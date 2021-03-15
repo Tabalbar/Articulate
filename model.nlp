@@ -1,0 +1,281 @@
+{
+  "settings": {
+    "languages": [
+      "en"
+    ],
+    "forceNER": true,
+    "tag": "nlp",
+    "threshold": 0.5,
+    "autoLoad": true,
+    "autoSave": true,
+    "modelFileName": "model.nlp",
+    "calculateSentiment": true
+  },
+  "nluManager": {
+    "settings": {
+      "tag": "nlu-manager"
+    },
+    "locales": [
+      "en"
+    ],
+    "languageNames": {},
+    "domainManagers": {
+      "en": {
+        "settings": {
+          "locale": "en",
+          "trainByDomain": false,
+          "tag": "domain-manager-en",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "comparison": {
+            "intent": "graph.comparison",
+            "domain": "default"
+          },
+          "compar": {
+            "intent": "graph.comparison",
+            "domain": "default"
+          },
+          "relationship": {
+            "intent": "graph.relationship",
+            "domain": "default"
+          },
+          "distribut": {
+            "intent": "graph.distribution",
+            "domain": "default"
+          },
+          "composit": {
+            "intent": "graph.composition",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "graph.comparison": "default",
+          "graph.relationship": "default",
+          "graph.distribution": "default",
+          "graph.composition": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "comparison",
+            "intent": "graph.comparison"
+          },
+          {
+            "domain": "default",
+            "utterance": "compare",
+            "intent": "graph.comparison"
+          },
+          {
+            "domain": "default",
+            "utterance": "relationship",
+            "intent": "graph.relationship"
+          },
+          {
+            "domain": "default",
+            "utterance": "distribution",
+            "intent": "graph.distribution"
+          },
+          {
+            "domain": "default",
+            "utterance": "composition",
+            "intent": "graph.composition"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "en",
+              "tag": "nlu-en",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "comparison": 1,
+              "compar": 1,
+              "relationship": 1,
+              "distribut": 1,
+              "composit": 1
+            },
+            "intents": {
+              "graph.comparison": 1,
+              "graph.relationship": 1,
+              "graph.distribution": 1,
+              "graph.composition": 1
+            },
+            "intentFeatures": {
+              "graph.comparison": {
+                "comparison": 1,
+                "compar": 1
+              },
+              "graph.relationship": {
+                "relationship": 1
+              },
+              "graph.distribution": {
+                "distribut": 1
+              },
+              "graph.composition": {
+                "composit": 1
+              }
+            },
+            "featuresToIntent": {
+              "comparison": [
+                "graph.comparison"
+              ],
+              "compar": [
+                "graph.comparison"
+              ],
+              "relationship": [
+                "graph.relationship"
+              ],
+              "distribut": [
+                "graph.distribution"
+              ],
+              "composit": [
+                "graph.composition"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "locale": "en",
+                "tag": "nlu-en",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true,
+                "log": true
+              },
+              "features": [
+                "comparison",
+                "compar",
+                "relationship",
+                "distribut",
+                "composit"
+              ],
+              "intents": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution",
+                "graph.composition"
+              ],
+              "perceptrons": [
+                [
+                  10.09615707397461,
+                  10.087945938110352,
+                  -4.024667263031006,
+                  -4.010825157165527,
+                  -3.9962873458862305,
+                  4.076714319175261
+                ],
+                [
+                  -1.9960479736328125,
+                  -1.987791657447815,
+                  12.088337898254395,
+                  -2.014575242996216,
+                  -2.00758957862854,
+                  2.041140666264944
+                ],
+                [
+                  -2.0039784908294678,
+                  -1.9960782527923584,
+                  -1.9878230094909668,
+                  12.088305473327637,
+                  -2.0146090984344482,
+                  2.0426991367996212
+                ],
+                [
+                  -2.0115439891815186,
+                  -2.004007339477539,
+                  -1.9961081743240356,
+                  -1.9878544807434082,
+                  12.088272094726562,
+                  2.0440051570274105
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "intentDomains": {},
+    "extraSentences": [
+      [
+        "en",
+        "comparison"
+      ],
+      [
+        "en",
+        "compare"
+      ],
+      [
+        "en",
+        "relationship"
+      ],
+      [
+        "en",
+        "distribution"
+      ],
+      [
+        "en",
+        "composition"
+      ]
+    ]
+  },
+  "ner": {
+    "settings": {
+      "tag": "ner",
+      "entityPreffix": "%",
+      "entitySuffix": "%"
+    },
+    "rules": {}
+  },
+  "nlgManager": {
+    "settings": {
+      "tag": "nlg-manager"
+    },
+    "responses": {
+      "en": {
+        "graph.comparison": [
+          {
+            "answer": "comparison"
+          }
+        ],
+        "graph.relationship": [
+          {
+            "answer": "relationship"
+          }
+        ],
+        "graph.distribution": [
+          {
+            "answer": "distribution"
+          }
+        ],
+        "graph.composition": [
+          {
+            "answer": "composition"
+          }
+        ]
+      }
+    }
+  },
+  "actionManager": {
+    "settings": {
+      "tag": "action-manager"
+    },
+    "actions": {}
+  },
+  "slotManager": {}
+}
