@@ -20,6 +20,7 @@
     "web-vitals": "^1.0.1",
     "xlsx": "^0.16.9"
   },
+  "proxy": "https://localhost:5000",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
