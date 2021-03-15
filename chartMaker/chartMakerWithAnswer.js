@@ -12,8 +12,8 @@ module.exports = (intent, command, headers, dataHead) => {
                     height: 200,
                     mark: 'bar',
                     encoding: {
-                      x: { field: 'a', type: findType(extractedHeaders, data) },
-                      y: { field: 'b', type: findType(extractedHeaders, data)},
+                      x: { field: 'a', type: findType(extractedHeaders[0], dataHead) },
+                      y: { field: 'b', type: findType(extractedHeaders[1], dataHead)},
                     },
                     data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                   }
@@ -26,7 +26,16 @@ module.exports = (intent, command, headers, dataHead) => {
 }  
 
 function findType(header, data) {
-
+    if(data[0][header].includes('/') || data[0][header].includes('-') ||
+    data[0][header].includes(':')) {
+        return "temporal"
+    } else if(isNaN(data[0][header])) {
+        console.log("is nominal", header)
+        return "nominal"
+    } else {
+        console.log('is quantitative', header)
+        return "quantitative"
+    }
 }
 
 function extractHeaders(command, headers) {
