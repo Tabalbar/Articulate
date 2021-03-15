@@ -15,31 +15,6 @@ function App() {
   const [dataHead, setDataHead] = useState([])
   const [attributes, setAttributes] = useState([])
 
-  const spec = {
-    width: 400,
-    height: 200,
-    mark: 'bar',
-    encoding: {
-      x: { field: 'a', type: 'ordinal' },
-      y: { field: 'b', type: 'quantitative' },
-    },
-    data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-  }
-
-  const barData = {
-    table: [
-      { a: 'A', b: 28 },
-      { a: 'B', b: 55 },
-      { a: 'C', b: 43 },
-      { a: 'D', b: 91 },
-      { a: 'E', b: 81 },
-      { a: 'F', b: 53 },
-      { a: 'G', b: 19 },
-      { a: 'H', b: 87 },
-      { a: 'I', b: 52 },
-    ],
-  }
-
   const processData = async (data) => {
     const dataStringLines = data.split(/\r\n|\n/);
     const headers = dataStringLines[0].split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/);
@@ -128,9 +103,15 @@ function App() {
     });
     const body = await response.text();
     const responseObj = JSON.parse(body)
-    console.log(responseObj)
-  }
+    for(let i = 0; i < responseObj.charts.length; i ++){
+      setCharts(prev=>[...prev, responseObj.charts[i]])
 
+    }
+    // console.log(responseObj.charts)
+  }
+  const clearGraphs = () => {
+    setCharts([])
+  }
   return (
     <>
       <br /><br />
@@ -138,9 +119,12 @@ function App() {
         <Grid.Row>
           <Form onSubmit={createCharts}>
             <Input placeholder={'...Enter query Here'} onChange={handleChange} />
-            <Button onClick={createCharts}>Create Visualization</Button>
-            <Input type='file' onChange={laodData} />
           </Form>
+          <Button onClick={createCharts}>Create Visualization</Button>
+
+          <Input type='file' onChange={laodData} />
+          <Button onClick={clearGraphs}>Clear Graphs</Button>
+
         </Grid.Row>
         <Grid.Row>
           {
@@ -148,7 +132,7 @@ function App() {
               charts.map(element => {
                 return (
                   <>
-                    <VegaLite spec={spec} data={barData} />
+                    <VegaLite spec={element.spec} data={element.data} />
                   </>
                 )
               })

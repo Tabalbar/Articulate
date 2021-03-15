@@ -1,23 +1,46 @@
 
 const nlp = require('compromise')
-module.exports = (intent, command, headers, dataHead) => {
+module.exports = (intent, command, headers, data) => {
     switch(intent){
         case "comparison":
 
         case "relationship":
-            const extractedHeaders = extractHeaders(command, headers)
-            if(extractedHeaders.length == 2) {
-                const spec = {
-                    width: 200,
-                    height: 200,
-                    mark: 'bar',
-                    encoding: {
-                      x: { field: 'a', type: findType(extractedHeaders[0], dataHead) },
-                      y: { field: 'b', type: findType(extractedHeaders[1], dataHead)},
-                    },
-                    data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                  }
+            let extractedHeaders = extractHeaders(command, headers)
+            let chart;
+            if(extractedHeaders.length === 2) {
+                extracteHeaders = reoderHeadersForTwo(extractedHeaders, data)
+                chart = {
+                    data: {table: extractDataForTwo(extractedHeaders, data)},
+                    spec: {
+                        width: 200,
+                        height: 200,
+                        mark: 'point',
+                        encoding: {
+                          x: { field: extractedHeaders[0], type: findType(extractedHeaders[0], data) },
+                          y: { field: extractedHeaders[1], type: findType(extractedHeaders[1], data)},
+                        },
+                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                    }
+                }
+            } else if (extractedHeaders.length === 3) {
+                extracteHeaders = reoderHeadersForThree(extractedHeaders, data)
+                console.log(extractedHeaders)
+                chart = {
+                    data: {table: extractDataForThree(extractedHeaders, data)},
+                    spec: {
+                        width: 200,
+                        height: 200,
+                        mark: 'point',
+                        encoding: {
+                          x: { field: extractedHeaders[0], type: findType(extractedHeaders[0], data) },
+                          y: { field: extractedHeaders[1], type: findType(extractedHeaders[1], data)},
+                          size: {field: extractedHeaders[2], type: findType(extractedHeaders[2], data)}
+                        },
+                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                    }
+                }
             }
+            return chart;
  
         case "distribution":
         case "composition":
@@ -25,15 +48,34 @@ module.exports = (intent, command, headers, dataHead) => {
     }
 }  
 
+function reoderHeadersForTwo(extractedHeaders, data) {
+    if(findType(extractedHeaders[0], data) === "quantitative"){
+        let tmpHeader = extractedHeaders[0];
+        extractedHeaders[0] = extractedHeaders[1];
+        extractedHeaders[1] = tmpHeader
+    }
+    return extractedHeaders
+}
+function reoderHeadersForThree(extractedHeaders, data) {
+    if(findType(extractedHeaders[1], data) === "nominal"){
+        let tmpHeader = extractedHeaders[1];
+        extractedHeaders[1] = extractedHeaders[0];
+        extractedHeaders[0] = tmpHeader
+    } else if(findType(extractedHeaders[2], data) === "nominal"){
+        let tmpHeader = extractedHeaders[2];
+        extractedHeaders[2] = extractedHeaders[0];
+        extractedHeaders[0] = tmpHeader
+    }
+    return extractedHeaders
+}
+
 function findType(header, data) {
     if(data[0][header].includes('/') || data[0][header].includes('-') ||
     data[0][header].includes(':')) {
         return "temporal"
     } else if(isNaN(data[0][header])) {
-        console.log("is nominal", header)
         return "nominal"
     } else {
-        console.log('is quantitative', header)
         return "quantitative"
     }
 }
@@ -47,4 +89,23 @@ function extractHeaders(command, headers) {
         }
     }
     return extractedHeaders;
+}
+
+function extractDataForTwo(extractedHeaders, data){
+    let chartData = []
+    for(let i = 0; i < data.length; i++) {
+        chartData.push({
+            [extractedHeaders[0]]: data[i][extractedHeaders[0]], [extractedHeaders[1]]: data[i][extractedHeaders[1]]
+        })
+    }
+    return chartData
+}
+function extractDataForThree(extractedHeaders, data){
+    let chartData = []
+    for(let i = 0; i < data.length; i++) {
+        chartData.push({
+            [extractedHeaders[0]]: data[i][extractedHeaders[0]], [extractedHeaders[1]]: data[i][extractedHeaders[1]],[extractedHeaders[2]]: data[i][extractedHeaders[2]],
+        })
+    }
+    return chartData
 }

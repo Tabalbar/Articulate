@@ -47,16 +47,17 @@ const nlp = require('compromise')
 router.post('/', async (req, res, next) => {
   let specs = [];
   const commands = findommands(req.body.command)
-  const dataHead = req.body.dataHead;
+  const data = req.body.dataHead;
   const attributes = req.body.attributes
+  let charts = []
   for(let i = 0; i < commands.length; i++){
     const response = await manager.process('en', commands[i])
     if(response){
-      chartMakerWithAnswer(response.answer, commands[i], attributes, dataHead)
+      charts.push(chartMakerWithAnswer(response.answer, commands[i], attributes, data))
     }
 
   }
-  res.send({ answer: 'answer' })
+  res.send({ charts: charts })
   
 });
 
