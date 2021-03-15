@@ -7,12 +7,10 @@ import XLSX from 'xlsx'
 
 function App() {
 
-  const [dataFile, setDataFile] = useState(null)
+  //data used for charts and table
+  const [data, setData] = useState([])
+  const [dataHeaders, setDataHeaders] = useState([])
   const [charts, setCharts] = useState([])
-
-  useEffect(() => {
-
-  }, [dataFile])
 
   const testingNode = async () => {
     const response = await fetch('http://localhost:5000/', {
@@ -129,7 +127,13 @@ function App() {
         }
       }
     };
-    console.log(list)
+    let tmpHeaders = []
+    for(let i = 0; i < headers.length; i++) {
+      let obj = {title: headers[i], field: headers[i]}
+      tmpHeaders.push(obj)
+    }
+    setData(list)
+    setDataHeaders(headers)
   }
   const laodData = (e) => {
     e.preventDefault()
