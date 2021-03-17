@@ -6,62 +6,87 @@ module.exports = (intent, command, headers, data) => {
     console.log(extractedHeaders, command)
     switch (intent) {
         case "comparison":
-            extracteHeaders = reorderHeadersForCategories(extractedHeaders, data)
-            if (extractedHeaders.length === 2) {
-                chart = {
-                    data: { table: extractDataForTwo(extractedHeaders, data) },
-                    spec: {
-                        width: 200,
-                        height: 200,
-                        mark: 'bar',
-                        encoding: {
-                            x: { field: extractedHeaders[0], type: findType(extractedHeaders[0], data) },
-                            y: { field: extractedHeaders[1], type: findType(extractedHeaders[1], data) },
-                        },
-                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+            let hasTime = checkTimeAndReorder(extractedHeaders, data);
+            console.log(hasTime)
+            if (!hasTime) {
+                let numCategories = countCategories(extractedHeaders[1], data)
+                extractedHeaders = reorderForTimeAgain(extractedHeaders, data)
+                console.log(numCategories)
+                if(numCategories > 3){
+                    chart = {
+                        data: { table: extractDataForTwo(extractedHeaders, data) },
+                        spec: {
+                            width: 200,
+                            height: 200,
+                            mark: 'line',
+                            encoding: {
+                                x: { field: extractedHeaders[0], type: 'temporal' },
+                                y: { field: extractedHeaders[1], type: 'quantitative' },
+                                color: {field: extractedHeaders[2], type: "nominal"}
+                            },
+                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                        }
                     }
                 }
-            } else if (extractedHeaders.length === 3) {
-                chart = {
-                    data: { table: extractDataForThree(extractedHeaders, data) },
-                    spec: {
-                        width: { step: 50 },
-                        mark: "bar",
-                        encoding: {
-                            column: {
-                                field: extractedHeaders[2], type: "nominal", spacing: 10
+            } else {
+                extracteHeaders = reorderHeadersForCategories(extractedHeaders, data)
+
+                if (extractedHeaders.length === 2) {
+                    chart = {
+                        data: { table: extractDataForTwo(extractedHeaders, data) },
+                        spec: {
+                            width: 200,
+                            height: 200,
+                            mark: 'bar',
+                            encoding: {
+                                x: { field: extractedHeaders[0], type: findType(extractedHeaders[0], data) },
+                                y: { field: extractedHeaders[1], type: findType(extractedHeaders[1], data) },
                             },
-                            y: {
-                                field: extractedHeaders[1],
-                                type: "quantitative",
-                                title: extractedHeaders[1],
-                                exis: { grid: false }
+                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                        }
+                    }
+                } else if (extractedHeaders.length === 3) {
+                    chart = {
+                        data: { table: extractDataForThree(extractedHeaders, data) },
+                        spec: {
+                            width: { step: 50 },
+                            mark: "bar",
+                            encoding: {
+                                column: {
+                                    field: extractedHeaders[2], type: "nominal", spacing: 10
+                                },
+                                y: {
+                                    field: extractedHeaders[1],
+                                    type: "quantitative",
+                                    title: extractedHeaders[1],
+                                    exis: { grid: false }
+                                },
+                                x: {
+                                    field: extractedHeaders[0],
+                                    type: "nominal",
+                                    axis: { title: "" }
+                                },
+                                color: {
+                                    field: extractedHeaders[0],
+                                    scale: { range: createRandomColros(extractedHeaders[0], data) }
+                                }
                             },
-                            x: {
-                                field: extractedHeaders[0],
-                                type: "nominal",
-                                axis: { title: "" }
-                            },
-                            color: {
-                                field: extractedHeaders[0],
-                                scale: { range: createRandomColros(extractedHeaders[0], data) }
-                            }
-                        },
-                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+
+                        }
 
                     }
+                } else if (extractedHeaders.length > 3) {
+                    chart = {
+                        data: { table: extractDataForAll(extractedHeaders, data) },
+                        spec: {
+                            columns: extractedHeaders.length - 1,
+                            concat: createLayers(extractedHeaders, data),
+                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
 
-                }
-            } else if (extractedHeaders.length > 3) {
-                chart = {
-                    data: { table: extractDataForAll(extractedHeaders, data) },
-                    spec: {
-                        columns: extractedHeaders.length-1,
-                        concat: createLayers(extractedHeaders, data),
-                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                        }
 
                     }
-
                 }
             }
 
@@ -191,13 +216,13 @@ function extractDataForTwo(extractedHeaders, data) {
 
 function extractDataForAll(extractedHeaders, data) {
     let chartData = []
-    for(let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         chartData.push({
             [extractedHeaders[0]]: data[i][extractedHeaders[0]]
         })
     }
-    for(let i = 0; i < data.length; i++){
-        for(let n = 1; n < extractedHeaders.length; n++){
+    for (let i = 0; i < data.length; i++) {
+        for (let n = 1; n < extractedHeaders.length; n++) {
             chartData[i][extractedHeaders[n]] = data[i][extractedHeaders[n]]
         }
 
@@ -256,6 +281,38 @@ function createLayers(extractedHeaders, data) {
             ]
         })
     }
-    console.log(layers)
     return layers
+}
+
+function checkTimeAndReorder(extractedHeaders, data) {
+    for (let i = 0; i < extractedHeaders.length; i++) {
+        let lowerCaseHeader = extractedHeaders[i].toLowerCase();
+        if (lowerCaseHeader.includes("year") || lowerCaseHeader.includes("month")
+            || lowerCaseHeader.includes("date") || lowerCaseHeader.includes("day")
+            || lowerCaseHeader.includes("time") || lowerCaseHeader.includes("hour")
+            || lowerCaseHeader.includes("second")) {
+            let tmpHeader = extractedHeaders[0]
+            extractedHeaders[0] = extractedHeaders[i];
+            extractedHeaders[i] = tmpHeader
+            console.log('here')
+            return true
+        } else if (findType(extractedHeaders[i], data) === "temporal") {
+            let tmpHeader = extractedHeaders[0]
+            extractedHeaders[0] = extractedHeaders[i];
+            extractedHeaders[i] = tmpHeader
+            return true
+        }
+    }
+
+    return false
+
+}
+
+function reorderForTimeAgain(extractedHeaders, data){
+    if(findType(extractedHeaders[2], data) === "quantitative"){
+        let tmpHeader = extractedHeaders[1]
+        extractedHeaders[1] = extractedHeaders[2]
+        extractedHeaders[2] = tmpHeader
+    }
+    return extractedHeaders
 }

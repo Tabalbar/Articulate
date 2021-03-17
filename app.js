@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// var usersRouter = require('./routes/users');
 var cors = require('cors')
 
 var app = express();
@@ -22,19 +22,32 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
+app.get('/testing', (req, res) => res.send('Hello World!'));
+
+
 // Add Access Control Allow Origin headers
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
+  // res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  // res.header(
+  //   "Access-Control-Allow-Headers",
+  //   "Origin, X-Requested-With, Content-Type, Accept"
+  // );
+  	// Set CORS headers
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Request-Method', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'authorization, content-type');
+
+	if ( req.method === 'OPTIONS' ) {
+		res.writeHead(200);
+		res.end();
+		return;
+	}
   next();
 });
 // error handler
