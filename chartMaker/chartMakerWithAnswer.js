@@ -8,13 +8,13 @@ module.exports = (intent, command, headers, data) => {
         case "comparison":
             let hasTime = checkTimeAndReorder(extractedHeaders, data);
             console.log(hasTime)
-            if (!hasTime) {
+            if (hasTime) {
                 let numCategories = countCategories(extractedHeaders[1], data)
                 extractedHeaders = reorderForTimeAgain(extractedHeaders, data)
                 console.log(numCategories)
                 if(numCategories > 3){
                     chart = {
-                        data: { table: extractDataForTwo(extractedHeaders, data) },
+                        data: { table: extractDataForAll(extractedHeaders, data) },
                         spec: {
                             width: 200,
                             height: 200,

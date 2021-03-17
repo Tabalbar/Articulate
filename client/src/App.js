@@ -52,7 +52,7 @@ function App() {
     setDataHeaders(tmpHeaders)
     setAttributes(headers)
     let tmpDataHead = []
-    for (let i = 0; i < list.length; i++) {
+    for (let i = 0; i < 100; i++) {
       tmpDataHead.push(list[i])
     }
     setDataHead(tmpDataHead)

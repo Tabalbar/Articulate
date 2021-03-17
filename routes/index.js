@@ -57,7 +57,11 @@ router.post('/', async (req, res, next) => {
     }
 
   }
+
+
   res.send({ charts: charts })
+  res.status(201);
+  res.json();
   
 });
 
@@ -72,6 +76,8 @@ router.post('/addHeaders', async(req, res, next) => {
       });
     })
   })
+  res.status(201);
+  res.json();
 })
 
 module.exports = router;
