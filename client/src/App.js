@@ -52,7 +52,7 @@ function App() {
     setDataHeaders(tmpHeaders)
     setAttributes(headers)
     let tmpDataHead = []
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 20; i++) {
       tmpDataHead.push(list[i])
     }
     setDataHead(tmpDataHead)
@@ -95,7 +95,6 @@ function App() {
   const createCharts = async () => {
     const response = await fetch('http://localhost:5000/', {
       method: 'POST',
-
       body: JSON.stringify({ command: command, attributes: attributes, dataHead: dataHead }),
       headers: {
         'Content-Type': 'application/json',
@@ -103,6 +102,7 @@ function App() {
     });
     const body = await response.text();
     const responseObj = JSON.parse(body)
+    console.log(responseObj.charts[0])
     for(let i = 0; i < responseObj.charts.length; i ++){
       setCharts(prev=>[...prev, responseObj.charts[i]])
 
