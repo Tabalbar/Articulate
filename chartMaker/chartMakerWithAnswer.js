@@ -151,7 +151,7 @@ module.exports = (intent, command, headers, data) => {
                         encoding: {
                             x: { field: extractedHeaders[0], type: "quantitative" },
                             y: { field: extractedHeaders[1], type: "quantitative" },
-                            color: {field: extractedHeaders[2], type: "nominal"},
+                            color: { field: extractedHeaders[2], type: "nominal" },
                         },
                         data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                     }
@@ -167,7 +167,7 @@ module.exports = (intent, command, headers, data) => {
                         encoding: {
                             x: { field: extractedHeaders[0], type: 'quantitative' },
                             y: { field: extractedHeaders[1], type: 'quantitative' },
-                            color: {field: extractedHeaders[2], type: "nominal"},
+                            color: { field: extractedHeaders[2], type: "nominal" },
                             size: { field: extractedHeaders[3], type: 'quantitative' }
                         },
                         data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
@@ -177,6 +177,58 @@ module.exports = (intent, command, headers, data) => {
             return chart;
 
         case "distribution":
+            if (extractedHeaders.length === 1) {
+                chart = {
+                    data: { table: extractDataForOne(extractedHeaders, data) },
+                    spec: {
+                        mark: "bar",
+                        encoding: {
+                            x: {
+                                bin: true,
+                                field: extractedHeaders[0]
+                            },
+                            y: { aggregate: count }
+                        },
+                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                    }
+                }
+            } else if (extractedHeaders.length === 2) {
+                chart = {
+                    data: { table: extractDataForTwo(extractedHeaders, data) },
+                    spec: {
+                        mark: "bar",
+                        encoding: {
+                            x: { field: extractedHeaders[0], type: 'quantitative' },
+                            y: { field: extractedHeaders[1], type: 'quantitative' },
+                        },
+                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                    }
+                }
+            } else if (extractedHeaders.length === 3) {
+                chart = {
+                    data: { table: extractDataForThree(extractedHeaders, data) },
+                    spec: {
+                        mark: "rect",
+                        width: 200,
+                        height: 200,
+                        encoding: {
+                            x: {
+                                field: extractedHeaders[0],
+                                type: "quantitative"
+                            },
+                            y: {
+                                field: extractedHeaders[1],
+                                type: "quantitative"
+                            },
+                            color: {
+                                field: extractedHeaders[2],
+                                type: "quantitative"
+                            }
+                        },
+                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                    }
+                }
+            }
         case "composition":
         default: return ''
     }
@@ -205,7 +257,7 @@ function reorderFourHeadersForRelationship(extractedHeaders, data) {
         let tmpHeader = extractedHeaders[2];
         extractedHeaders[2] = extractedHeaders[1];
         extractedHeaders[1] = tmpHeader
-    }else if (findType(extractedHeaders[4], data) === "quantitative") {
+    } else if (findType(extractedHeaders[4], data) === "quantitative") {
         let tmpHeader = extractedHeaders[2];
         extractedHeaders[2] = extractedHeaders[4];
         extractedHeaders[4] = tmpHeader
@@ -262,6 +314,16 @@ function extractHeaders(command, headers) {
         }
     }
     return extractedHeaders;
+}
+
+function extractDataForOne(extractedHeaders, data) {
+    let chartData = [];
+    for (let i = 0; i < data.length; i++) {
+        chartData.push({
+            [extractedHeaders[0]]: data[i][extractedHeaders[0]]
+        })
+    }
+    return chartData
 }
 
 function extractDataForTwo(extractedHeaders, data) {
