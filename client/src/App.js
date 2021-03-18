@@ -93,6 +93,14 @@ function App() {
   }
 
   const createCharts = async () => {
+    await fetch('http://localhost:5000/addHeaders', {
+      method: 'POST',
+
+      body: JSON.stringify({ headers: attributes}),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
     const response = await fetch('http://localhost:5000/', {
       method: 'POST',
       body: JSON.stringify({ command: command, attributes: attributes, dataHead: dataHead }),
