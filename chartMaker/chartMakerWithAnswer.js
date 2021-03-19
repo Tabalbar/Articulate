@@ -4,9 +4,10 @@ module.exports = (intent, command, headers, data) => {
     let extractedHeaders = extractHeaders(command, headers)
     let chart;
     console.log(extractedHeaders, command)
+    let hasTime = false;
     switch (intent) {
         case "comparison":
-            let hasTime = checkTimeAndReorder(extractedHeaders, data);
+            hasTime = checkTimeAndReorder(extractedHeaders, data);
             console.log(hasTime)
             if (hasTime) {
                 let numCategories = countCategories(extractedHeaders[1], data)
@@ -79,7 +80,7 @@ module.exports = (intent, command, headers, data) => {
             } else {
                 extracteHeaders = reorderHeadersForCategories(extractedHeaders, data)
 
-                if (extractedHeaders.length === 3) {
+                if (extractedHeaders.length === 2) {
                     chart = {
                         data: { table: extractDataForTwo(extractedHeaders, data) },
                         spec: {
@@ -93,7 +94,7 @@ module.exports = (intent, command, headers, data) => {
                             data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                         }
                     }
-                } else if (extractedHeaders.length === 4) {
+                } else if (extractedHeaders.length === 3) {
                     chart = {
                         data: { table: extractDataForThree(extractedHeaders, data) },
                         spec: {
@@ -158,6 +159,7 @@ module.exports = (intent, command, headers, data) => {
                 }
             } else if (extractedHeaders.length === 4) {
                 extracteHeaders = reorderFourHeadersForRelationship(extractedHeaders, data)
+                //Need to reoder extracted headers for quantiative data, should put lowest number of categories on axis?
                 chart = {
                     data: { table: extractDataForAll(extractedHeaders, data) },
                     spec: {
@@ -184,10 +186,9 @@ module.exports = (intent, command, headers, data) => {
                         mark: "bar",
                         encoding: {
                             x: {
-                                bin: true,
                                 field: extractedHeaders[0]
                             },
-                            y: { aggregate: count }
+                            y: { aggregate: 'count' }
                         },
                         data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                     }
@@ -196,7 +197,7 @@ module.exports = (intent, command, headers, data) => {
                 chart = {
                     data: { table: extractDataForTwo(extractedHeaders, data) },
                     spec: {
-                        mark: "bar",
+                        mark: "point",
                         encoding: {
                             x: { field: extractedHeaders[0], type: 'quantitative' },
                             y: { field: extractedHeaders[1], type: 'quantitative' },
@@ -205,31 +206,102 @@ module.exports = (intent, command, headers, data) => {
                     }
                 }
             } else if (extractedHeaders.length === 3) {
+                //Need to distinguis what is lat and lon,
+                //Longitude is supposed to be in the first index of extractedHeaders followed by latitude
                 chart = {
-                    data: { table: extractDataForThree(extractedHeaders, data) },
+                    data: { table: extractDataForAll(extractedHeaders, data) },
                     spec: {
-                        mark: "rect",
-                        width: 200,
+                        projection: {type: {expr: "projection"}},
+                        mark: "circle",
+                        width: 500,
                         height: 200,
-                        encoding: {
-                            x: {
-                                field: extractedHeaders[0],
-                                type: "quantitative"
-                            },
-                            y: {
-                                field: extractedHeaders[1],
-                                type: "quantitative"
-                            },
-                            color: {
-                                field: extractedHeaders[2],
-                                type: "quantitative"
+                        params: [
+                            {
+                              name: "projection",
+                              value: "equalEarth",
+                              bind: {
+                                input: "select",
+                                options: [
+                                  "albers",
+                                  "albersUsa",
+                                  "azimuthalEqualArea",
+                                  "azimuthalEquidistant",
+                                  "conicConformal",
+                                  "conicEqualArea",
+                                  "conicEquidistant",
+                                  "equalEarth",
+                                  "equirectangular",
+                                  "gnomonic",
+                                  "mercator",
+                                  "naturalEarth1",
+                                  "orthographic",
+                                  "stereographic",
+                                  "transverseMercator"
+                                ]
+                              }
                             }
-                        },
+                          ],
+                        encoding: {
+                            longitude: {
+                              field: extractedHeaders[2],
+                              type: "quantitative"
+                            },
+                            latitude: {
+                              field: extractedHeaders[1],
+                              type: "quantitative"
+                            },
+                            size: {value: 10},
+                            color: {field: extractedHeaders[0], type: "nominal"}
+                          },
                         data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                     }
                 }
             }
+            return chart
         case "composition":
+            hasTime = checkTimeAndReorderComposition(extractedHeaders, data);
+            if(hasTime){
+                chart = {
+                    data: { table: extractDataForTwo(extractedHeaders, data) },
+                    spec: {
+                        mark: "bar",
+                        encoding: {
+                          x: {
+                            field: extractedHeaders[0],
+                            type: "ordinal",
+                          },
+                          y: {aggregate: "count", type: "quantitative"},
+                          color: {
+                            field: extractedHeaders[1],
+                            type: "nominal",
+                            scale: {
+                              range: createRandomColors(extractedHeaders[1], data)
+                            },
+                          }
+                        },
+                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                    }
+                }
+            }else {
+                if(extractedHeaders.length === 2){
+                    extractedHeaders = reoderTwoHeadersForComposition(extractedHeaders, data)
+                    chart = {
+                        data: { table: extractDataForTwo(extractedHeaders, data) },
+                        spec: {
+                            mark: "arc",
+                            encoding: {
+                              theta: {field: extractedHeaders[0], "type": "quantitative"},
+                              color: {field: extractedHeaders[1], "type": "nominal"}
+                            },
+                            view: {stroke: null},
+                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                        }
+                    }
+                } else if(extractedHeaders.length > 2){
+
+                }
+            }
+            return chart
         default: return ''
     }
 }
@@ -292,6 +364,39 @@ function reorderHeadersForCategories(extractedHeaders, data) {
     }
     return extractedHeaders;
 
+}
+
+function reoderTwoHeadersForComposition(extractedHeaders, data) {
+    if(findType(extractedHeaders[1], data) === 'quantitative'){
+        let tmpHeader = extractedHeaders[0]
+        extractedHeaders[0] = extractedHeaders[1]
+        extractedHeaders[1] = tmpHeader
+    }
+    return extractedHeaders
+}
+
+function checkTimeAndReorderComposition(extractedHeaders, data) {
+    for(let i = 0; i < extractedHeaders.length; i ++){
+        let lowerCaseHeader = extractedHeaders[i].toLowerCase();
+        if (lowerCaseHeader.includes("year") || lowerCaseHeader.includes("month")
+            || lowerCaseHeader.includes("date") || lowerCaseHeader.includes("day")
+            || lowerCaseHeader.includes("time") || lowerCaseHeader.includes("hour")
+            || lowerCaseHeader.includes("second")) {
+            let tmpHeader = extractedHeaders[0]
+            extractedHeaders[0] = extractedHeaders[i];
+            extractedHeaders[i] = tmpHeader
+            console.log('here')
+            return true
+        } else if (findType(extractedHeaders[i], data) === "temporal") {
+            let tmpHeader = extractedHeaders[0]
+            extractedHeaders[0] = extractedHeaders[i];
+            extractedHeaders[i] = tmpHeader
+            return true
+        }
+    } 
+
+
+    return false
 }
 
 function findType(header, data) {
@@ -364,7 +469,7 @@ function extractDataForThree(extractedHeaders, data) {
     return chartData
 }
 
-function createRandomColros(extractedHeader, data) {
+function createRandomColors(extractedHeader, data) {
     const numCategories = countCategories(extractedHeader, data)
     let colors = [];
 

@@ -40,23 +40,28 @@ manager.addAnswer('en', 'graph.composition', 'composition');
 })();
 
 const chartMakerWithAnswer = require('../chartMaker/chartMakerWithAnswer')
-const findommands = require('../chartMaker/findCommands')
+// const findommands = require('../chartMaker/findCommands')
 const nlp = require('compromise')
 
 /* GET home page. */
 router.post('/', async (req, res, next) => {
   let specs = [];
-  const commands = findommands(req.body.command)
+  // const commands = findommands(req.body.command)
   const data = req.body.dataHead;
   const attributes = req.body.attributes
   let charts = []
-  for(let i = 0; i < commands.length; i++){
-    const response = await manager.process('en', commands[i])
-    if(response){
-      charts.push(chartMakerWithAnswer(response.answer, commands[i], attributes, data))
-    }
+  // for(let i = 0; i < commands.length; i++){
+  //   const response = await manager.process('en', commands[i])
+  //   if(response){
+  //     charts.push(chartMakerWithAnswer(response.answer, commands[i], attributes, data))
+  //   }
 
-  }
+  // }
+  const command = req.body.command
+    const response = await manager.process('en', command)
+    if(response){
+      charts.push(chartMakerWithAnswer(response.answer, command, attributes, data))
+    }
 
 
   res.send({ charts: charts })
