@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import 'semantic-ui-css/semantic.min.css'
-import { Button, Form, Grid, Input } from 'semantic-ui-react'
+import { Button, Form, Grid, Input, Header } from 'semantic-ui-react'
 import { VegaLite } from 'react-vega'
 import MaterialTable from 'material-table'
 import XLSX from 'xlsx'
@@ -14,6 +14,7 @@ function App() {
   const [command, setCommand] = useState('')
   const [dataHead, setDataHead] = useState([])
   const [attributes, setAttributes] = useState([])
+  const [errMsg, setErrMsg] = useState('')
 
   const processData = async (data) => {
     const dataStringLines = data.split(/\r\n|\n/);
@@ -88,6 +89,7 @@ function App() {
   }
   const handleChange = (e) => {
     e.preventDefault()
+    setErrMsg('')
     const value = e.target.value;
     setCommand(value)
   }
@@ -109,12 +111,17 @@ function App() {
       }
     });
     const body = await response.text();
-    const responseObj = JSON.parse(body)
-    console.log(responseObj.charts[0])
-    for(let i = 0; i < responseObj.charts.length; i ++){
-      setCharts(prev=>[...prev, responseObj.charts[i]])
+    const {chartObj} = JSON.parse(body)
+    console.log(chartObj.charts === null)
+    if(chartObj.errMsg === '' && chartObj.charts !== null) {
+      setCharts(prev=>[...prev, chartObj.charts])
 
+    } else {
+      console.log('here')
+
+      setErrMsg(chartObj.errMsg)
     }
+
     // console.log(responseObj.charts)
   }
   const clearGraphs = () => {
@@ -133,6 +140,9 @@ function App() {
           <Input type='file' onChange={laodData} />
           <Button onClick={clearGraphs}>Clear Graphs</Button>
 
+        </Grid.Row>
+        <Grid.Row>
+          <Header as="h3" color="red">{errMsg}</Header>
         </Grid.Row>
         <Grid.Row>
           {

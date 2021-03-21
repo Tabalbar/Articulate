@@ -58,19 +58,24 @@ router.post('/', async (req, res, next) => {
 
   // }
   const command = req.body.command
-    const response = await manager.process('en', command)
-    if(response){
-      charts.push(chartMakerWithAnswer(response.answer, command, attributes, data))
-    }
+  const response = await manager.process('en', command)
+  let chartObj = {
+    charts: null,
+    errMsg: ''
+  }
+  if (response) {
+    chartObj = chartMakerWithAnswer(response.answer, command, attributes, data)
+  }
+  console.log(chartObj)
 
 
-  res.send({ charts: charts })
+  res.send({ chartObj })
   res.status(201);
   res.json();
-  
+
 });
 
-router.post('/addHeaders', async(req, res, next) => {
+router.post('/addHeaders', async (req, res, next) => {
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
     // add methods to run after the tagger
