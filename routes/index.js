@@ -40,6 +40,9 @@ manager.addAnswer('en', 'graph.composition', 'composition');
 })();
 
 const chartMakerWithAnswer = require('../chartMaker/chartMakerWithAnswer')
+const createVector = require('../chartMaker/createVector')
+const normalizeCommand = require('../chartMaker/normalizeCommand')
+
 // const findommands = require('../chartMaker/findCommands')
 const nlp = require('compromise')
 
@@ -50,21 +53,28 @@ router.post('/', async (req, res, next) => {
   const data = req.body.dataHead;
   const attributes = req.body.attributes
   let charts = []
-  // for(let i = 0; i < commands.length; i++){
-  //   const response = await manager.process('en', commands[i])
-  //   if(response){
-  //     charts.push(chartMakerWithAnswer(response.answer, commands[i], attributes, data))
-  //   }
-
-  // }
   const command = req.body.command
   const response = await manager.process('en', command)
+  const headerMatrix = createVector(attributes, data)
+  nlp.extend((Doc, world) => {
+    const headers = req.body.headers
+    // add methods to run after the tagger
+    world.postProcess(doc => {
+      headerMatrix.forEach(firstD => {
+        firstD.forEach(noun=> {
+          doc.match(noun).tag('#Noun')
+        })
+      });
+    })
+  })
+  const normalizedCommand = normalizeCommand(command)
+
   let chartObj = {
     charts: null,
     errMsg: ''
   }
   if (response) {
-    chartObj = chartMakerWithAnswer(response.answer, command, attributes, data)
+    chartObj = chartMakerWithAnswer(response.answer, command, attributes, data, headerMatrix)
   }
   console.log(chartObj)
 
@@ -86,6 +96,7 @@ router.post('/addHeaders', async (req, res, next) => {
       });
     })
   })
+
   res.status(201);
   res.json();
 })

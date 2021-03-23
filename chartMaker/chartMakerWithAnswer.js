@@ -1,26 +1,25 @@
 
 const nlp = require('compromise')
-module.exports = (intent, command, headers, data) => {
+module.exports = (intent, command, headers, data, headerMatrix) => {
     let extractedHeaders = extractHeaders(command, headers)
+    let filteredHeaders = extractFilteredHeaders(command, headerMatrix)
     let chartObj = {
         charts: null,
         errMsg: ''
     };
-    console.log(extractedHeaders, command)
     let hasTime = false;
     switch (intent) {
         case "comparison":
             hasTime = checkTimeAndReorder(extractedHeaders, data);
-            console.log(hasTime)
             if (hasTime) {
                 let numCategories = countCategories(extractedHeaders[1], data)
-                console.log(numCategories)
                 if (extractedHeaders.length === 2) {
                     chartObj.charts = {
-                        data: { table: extractDataForTwo(extractedHeaders, data) },
+                        data: { table: data },
                         spec: {
                             width: 200,
                             height: 200,
+                            transform: [],
                             mark: 'line',
                             encoding: {
                                 x: { field: extractedHeaders[0], type: 'temporal' },
@@ -34,10 +33,11 @@ module.exports = (intent, command, headers, data) => {
 
                     if (numCategories > 3) {
                         chartObj.charts = {
-                            data: { table: extractDataForThree(extractedHeaders, data) },
+                            data: { table: data },
                             spec: {
                                 width: 200,
                                 height: 200,
+                                transform: [],
                                 mark: 'line',
                                 encoding: {
                                     x: { field: extractedHeaders[0], type: 'temporal' },
@@ -49,10 +49,11 @@ module.exports = (intent, command, headers, data) => {
                         }
                     } else {
                         chartObj.charts = {
-                            data: { table: extractDataForThree(extractedHeaders, data) },
+                            data: { table: data },
                             spec: {
                                 width: { step: 50 },
                                 mark: "bar",
+                                transform: [],
                                 encoding: {
                                     column: {
                                         field: extractedHeaders[2], type: "nominal", spacing: 10
@@ -88,11 +89,12 @@ module.exports = (intent, command, headers, data) => {
 
                 if (extractedHeaders.length === 2) {
                     chartObj.charts = {
-                        data: { table: extractDataForTwo(extractedHeaders, data) },
+                        data: { table: data },
                         spec: {
                             width: 200,
                             height: 200,
                             mark: 'bar',
+                            transform: [],
                             encoding: {
                                 x: { field: extractedHeaders[0], type: findType(extractedHeaders[0], data) },
                                 y: { field: extractedHeaders[1], type: findType(extractedHeaders[1], data) },
@@ -102,10 +104,11 @@ module.exports = (intent, command, headers, data) => {
                     }
                 } else if (extractedHeaders.length === 3) {
                     chartObj.charts = {
-                        data: { table: extractDataForThree(extractedHeaders, data) },
+                        data: { table: data },
                         spec: {
-                            width: { step: 50 },
+                            width: { step: 10 },
                             mark: "bar",
+                            transform: [],
                             encoding: {
                                 column: {
                                     field: extractedHeaders[2], type: "nominal", spacing: 10
@@ -133,8 +136,9 @@ module.exports = (intent, command, headers, data) => {
                     }
                 } else if (extractedHeaders.length > 3) {
                     chartObj.charts = {
-                        data: { table: extractDataForAll(extractedHeaders, data) },
+                        data: { table: data },
                         spec: {
+                            transform: [],
                             columns: extractedHeaders.length - 1,
                             concat: createLayers(extractedHeaders, data),
                             data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
@@ -146,17 +150,20 @@ module.exports = (intent, command, headers, data) => {
                     chartObj.errMsg = "Could not create specification. Expected headers >= 2, got " + extractedHeaders.length
                 }
             }
-
+            if(filteredHeaders.length){
+                filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
+            }
             return chartObj
         case "relationship":
             if (extractedHeaders.length === 2) {
                 extracteHeaders = reorderTwoHeadersForRelationship(extractedHeaders, data)
                 chartObj.charts = {
-                    data: { table: extractDataForTwo(extractedHeaders, data) },
+                    data: { table: data },
                     spec: {
                         width: 200,
                         height: 200,
                         mark: 'point',
+                        transform: [],
                         encoding: {
                             x: { field: extractedHeaders[0], type: "quantitative" },
                             y: { field: extractedHeaders[1], type: "quantitative" },
@@ -167,11 +174,12 @@ module.exports = (intent, command, headers, data) => {
             } else if (extractedHeaders.length === 3) {
                 extracteHeaders = reorderThreeHeadersForRelationship(extractedHeaders, data)
                 chartObj.charts = {
-                    data: { table: extractDataForThree(extractedHeaders, data) },
+                    data: { table: data },
                     spec: {
                         width: 200,
                         height: 200,
                         mark: 'point',
+                        transform: [],
                         encoding: {
                             x: { field: extractedHeaders[0], type: "quantitative" },
                             y: { field: extractedHeaders[1], type: "quantitative" },
@@ -184,11 +192,12 @@ module.exports = (intent, command, headers, data) => {
                 extracteHeaders = reorderFourHeadersForRelationship(extractedHeaders, data)
                 //Need to reoder extracted headers for quantiative data, should put lowest number of categories on axis?
                 chartObj.charts = {
-                    data: { table: extractDataForAll(extractedHeaders, data) },
+                    data: { table: data },
                     spec: {
                         width: 200,
                         height: 200,
                         mark: 'point',
+                        transform: [],
                         encoding: {
                             x: { field: extractedHeaders[0], type: 'quantitative' },
                             y: { field: extractedHeaders[1], type: 'quantitative' },
@@ -206,9 +215,10 @@ module.exports = (intent, command, headers, data) => {
         case "distribution":
             if (extractedHeaders.length === 1) {
                 chartObj.charts = {
-                    data: { table: extractDataForOne(extractedHeaders, data) },
+                    data: { table: data },
                     spec: {
                         mark: "bar",
+                        transform: [],
                         encoding: {
                             x: {
                                 field: extractedHeaders[0]
@@ -220,9 +230,10 @@ module.exports = (intent, command, headers, data) => {
                 }
             } else if (extractedHeaders.length === 2) {
                 chartObj.charts = {
-                    data: { table: extractDataForTwo(extractedHeaders, data) },
+                    data: { table: data },
                     spec: {
                         mark: "point",
+                        transform: [],
                         encoding: {
                             x: { field: extractedHeaders[0], type: 'quantitative' },
                             y: { field: extractedHeaders[1], type: 'quantitative' },
@@ -234,12 +245,13 @@ module.exports = (intent, command, headers, data) => {
                 //Need to distinguis what is lat and lon,
                 //Longitude is supposed to be in the first index of extractedHeaders followed by latitude
                 chartObj.charts = {
-                    data: { table: extractDataForAll(extractedHeaders, data) },
+                    data: { table: data },
                     spec: {
                         projection: { type: { expr: "projection" } },
                         mark: "circle",
                         width: 500,
                         height: 200,
+                        transform: [],
                         params: [
                             {
                                 name: "projection",
@@ -291,9 +303,10 @@ module.exports = (intent, command, headers, data) => {
             if (hasTime) {
                 if (extractedHeaders.length === 2) {
                     chartObj.charts = {
-                        data: { table: extractDataForTwo(extractedHeaders, data) },
+                        data: { table: data },
                         spec: {
                             mark: "bar",
+                            transform: [],
                             encoding: {
                                 x: {
                                     field: extractedHeaders[0],
@@ -320,9 +333,10 @@ module.exports = (intent, command, headers, data) => {
                 if (extractedHeaders.length === 2) {
                     extractedHeaders = reoderTwoHeadersForComposition(extractedHeaders, data)
                     chartObj.charts = {
-                        data: { table: extractDataForTwo(extractedHeaders, data) },
+                        data: { table: data },
                         spec: {
                             mark: "arc",
+                            transform: [],
                             encoding: {
                                 theta: { field: extractedHeaders[0], "type": "quantitative" },
                                 color: { field: extractedHeaders[1], "type": "nominal" }
@@ -429,7 +443,6 @@ function checkTimeAndReorderComposition(extractedHeaders, data) {
             let tmpHeader = extractedHeaders[0]
             extractedHeaders[0] = extractedHeaders[i];
             extractedHeaders[i] = tmpHeader
-            console.log('here')
             return true
         } else if (findType(extractedHeaders[i], data) === "temporal") {
             let tmpHeader = extractedHeaders[0]
@@ -465,53 +478,22 @@ function extractHeaders(command, headers) {
     return extractedHeaders;
 }
 
-function extractDataForOne(extractedHeaders, data) {
-    let chartData = [];
-    for (let i = 0; i < data.length; i++) {
-        chartData.push({
-            [extractedHeaders[0]]: data[i][extractedHeaders[0]]
-        })
-    }
-    return chartData
-}
-
-function extractDataForTwo(extractedHeaders, data) {
-    let chartData = []
-    for (let i = 0; i < data.length; i++) {
-        chartData.push({
-            [extractedHeaders[0]]: data[i][extractedHeaders[0]], [extractedHeaders[1]]: data[i][extractedHeaders[1]]
-        })
-    }
-    return chartData
-}
-
-function extractDataForAll(extractedHeaders, data) {
-    let chartData = []
-    for (let i = 0; i < data.length; i++) {
-        chartData.push({
-            [extractedHeaders[0]]: data[i][extractedHeaders[0]]
-        })
-    }
-    for (let i = 0; i < data.length; i++) {
-        for (let n = 1; n < extractedHeaders.length; n++) {
-            chartData[i][extractedHeaders[n]] = data[i][extractedHeaders[n]]
+function extractFilteredHeaders(command, headerMatrix){
+    let doc = nlp(command)
+    let extractedFilteredHeaders = []
+    for (let i = 0; i < headerMatrix.length; i++) {
+        for( let n = 1; n < headerMatrix[i].length; n++){
+            if (doc.has(headerMatrix[i][n])) {
+                extractedFilteredHeaders.push({[headerMatrix[i][0]]: headerMatrix[i][n]})
+            }
         }
 
     }
-    console.log('here')
-    return chartData;
-
+    console.log('extrctedFilteredHeaders = ', extractedFilteredHeaders)
+    return extractedFilteredHeaders;
 }
 
-function extractDataForThree(extractedHeaders, data) {
-    let chartData = []
-    for (let i = 0; i < data.length; i++) {
-        chartData.push({
-            [extractedHeaders[0]]: data[i][extractedHeaders[0]], [extractedHeaders[1]]: data[i][extractedHeaders[1]], [extractedHeaders[2]]: data[i][extractedHeaders[2]],
-        })
-    }
-    return chartData
-}
+
 
 function createRandomColors(extractedHeader, data) {
     const numCategories = countCategories(extractedHeader, data)
@@ -565,7 +547,6 @@ function checkTimeAndReorder(extractedHeaders, data) {
             let tmpHeader = extractedHeaders[0]
             extractedHeaders[0] = extractedHeaders[i];
             extractedHeaders[i] = tmpHeader
-            console.log('here')
             return true
         } else if (findType(extractedHeaders[i], data) === "temporal") {
             let tmpHeader = extractedHeaders[0]
@@ -587,3 +568,82 @@ function reorderForTimeAgain(extractedHeaders, data) {
     }
     return extractedHeaders
 }
+
+function filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj) {
+    let extraData = []
+    let uniqueHeaders = []
+    // for( let i = 0; i < filteredHeaders.length;i++){
+    //     let found = false;
+    //     let keys = Object.keys(filteredHeaders[i]);
+    //     for(let n = 0; n < uniqueHeaders.length; n++){
+    //         if(uniqueHeaders[n] === keys[0]){
+    //             found = true
+    //         }
+    //     }
+    //     if(!found){
+    //         uniqueHeaders.push(keys[0])
+    //     }
+    // }
+
+    // for(let i = 0; i < uniqueHeaders.length; i++){
+    //     let found = false;
+    //     for(let n = 0; n < extractedHeaders.length; n++){
+    //         if(extractedHeaders[i] === uniqueHeaders[n]){
+    //             found = true
+    //         }
+    //     }
+    //     if(!found){
+    //         extraData.push(uniqueHeaders[i])
+    //     }
+
+    // }
+
+    // console.log(filteredHeaders[0])
+}
+
+// function extractDataForOne(extractedHeaders, data) {
+//     let chartData = [];
+//     for (let i = 0; i < data.length; i++) {
+//         chartData.push({
+//             [extractedHeaders[0]]: data[i][extractedHeaders[0]]
+//         })
+//     }
+//     return chartData
+// }
+
+// function extractDataForTwo(extractedHeaders, data) {
+//     let chartData = []
+//     for (let i = 0; i < data.length; i++) {
+//         chartData.push({
+//             [extractedHeaders[0]]: data[i][extractedHeaders[0]], [extractedHeaders[1]]: data[i][extractedHeaders[1]]
+//         })
+//     }
+//     return chartData
+// }
+
+// function extractDataForAll(extractedHeaders, data) {
+//     let chartData = []
+//     for (let i = 0; i < data.length; i++) {
+//         chartData.push({
+//             [extractedHeaders[0]]: data[i][extractedHeaders[0]]
+//         })
+//     }
+//     for (let i = 0; i < data.length; i++) {
+//         for (let n = 1; n < extractedHeaders.length; n++) {
+//             chartData[i][extractedHeaders[n]] = data[i][extractedHeaders[n]]
+//         }
+
+//     }
+//     return chartData;
+
+// }
+
+// function extractDataForThree(extractedHeaders, data) {
+//     let chartData = []
+//     for (let i = 0; i < data.length; i++) {
+//         chartData.push({
+//             [extractedHeaders[0]]: data[i][extractedHeaders[0]], [extractedHeaders[1]]: data[i][extractedHeaders[1]], [extractedHeaders[2]]: data[i][extractedHeaders[2]],
+//         })
+//     }
+//     return chartData
+// }
