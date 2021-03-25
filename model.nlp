@@ -38,7 +38,43 @@
             "intent": "graph.comparison",
             "domain": "default"
           },
-          "compar": {
+          "a,and,bar,by,chart,nomin,of,quantit,show,side,valu,with": {
+            "intent": "graph.comparison",
+            "domain": "default"
+          },
+          "a,and,chart,me,nomin,of,quantit,show": {
+            "intent": "graph.comparison",
+            "domain": "default"
+          },
+          "and,compar,how,i,nomin,quantit,see,to,want": {
+            "intent": "graph.comparison",
+            "domain": "default"
+          },
+          "a,bar,chart,creat,each,how,is,much,nomin,quantit,show,the": {
+            "intent": "graph.comparison",
+            "domain": "default"
+          },
+          "differ,is,nomin,of,quantit,the,what": {
+            "intent": "graph.comparison",
+            "domain": "default"
+          },
+          "a,by,graph,make,me,my,nomin,of,quantit,show,the,whole": {
+            "intent": "graph.comparison",
+            "domain": "default"
+          },
+          "a,diagram,each,for,nomin,of,quantit,show": {
+            "intent": "graph.comparison",
+            "domain": "default"
+          },
+          "a,benchmark,best,graph,make,me,nomin,of,perform,quantit,show,the": {
+            "intent": "graph.comparison",
+            "domain": "default"
+          },
+          "a,bar,chart,me,nomin,quantit,show,with": {
+            "intent": "graph.comparison",
+            "domain": "default"
+          },
+          "compareof,nomin": {
             "intent": "graph.comparison",
             "domain": "default"
           },
@@ -46,7 +82,67 @@
             "intent": "graph.relationship",
             "domain": "default"
           },
+          "and,between,correl,each,for,plot,quantit,the,their": {
+            "intent": "graph.relationship",
+            "domain": "default"
+          },
+          "a,and,for,make,me,plot,quantit,quantita,scatter": {
+            "intent": "graph.relationship",
+            "domain": "default"
+          },
+          "and,between,in,me,quantit,relat,show,the,various": {
+            "intent": "graph.relationship",
+            "domain": "default"
+          },
+          "a,bubbl,in,make,median,of,per,plot,quantit,to": {
+            "intent": "graph.relationship",
+            "domain": "default"
+          },
+          "a,against,chart,make,quantit,show": {
+            "intent": "graph.relationship",
+            "domain": "default"
+          },
+          "and,between,is,quantit,relationship,the,what": {
+            "intent": "graph.relationship",
+            "domain": "default"
+          },
+          "a,bubbl,chart,make,quantit,with": {
+            "intent": "graph.relationship",
+            "domain": "default"
+          },
           "distribut": {
+            "intent": "graph.distribution",
+            "domain": "default"
+          },
+          "distribut,me,nomin,of,show,the": {
+            "intent": "graph.distribution",
+            "domain": "default"
+          },
+          "a,bar,chart,data,distribut,make,me,nomin,use": {
+            "intent": "graph.distribution",
+            "domain": "default"
+          },
+          "distribut,histogram,nomin,of,show": {
+            "intent": "graph.distribution",
+            "domain": "default"
+          },
+          "a,bar,chart,distribut,in,nomin,show": {
+            "intent": "graph.distribution",
+            "domain": "default"
+          },
+          "all,distribut,for,is,nomin,the,what": {
+            "intent": "graph.distribution",
+            "domain": "default"
+          },
+          "a,and,me,of,plot,quantit,scatter,show": {
+            "intent": "graph.distribution",
+            "domain": "default"
+          },
+          "a,compar,doe,how,in,plot,quantit,scatter,show,with": {
+            "intent": "graph.distribution",
+            "domain": "default"
+          },
+          "a,and,bar,chart,for,quantit,show,the": {
             "intent": "graph.distribution",
             "domain": "default"
           },
@@ -69,7 +165,52 @@
           },
           {
             "domain": "default",
-            "utterance": "compare",
+            "utterance": "show a bar chart with side by side values of quantitative and nominal",
+            "intent": "graph.comparison"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a chart of quantitative and nominal",
+            "intent": "graph.comparison"
+          },
+          {
+            "domain": "default",
+            "utterance": "i want to see how nominal and nominal compare to quantitative",
+            "intent": "graph.comparison"
+          },
+          {
+            "domain": "default",
+            "utterance": "create a bar chart the shows how much each nominal is quantitative",
+            "intent": "graph.comparison"
+          },
+          {
+            "domain": "default",
+            "utterance": "what is the quantitative of the different nominal",
+            "intent": "graph.comparison"
+          },
+          {
+            "domain": "default",
+            "utterance": "make me a graph showing my nominal by quantitative of the whole",
+            "intent": "graph.comparison"
+          },
+          {
+            "domain": "default",
+            "utterance": "for each nominal show a diagram of quantitative",
+            "intent": "graph.comparison"
+          },
+          {
+            "domain": "default",
+            "utterance": "make me a benchmark graph of nominal showing the best performing quantitative",
+            "intent": "graph.comparison"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a bar chart with nominal quantitative",
+            "intent": "graph.comparison"
+          },
+          {
+            "domain": "default",
+            "utterance": "compareof nominal",
             "intent": "graph.comparison"
           },
           {
@@ -79,7 +220,82 @@
           },
           {
             "domain": "default",
+            "utterance": "plot for each quantitative the correlation between quantitative and their quantitative",
+            "intent": "graph.relationship"
+          },
+          {
+            "domain": "default",
+            "utterance": "make me a scatter plot for quantitaive and quantitative",
+            "intent": "graph.relationship"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me the relation between quantitative and quantitative in various quantitative",
+            "intent": "graph.relationship"
+          },
+          {
+            "domain": "default",
+            "utterance": "make a bubble plot of quantitative per to median quantitative in quantitative",
+            "intent": "graph.relationship"
+          },
+          {
+            "domain": "default",
+            "utterance": "make a chart showing quantitative quantitative against quantitative",
+            "intent": "graph.relationship"
+          },
+          {
+            "domain": "default",
+            "utterance": "what is the relationship between quantitative and quantitative",
+            "intent": "graph.relationship"
+          },
+          {
+            "domain": "default",
+            "utterance": "make a bubble chart with quantitative quantitative",
+            "intent": "graph.relationship"
+          },
+          {
+            "domain": "default",
             "utterance": "distribution",
+            "intent": "graph.distribution"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me the distribution of nominal",
+            "intent": "graph.distribution"
+          },
+          {
+            "domain": "default",
+            "utterance": "using nominal distribution data make me a bar chart",
+            "intent": "graph.distribution"
+          },
+          {
+            "domain": "default",
+            "utterance": "show histogram of nominal distribution",
+            "intent": "graph.distribution"
+          },
+          {
+            "domain": "default",
+            "utterance": "show in a bar chart nominal distribution",
+            "intent": "graph.distribution"
+          },
+          {
+            "domain": "default",
+            "utterance": "what is the nominal distribution for all nominal",
+            "intent": "graph.distribution"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a scatter plot of quantitative and quantitative",
+            "intent": "graph.distribution"
+          },
+          {
+            "domain": "default",
+            "utterance": "show in a scatter plot how does quantitative compare with quantitative",
+            "intent": "graph.distribution"
+          },
+          {
+            "domain": "default",
+            "utterance": "show a bar chart for the quantitative and quantitative",
             "intent": "graph.distribution"
           },
           {
@@ -103,9 +319,62 @@
             },
             "features": {
               "comparison": 1,
+              "show": 1,
+              "a": 1,
+              "bar": 1,
+              "chart": 1,
+              "with": 1,
+              "side": 1,
+              "by": 1,
+              "valu": 1,
+              "of": 1,
+              "quantit": 1,
+              "and": 1,
+              "nomin": 1,
+              "me": 1,
+              "i": 1,
+              "want": 1,
+              "to": 1,
+              "see": 1,
+              "how": 1,
               "compar": 1,
+              "creat": 1,
+              "the": 1,
+              "much": 1,
+              "each": 1,
+              "is": 1,
+              "what": 1,
+              "differ": 1,
+              "make": 1,
+              "graph": 1,
+              "my": 1,
+              "whole": 1,
+              "for": 1,
+              "diagram": 1,
+              "benchmark": 1,
+              "best": 1,
+              "perform": 1,
+              "compareof": 1,
               "relationship": 1,
+              "plot": 1,
+              "correl": 1,
+              "between": 1,
+              "their": 1,
+              "scatter": 1,
+              "quantita": 1,
+              "relat": 1,
+              "in": 1,
+              "various": 1,
+              "bubbl": 1,
+              "per": 1,
+              "median": 1,
+              "against": 1,
               "distribut": 1,
+              "use": 1,
+              "data": 1,
+              "histogram": 1,
+              "all": 1,
+              "doe": 1,
               "composit": 1
             },
             "intents": {
@@ -117,13 +386,101 @@
             "intentFeatures": {
               "graph.comparison": {
                 "comparison": 1,
-                "compar": 1
+                "show": 1,
+                "a": 1,
+                "bar": 1,
+                "chart": 1,
+                "with": 1,
+                "side": 1,
+                "by": 1,
+                "valu": 1,
+                "of": 1,
+                "quantit": 1,
+                "and": 1,
+                "nomin": 1,
+                "me": 1,
+                "i": 1,
+                "want": 1,
+                "to": 1,
+                "see": 1,
+                "how": 1,
+                "compar": 1,
+                "creat": 1,
+                "the": 1,
+                "much": 1,
+                "each": 1,
+                "is": 1,
+                "what": 1,
+                "differ": 1,
+                "make": 1,
+                "graph": 1,
+                "my": 1,
+                "whole": 1,
+                "for": 1,
+                "diagram": 1,
+                "benchmark": 1,
+                "best": 1,
+                "perform": 1,
+                "compareof": 1
               },
               "graph.relationship": {
-                "relationship": 1
+                "relationship": 1,
+                "plot": 1,
+                "for": 1,
+                "each": 1,
+                "quantit": 1,
+                "the": 1,
+                "correl": 1,
+                "between": 1,
+                "and": 1,
+                "their": 1,
+                "make": 1,
+                "me": 1,
+                "a": 1,
+                "scatter": 1,
+                "quantita": 1,
+                "show": 1,
+                "relat": 1,
+                "in": 1,
+                "various": 1,
+                "bubbl": 1,
+                "of": 1,
+                "per": 1,
+                "to": 1,
+                "median": 1,
+                "chart": 1,
+                "against": 1,
+                "what": 1,
+                "is": 1,
+                "with": 1
               },
               "graph.distribution": {
-                "distribut": 1
+                "distribut": 1,
+                "show": 1,
+                "me": 1,
+                "the": 1,
+                "of": 1,
+                "nomin": 1,
+                "use": 1,
+                "data": 1,
+                "make": 1,
+                "a": 1,
+                "bar": 1,
+                "chart": 1,
+                "histogram": 1,
+                "in": 1,
+                "what": 1,
+                "is": 1,
+                "for": 1,
+                "all": 1,
+                "scatter": 1,
+                "plot": 1,
+                "quantit": 1,
+                "and": 1,
+                "how": 1,
+                "doe": 1,
+                "compar": 1,
+                "with": 1
               },
               "graph.composition": {
                 "composit": 1
@@ -133,13 +490,207 @@
               "comparison": [
                 "graph.comparison"
               ],
+              "show": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "a": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "bar": [
+                "graph.comparison",
+                "graph.distribution"
+              ],
+              "chart": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "with": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "side": [
+                "graph.comparison"
+              ],
+              "by": [
+                "graph.comparison"
+              ],
+              "valu": [
+                "graph.comparison"
+              ],
+              "of": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "quantit": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "and": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "nomin": [
+                "graph.comparison",
+                "graph.distribution"
+              ],
+              "me": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "i": [
+                "graph.comparison"
+              ],
+              "want": [
+                "graph.comparison"
+              ],
+              "to": [
+                "graph.comparison",
+                "graph.relationship"
+              ],
+              "see": [
+                "graph.comparison"
+              ],
+              "how": [
+                "graph.comparison",
+                "graph.distribution"
+              ],
               "compar": [
+                "graph.comparison",
+                "graph.distribution"
+              ],
+              "creat": [
+                "graph.comparison"
+              ],
+              "the": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "much": [
+                "graph.comparison"
+              ],
+              "each": [
+                "graph.comparison",
+                "graph.relationship"
+              ],
+              "is": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "what": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "differ": [
+                "graph.comparison"
+              ],
+              "make": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "graph": [
+                "graph.comparison"
+              ],
+              "my": [
+                "graph.comparison"
+              ],
+              "whole": [
+                "graph.comparison"
+              ],
+              "for": [
+                "graph.comparison",
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "diagram": [
+                "graph.comparison"
+              ],
+              "benchmark": [
+                "graph.comparison"
+              ],
+              "best": [
+                "graph.comparison"
+              ],
+              "perform": [
+                "graph.comparison"
+              ],
+              "compareof": [
                 "graph.comparison"
               ],
               "relationship": [
                 "graph.relationship"
               ],
+              "plot": [
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "correl": [
+                "graph.relationship"
+              ],
+              "between": [
+                "graph.relationship"
+              ],
+              "their": [
+                "graph.relationship"
+              ],
+              "scatter": [
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "quantita": [
+                "graph.relationship"
+              ],
+              "relat": [
+                "graph.relationship"
+              ],
+              "in": [
+                "graph.relationship",
+                "graph.distribution"
+              ],
+              "various": [
+                "graph.relationship"
+              ],
+              "bubbl": [
+                "graph.relationship"
+              ],
+              "per": [
+                "graph.relationship"
+              ],
+              "median": [
+                "graph.relationship"
+              ],
+              "against": [
+                "graph.relationship"
+              ],
               "distribut": [
+                "graph.distribution"
+              ],
+              "use": [
+                "graph.distribution"
+              ],
+              "data": [
+                "graph.distribution"
+              ],
+              "histogram": [
+                "graph.distribution"
+              ],
+              "all": [
+                "graph.distribution"
+              ],
+              "doe": [
                 "graph.distribution"
               ],
               "composit": [
@@ -160,9 +711,62 @@
               },
               "features": [
                 "comparison",
+                "show",
+                "a",
+                "bar",
+                "chart",
+                "with",
+                "side",
+                "by",
+                "valu",
+                "of",
+                "quantit",
+                "and",
+                "nomin",
+                "me",
+                "i",
+                "want",
+                "to",
+                "see",
+                "how",
                 "compar",
+                "creat",
+                "the",
+                "much",
+                "each",
+                "is",
+                "what",
+                "differ",
+                "make",
+                "graph",
+                "my",
+                "whole",
+                "for",
+                "diagram",
+                "benchmark",
+                "best",
+                "perform",
+                "compareof",
                 "relationship",
+                "plot",
+                "correl",
+                "between",
+                "their",
+                "scatter",
+                "quantita",
+                "relat",
+                "in",
+                "various",
+                "bubbl",
+                "per",
+                "median",
+                "against",
                 "distribut",
+                "use",
+                "data",
+                "histogram",
+                "all",
+                "doe",
                 "composit"
               ],
               "intents": [
@@ -173,36 +777,248 @@
               ],
               "perceptrons": [
                 [
-                  10.09615707397461,
-                  10.087945938110352,
-                  -4.024667263031006,
-                  -4.010825157165527,
-                  -3.9962873458862305,
-                  4.076714319175261
+                  11.37307071685791,
+                  -1.517146110534668,
+                  1.3038561344146729,
+                  0.11337082833051682,
+                  0.5617826581001282,
+                  -0.07700695842504501,
+                  -0.09671100974082947,
+                  1.1675227880477905,
+                  -0.09671100974082947,
+                  1.217270016670227,
+                  2.2497143745422363,
+                  -1.1682950258255005,
+                  8.013851165771484,
+                  0.9919023513793945,
+                  0.46667778491973877,
+                  0.46667778491973877,
+                  -0.33597466349601746,
+                  0.46667778491973877,
+                  1.0381388664245605,
+                  0.46667778491973877,
+                  0.5716806054115295,
+                  -3.0074350833892822,
+                  0.5716806054115295,
+                  0.7938268184661865,
+                  0.9781466722488403,
+                  0.40662455558776855,
+                  1.8005411624908447,
+                  -3.7835254669189453,
+                  2.4967401027679443,
+                  1.264613389968872,
+                  1.264613389968872,
+                  -1.4673020839691162,
+                  1.0679186582565308,
+                  1.2317485809326172,
+                  1.2317485809326172,
+                  1.2317485809326172,
+                  3.670708417892456,
+                  -2.541071891784668,
+                  -3.6675028800964355,
+                  -0.5910000205039978,
+                  -2.934326171875,
+                  -0.5910000205039978,
+                  -2.019453287124634,
+                  -0.5993749499320984,
+                  -0.8372958898544312,
+                  -2.7920427322387695,
+                  -0.8372958898544312,
+                  -2.8587348461151123,
+                  -0.6310383081436157,
+                  -0.6310383081436157,
+                  -1.5440396070480347,
+                  -8.304387092590332,
+                  -0.8183939456939697,
+                  -0.8183939456939697,
+                  -2.381718397140503,
+                  -0.15126754343509674,
+                  0,
+                  -2.4509196281433105,
+                  2.609350622588657
                 ],
                 [
-                  -1.9960479736328125,
-                  -1.987791657447815,
-                  12.088337898254395,
-                  -2.014575242996216,
-                  -2.00758957862854,
-                  2.041140666264944
+                  -2.879484176635742,
+                  -1.814029335975647,
+                  -0.6667958498001099,
+                  -3.791581630706787,
+                  0.9759047031402588,
+                  -0.10793248564004898,
+                  0,
+                  -0.4260779023170471,
+                  0,
+                  -3.59167742729187,
+                  2.8475089073181152,
+                  -0.22648049890995026,
+                  -3.589285373687744,
+                  0.6314553618431091,
+                  -0.40881404280662537,
+                  -0.40881404280662537,
+                  0.22104977071285248,
+                  -0.40881404280662537,
+                  -1.7458049058914185,
+                  -1.7458049058914185,
+                  0,
+                  -1.4653249979019165,
+                  0,
+                  1.6830053329467773,
+                  -1.9387781620025635,
+                  -1.9387781620025635,
+                  -0.23548048734664917,
+                  6.265862464904785,
+                  -0.7962467670440674,
+                  -0.4260779023170471,
+                  -0.4260779023170471,
+                  0.8058291077613831,
+                  0,
+                  -0.28666606545448303,
+                  -0.28666606545448303,
+                  -0.28666606545448303,
+                  0,
+                  10.730887413024902,
+                  0.8480092287063599,
+                  1.6830053329467773,
+                  3.3228001594543457,
+                  1.6830053329467773,
+                  -1.528873324394226,
+                  2.2523813247680664,
+                  2.930490255355835,
+                  2.0224781036376953,
+                  2.930490255355835,
+                  1.897201657295227,
+                  0.6911152601242065,
+                  0.6911152601242065,
+                  3.6225996017456055,
+                  -2.9726037979125977,
+                  -0.5046648979187012,
+                  -0.5046648979187012,
+                  -0.053165242075920105,
+                  -0.20974813401699066,
+                  -1.180487871170044,
+                  -2.9109437465667725,
+                  3.0442746727408507
                 ],
                 [
-                  -2.0039784908294678,
-                  -1.9960782527923584,
-                  -1.9878230094909668,
-                  12.088305473327637,
-                  -2.0146090984344482,
-                  2.0426991367996212
+                  -1.7285057306289673,
+                  4.263138771057129,
+                  1.6295959949493408,
+                  3.473600149154663,
+                  -0.06037799268960953,
+                  -1.2611078023910522,
+                  -1.3841724395751953,
+                  -2.7330572605133057,
+                  -1.3841724395751953,
+                  1.4613767862319946,
+                  -3.0231900215148926,
+                  1.5215786695480347,
+                  -6.770696640014648,
+                  -1.390151023864746,
+                  -0.19913777709007263,
+                  -0.19913777709007263,
+                  -0.4739290177822113,
+                  -0.19913777709007263,
+                  0.45365074276924133,
+                  2.027095317840576,
+                  -1.3515546321868896,
+                  3.043545722961426,
+                  -1.3515546321868896,
+                  -3.4158544540405273,
+                  -0.3089255094528198,
+                  1.2645193338394165,
+                  -0.3560978174209595,
+                  -4.269863605499268,
+                  -1.747633934020996,
+                  -0.8105013966560364,
+                  -0.8105013966560364,
+                  1.531234622001648,
+                  -0.6585067510604858,
+                  -0.6388252377510071,
+                  -0.6388252377510071,
+                  -0.6388252377510071,
+                  -0.09828173369169235,
+                  -1.7216132879257202,
+                  3.3187105655670166,
+                  -1.1022284030914307,
+                  -2.555720090866089,
+                  -1.1022284030914307,
+                  4.632969856262207,
+                  -5.657090663909912,
+                  -1.398783564567566,
+                  -1.8901311159133911,
+                  -1.398783564567566,
+                  -0.17666974663734436,
+                  -0.17666974663734436,
+                  -0.17666974663734436,
+                  -0.32682710886001587,
+                  11.95773983001709,
+                  3.9229819774627686,
+                  3.9229819774627686,
+                  1.5295758247375488,
+                  1.7478989362716675,
+                  2.3275206089019775,
+                  -1.7434138059616089,
+                  1.820190912787694
                 ],
                 [
-                  -2.0115439891815186,
-                  -2.004007339477539,
-                  -1.9961081743240356,
-                  -1.9878544807434082,
-                  12.088272094726562,
-                  2.0440051570274105
+                  -2.0517632961273193,
+                  -0.304517924785614,
+                  -0.40678155422210693,
+                  -0.05258491635322571,
+                  -0.3282445967197418,
+                  -0.2047734409570694,
+                  -0.02452715113759041,
+                  -0.02452715113759041,
+                  -0.02452715113759041,
+                  -0.22230729460716248,
+                  -0.7019227743148804,
+                  -0.3401355445384979,
+                  -1.2068800926208496,
+                  -0.12201721221208572,
+                  -0.06172692030668259,
+                  -0.06172692030668259,
+                  -0.09757695347070694,
+                  -0.06172692030668259,
+                  -0.09287098050117493,
+                  -0.07947919517755508,
+                  -0.006927995476871729,
+                  -0.25917866826057434,
+                  -0.006927995476871729,
+                  -0.12258995324373245,
+                  -0.09544890373945236,
+                  -0.0820688009262085,
+                  -0.05711715668439865,
+                  -0.29305407404899597,
+                  0,
+                  0,
+                  0,
+                  -0.15792107582092285,
+                  -0.005580834578722715,
+                  0,
+                  0,
+                  0,
+                  -0.9076927900314331,
+                  -2.037306070327759,
+                  -0.168194979429245,
+                  -0.09942815452814102,
+                  -0.16262777149677277,
+                  -0.09942815452814102,
+                  -0.03835084289312363,
+                  -0.023885566741228104,
+                  -0.06026871129870415,
+                  -0.1005503460764885,
+                  -0.06026871129870415,
+                  -0.17666704952716827,
+                  -0.027329139411449432,
+                  -0.027329139411449432,
+                  -0.08667775243520737,
+                  -2.025383710861206,
+                  0,
+                  0,
+                  -0.036483462899923325,
+                  -0.015786917880177498,
+                  -0.009883333928883076,
+                  11.956567764282227,
+                  2.117313584562402
                 ]
               ]
             }
@@ -218,7 +1034,43 @@
       ],
       [
         "en",
-        "compare"
+        "show a bar chart with side by side values of quantitative and nominal"
+      ],
+      [
+        "en",
+        "show me a chart of quantitative and nominal"
+      ],
+      [
+        "en",
+        "i want to see how nominal and nominal compare to quantitative"
+      ],
+      [
+        "en",
+        "create a bar chart the shows how much each nominal is quantitative"
+      ],
+      [
+        "en",
+        "what is the quantitative of the different nominal"
+      ],
+      [
+        "en",
+        "make me a graph showing my nominal by quantitative of the whole"
+      ],
+      [
+        "en",
+        "for each nominal show a diagram of quantitative"
+      ],
+      [
+        "en",
+        "make me a benchmark graph of nominal showing the best performing quantitative"
+      ],
+      [
+        "en",
+        "show me a bar chart with nominal quantitative"
+      ],
+      [
+        "en",
+        "compareof nominal"
       ],
       [
         "en",
@@ -226,7 +1078,67 @@
       ],
       [
         "en",
+        "plot for each quantitative the correlation between quantitative and their quantitative"
+      ],
+      [
+        "en",
+        "make me a scatter plot for quantitaive and quantitative"
+      ],
+      [
+        "en",
+        "show me the relation between quantitative and quantitative in various quantitative"
+      ],
+      [
+        "en",
+        "make a bubble plot of quantitative per to median quantitative in quantitative"
+      ],
+      [
+        "en",
+        "make a chart showing quantitative quantitative against quantitative"
+      ],
+      [
+        "en",
+        "what is the relationship between quantitative and quantitative"
+      ],
+      [
+        "en",
+        "make a bubble chart with quantitative quantitative"
+      ],
+      [
+        "en",
         "distribution"
+      ],
+      [
+        "en",
+        "show me the distribution of nominal"
+      ],
+      [
+        "en",
+        "using nominal distribution data make me a bar chart"
+      ],
+      [
+        "en",
+        "show histogram of nominal distribution"
+      ],
+      [
+        "en",
+        "show in a bar chart nominal distribution"
+      ],
+      [
+        "en",
+        "what is the nominal distribution for all nominal"
+      ],
+      [
+        "en",
+        "show me a scatter plot of quantitative and quantitative"
+      ],
+      [
+        "en",
+        "show in a scatter plot how does quantitative compare with quantitative"
+      ],
+      [
+        "en",
+        "show a bar chart for the quantitative and quantitative"
       ],
       [
         "en",

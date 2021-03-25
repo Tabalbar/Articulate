@@ -1,8 +1,9 @@
 
 const nlp = require('compromise')
 module.exports = (intent, command, headers, data, headerMatrix) => {
-    let extractedHeaders = extractHeaders(command, headers)
     let filteredHeaders = extractFilteredHeaders(command, headerMatrix)
+    let extractedHeaders = extractHeaders(command, headers, filteredHeaders)
+
     let chartObj = {
         charts: null,
         errMsg: ''
@@ -17,6 +18,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                     chartObj.charts = {
                         data: { table: data },
                         spec: {
+                            title: command,
                             width: 200,
                             height: 200,
                             transform: [],
@@ -35,6 +37,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                         chartObj.charts = {
                             data: { table: data },
                             spec: {
+                                title: command,
                                 width: 200,
                                 height: 200,
                                 transform: [],
@@ -51,6 +54,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                         chartObj.charts = {
                             data: { table: data },
                             spec: {
+                                title: command,
                                 width: { step: 50 },
                                 mark: "bar",
                                 transform: [],
@@ -91,6 +95,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                     chartObj.charts = {
                         data: { table: data },
                         spec: {
+                            title: command,
                             width: 200,
                             height: 200,
                             mark: 'bar',
@@ -106,6 +111,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                     chartObj.charts = {
                         data: { table: data },
                         spec: {
+                            title: command,
                             width: { step: 10 },
                             mark: "bar",
                             transform: [],
@@ -138,6 +144,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                     chartObj.charts = {
                         data: { table: data },
                         spec: {
+                            title: command,
                             transform: [],
                             columns: extractedHeaders.length - 1,
                             concat: createLayers(extractedHeaders, data),
@@ -150,9 +157,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                     chartObj.errMsg = "Could not create specification. Expected headers >= 2, got " + extractedHeaders.length
                 }
             }
-            if(filteredHeaders.length){
                 filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
-            }
             return chartObj
         case "relationship":
             if (extractedHeaders.length === 2) {
@@ -160,6 +165,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                 chartObj.charts = {
                     data: { table: data },
                     spec: {
+                        title: command,
                         width: 200,
                         height: 200,
                         mark: 'point',
@@ -176,6 +182,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                 chartObj.charts = {
                     data: { table: data },
                     spec: {
+                        title: command,
                         width: 200,
                         height: 200,
                         mark: 'point',
@@ -194,6 +201,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                 chartObj.charts = {
                     data: { table: data },
                     spec: {
+                        title: command,
                         width: 200,
                         height: 200,
                         mark: 'point',
@@ -210,6 +218,8 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
             } else {
                 chartObj.errMsg = "Could not create specification. Expected headers 2, 3, or 4, got " + extractedHeaders.length
             }
+            filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
+
             return chartObj;
 
         case "distribution":
@@ -217,6 +227,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                 chartObj.charts = {
                     data: { table: data },
                     spec: {
+                        title: command,
                         mark: "bar",
                         transform: [],
                         encoding: {
@@ -232,6 +243,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                 chartObj.charts = {
                     data: { table: data },
                     spec: {
+                        title: command,
                         mark: "point",
                         transform: [],
                         encoding: {
@@ -247,6 +259,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                 chartObj.charts = {
                     data: { table: data },
                     spec: {
+                        title: command,
                         projection: { type: { expr: "projection" } },
                         mark: "circle",
                         width: 500,
@@ -297,6 +310,8 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                 chartObj.errMsg = "Could not create specification. Expected headers 1, 2, or 3, got " + extractedHeaders.length
 
             }
+            filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
+
             return chartObj
         case "composition":
             hasTime = checkTimeAndReorderComposition(extractedHeaders, data);
@@ -305,6 +320,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                     chartObj.charts = {
                         data: { table: data },
                         spec: {
+                            title: command,
                             mark: "bar",
                             transform: [],
                             encoding: {
@@ -335,6 +351,7 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
                     chartObj.charts = {
                         data: { table: data },
                         spec: {
+                            title: command,
                             mark: "arc",
                             transform: [],
                             encoding: {
@@ -350,6 +367,8 @@ module.exports = (intent, command, headers, data, headerMatrix) => {
 
                 }
             }
+            filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
+
             return chartObj
         default: return ''
     }
@@ -467,13 +486,29 @@ function findType(header, data) {
     }
 }
 
-function extractHeaders(command, headers) {
+function extractHeaders(command, headers, filteredHeaders) {
     let doc = nlp(command)
     let extractedHeaders = []
     for (let i = 0; i < headers.length; i++) {
         if (doc.has(headers[i])) {
             extractedHeaders.push(headers[i])
         }
+    }
+    let accessors = []
+    let keys = Object.keys(filteredHeaders);
+    for( let i = 0; i < keys.length;i++){
+        let found = false;
+        if(filteredHeaders[keys[i]].length > 0){
+            for(let n = 0; n < extractedHeaders.length; n++){
+                if(extractedHeaders[n] === keys[i]){
+                    found = true
+                }
+            }
+            if(!found){
+                extractedHeaders.push(keys[i])
+            }
+        }
+
     }
     return extractedHeaders;
 }
@@ -482,14 +517,14 @@ function extractFilteredHeaders(command, headerMatrix){
     let doc = nlp(command)
     let extractedFilteredHeaders = []
     for (let i = 0; i < headerMatrix.length; i++) {
+        extractedFilteredHeaders[headerMatrix[i][0]] = []
         for( let n = 1; n < headerMatrix[i].length; n++){
             if (doc.has(headerMatrix[i][n])) {
-                extractedFilteredHeaders.push({[headerMatrix[i][0]]: headerMatrix[i][n]})
+                extractedFilteredHeaders[headerMatrix[i][0]].push(headerMatrix[i][n])
             }
         }
 
     }
-    console.log('extrctedFilteredHeaders = ', extractedFilteredHeaders)
     return extractedFilteredHeaders;
 }
 
@@ -570,21 +605,33 @@ function reorderForTimeAgain(extractedHeaders, data) {
 }
 
 function filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj) {
-    let extraData = []
-    let uniqueHeaders = []
+    let accessors = []
+    let keys = Object.keys(filteredHeaders);
+    for(let i = 0; i < keys.length; i++) {
+        if(filteredHeaders[keys[i]].length > 0){
+            if(findType(keys[i], data) === "nominal"){
+                chartObj.charts.spec.transform.push({
+                    filter: {field: keys[i], oneOf: filteredHeaders[keys[i]]}
+                })
+            }
+        }
+    }
     // for( let i = 0; i < filteredHeaders.length;i++){
     //     let found = false;
-    //     let keys = Object.keys(filteredHeaders[i]);
-    //     for(let n = 0; n < uniqueHeaders.length; n++){
-    //         if(uniqueHeaders[n] === keys[0]){
+    //     for(let n = 0; n < filteredHeaders.length; n++){
+    //         if(filteredHeaders[n] === keys[0]){
     //             found = true
     //         }
     //     }
     //     if(!found){
-    //         uniqueHeaders.push(keys[0])
+    //         accessors.push(keys[0])
     //     }
     // }
-
+    // for(let i = 0; i < accessors.length; i++){
+    //     if(findType(accessors[i], data) === "nominal"){
+    //         chartObj.charts.spec.transform.push({filter: {field: accessors[i], equal: filteredHeaders[i][accessors[i]]}})
+    //     }
+    // }
     // for(let i = 0; i < uniqueHeaders.length; i++){
     //     let found = false;
     //     for(let n = 0; n < extractedHeaders.length; n++){

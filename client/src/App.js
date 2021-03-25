@@ -112,7 +112,7 @@ function App() {
     });
     const body = await response.text();
     const {chartObj} = JSON.parse(body)
-    console.log(chartObj.charts === null)
+    console.log(chartObj)
     if(chartObj.errMsg === '' && chartObj.charts !== null) {
       setCharts(prev=>[...prev, chartObj.charts])
 
@@ -150,7 +150,7 @@ function App() {
               charts.map(element => {
                 return (
                   <>
-                    <VegaLite spec={element.spec} data={element.data} />
+                    <VegaLite spec={element.spec} data={{table: data}} />
                   </>
                 )
               })

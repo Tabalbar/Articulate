@@ -12,6 +12,5 @@ module.exports = (command) => {
     //     return lemmatize.noun(noun.text())
     // })
     // console.log(newCommand.text(), 'lololo')
-    console.log(doc.text())
     return doc.text()
 }
