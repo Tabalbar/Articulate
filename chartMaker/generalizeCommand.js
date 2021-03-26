@@ -1,22 +1,36 @@
 const nlp = require('compromise')
 const createVector = require('./createVector')
 nlp.extend(require('compromise-numbers'))
+nlp.extend(require('compromise-dates'))
+var thesaurus = require("thesaurus");
+
 
 module.exports = (command, attributes, data) => {
     let doc = nlp(command)
-
-    const filteredHeaders = createMatrixForAll(attributes, data)
-    console.log(filteredHeaders[0][0])
-    for (let i = 0; i < filteredHeaders.length; i++) {
-        for (let n = 0; n < filteredHeaders[i].length; n++) {
-            if (doc.match(filteredHeaders[i][n])) {
-                doc.replace(filteredHeaders[i][n], findType(filteredHeaders[i][0], data))
+    let catchSynonymCommand = nlp(command);
+    const {featureMatrix, synonymMatrix} = createMatrixForAll(attributes, data)
+    for (let i = 0; i < featureMatrix.length; i++) {
+        for (let n = 0; n < featureMatrix[i].length; n++) {
+            if (doc.match(featureMatrix[i][n])) {
+                doc.replace(featureMatrix[i][n], findType(featureMatrix[i][0], data))
             }
         }
     }
     doc.numbers().replaceWith("quantitative")
-    console.log(doc.text())
-    return doc.text()
+    doc.dates().replaceWith("temporal")
+
+    for(let i = 0; i < synonymMatrix.length; i++){
+        for(let n = 0; n < synonymMatrix[i].length; n++){
+            if(catchSynonymCommand.match(synonymMatrix[i][n])){
+                // console.log(catchSynonymCommand.match(synonymMatrix[i][n]).text())
+                catchSynonymCommand.replace(synonymMatrix[i][n], synonymMatrix[i][0])
+            }
+        }
+    }
+    generalizedCommand = doc.text()
+    synonymCommand = catchSynonymCommand.text()
+    console.log(synonymCommand)
+    return {generalizedCommand, synonymCommand}
 }
 
 
@@ -35,21 +49,42 @@ let featureMatrix = [];
 
 function createMatrixForAll(headers, data){
     let featureMatrix = [];
-
+    let synonymMatrix = [];
     for (let i = 0; i < headers.length; i++) {
         let isNominal = false;
+        synonyms = [headers[i]]
         if (findType(headers[i], data) === "nominal") {
             var flags = [], output = [headers[i]], l = data.length, n;
             for (n = 0; n < l; n++) {
                 if (flags[data[n][headers[i]]]) continue;
                 flags[data[n][headers[i]]] = true;
                 output.push(data[n][headers[i]]);
+                output.push(thesaurus.find(data[n][headers[i]]))
+                output = output.flat()
             }
             featureMatrix.push(output)
         } else {
             var output = [headers[i]]
             featureMatrix.push(output)
         }
+
+        // console.log(headers[i].split(/\W/g))
+        // if(headers[i].match(/\W/g)){
+        //     let words = headers[i].split(/\W/g)
+        //     for(let i = 0; i < words.length; i++){
+        //         let doc = nlp(words[i])
+        //         if(doc.has('#Noun')){
+        //             console.log(doc.text())
+        //             synonyms.push(thesaurus.find(words[i]))
+        //             synonyms.push(words[i])
+        //         }
+        //     }
+
+        // }
+        synonyms.push(thesaurus.find(headers[i]))
+        synonyms = synonyms.flat()
+        synonymMatrix.push(synonyms)
+
     }
-    return featureMatrix
+    return {featureMatrix, synonymMatrix}
 }

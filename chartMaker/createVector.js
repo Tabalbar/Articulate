@@ -4,7 +4,6 @@ module.exports = (headers, data) => {
     let featureMatrix = [];
 
     for (let i = 0; i < headers.length; i++) {
-        let isNominal = false;
         if (findType(headers[i], data) === "nominal") {
             var flags = [], output = [headers[i]], l = data.length, n;
             for (n = 0; n < l; n++) {
@@ -13,6 +12,8 @@ module.exports = (headers, data) => {
                 output.push(data[n][headers[i]]);
             }
             featureMatrix.push(output)
+        } else {
+            featureMatrix.push([headers[i]])
         }
     }
     return featureMatrix

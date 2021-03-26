@@ -81,19 +81,19 @@ router.post('/', async (req, res, next) => {
   const attributes = req.body.attributes
   let charts = []
   const command = req.body.command
-  const generalizedCommand = generalizeCommand(command,attributes, data)
   const normalizedCommand = normalizeCommand(command)
+  const { generalizedCommand, synonymCommand } = generalizeCommand(command, attributes, data)
 
   const response = await manager.process('en', generalizedCommand)
-  console.log(response.answer)
   const headerMatrix = createVector(attributes, data)
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
     // add methods to run after the tagger
     world.postProcess(doc => {
       headerMatrix.forEach(firstD => {
-        firstD.forEach(noun=> {
+        firstD.forEach(noun => {
           doc.match(noun).tag('#Noun')
+          doc.match(noun + 's').tag('#Noun')
         })
       });
     })
@@ -103,8 +103,9 @@ router.post('/', async (req, res, next) => {
     charts: null,
     errMsg: ''
   }
+  console.log(response.answer)
   if (response) {
-    chartObj = chartMakerWithAnswer(response.answer, command, attributes, data, headerMatrix)
+    chartObj = chartMakerWithAnswer(response.answer, synonymCommand, attributes, data, headerMatrix, command)
   }
 
 
