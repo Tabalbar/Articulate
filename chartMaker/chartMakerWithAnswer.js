@@ -1,7 +1,7 @@
 
 const nlp = require('compromise')
 module.exports = (intent, command, headers, data, headerMatrix, actualCommand) => {
-    let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers)
+    let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers, command)
     let extractedHeaders = extractHeaders(command, headers, filteredHeaders)
     console.log(command, extractedHeaders)
     let chartObj = {
@@ -157,7 +157,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                     chartObj.errMsg = "Could not create specification. Expected headers >= 2, got " + extractedHeaders.length
                 }
             }
-            if(chartObj.errMsg === ""){
+            if (chartObj.errMsg === "") {
                 filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
 
             }
@@ -221,7 +221,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
             } else {
                 chartObj.errMsg = "Could not create specification. Expected headers 2, 3, or 4, got " + extractedHeaders.length
             }
-            if(chartObj.errMsg === ""){
+            if (chartObj.errMsg === "") {
                 filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
 
             }
@@ -315,7 +315,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                 chartObj.errMsg = "Could not create specification. Expected headers 1, 2, or 3, got " + extractedHeaders.length
 
             }
-            if(chartObj.errMsg === ""){
+            if (chartObj.errMsg === "") {
                 filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
 
             }
@@ -374,7 +374,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
 
                 }
             }
-            if(chartObj.errMsg === ""){
+            if (chartObj.errMsg === "") {
                 filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
 
             }
@@ -488,8 +488,8 @@ function findType(header, data) {
     header = header.toLowerCase()
     if (header.includes('date')
         || header.includes('year') || header.includes('month')
-        || header.includes('day') || header.includes('months') 
-        || header.includes('dates') ) {
+        || header.includes('day') || header.includes('months')
+        || header.includes('dates')) {
         return "temporal"
     } else if (isNaN(data[0][header])) {
         return "nominal"
@@ -508,15 +508,15 @@ function extractHeaders(command, headers, filteredHeaders) {
     }
     let accessors = []
     let keys = Object.keys(filteredHeaders);
-    for( let i = 0; i < keys.length;i++){
+    for (let i = 0; i < keys.length; i++) {
         let found = false;
-        if(filteredHeaders[keys[i]].length > 0){
-            for(let n = 0; n < extractedHeaders.length; n++){
-                if(extractedHeaders[n] === keys[i]){
+        if (filteredHeaders[keys[i]].length > 0) {
+            for (let n = 0; n < extractedHeaders.length; n++) {
+                if (extractedHeaders[n] === keys[i]) {
                     found = true
                 }
             }
-            if(!found){
+            if (!found) {
                 extractedHeaders.push(keys[i])
             }
         }
@@ -525,50 +525,57 @@ function extractHeaders(command, headers, filteredHeaders) {
     return extractedHeaders;
 }
 
-function extractFilteredHeaders(command, headerMatrix, data, headers){
+function extractFilteredHeaders(command, headerMatrix, data, headers, command) {
     let doc = nlp(command)
     let extractedFilteredHeaders = []
     let foundTimeHeader = false
     for (let i = 0; i < headerMatrix.length; i++) {
         extractedFilteredHeaders[headerMatrix[i][0]] = []
-        for( let n = 1; n < headerMatrix[i].length; n++){
+        for (let n = 1; n < headerMatrix[i].length; n++) {
             if (doc.has(headerMatrix[i][n])) {
                 extractedFilteredHeaders[headerMatrix[i][0]].push(headerMatrix[i][n])
             }
 
         }
 
-        if(findType(headerMatrix[i][0], data) === "temporal" && !foundTimeHeader){
-            console.log("here")
-            const {foundTime, timeHeader} = extractHeadersWithoutFilter(doc, headers, data)
-            if(!foundTime){
-
+        if (findType(headerMatrix[i][0], data) === "temporal" && !foundTimeHeader) {
+            console.log(headerMatrix[i][0])
+            const { foundTime, timeHeader } = extractHeadersWithoutFilter(doc, headers, data, command)
+            if (!foundTime) {
 
                 //todo: ******* find a way to add the accessor to extractedFilteredHeaders array before adding the filters
 
 
 
-
+                findDates(doc, extractedFilteredHeaders[headerMatrix[i][0]])
+                command += " " + headerMatrix[i][0]
+                foundTimeHeader = true;
+                console.log(timeHeader, headerMatrix[i][0])
+                console.log(foundTime)
                 // findDates(doc, extractedFilteredHeaders["State"])
             } else {
-                findDates(doc, extractedFilteredHeaders[headerMatrix[i][0]])
-                command += " " + timeHeader
+                console.log(foundTime)
+
+                if (timeHeader === headerMatrix[i][0]) {
+                    findDates(doc, extractedFilteredHeaders[headerMatrix[i][0]])
+
+                }
+
 
             }
-            foundTimeHeader = true;
+
 
         }
 
     }
     console.log(extractedFilteredHeaders)
-    function findDates(docCommand, header){
-        if(docCommand.match("to")){
+    function findDates(docCommand, header) {
+        if (docCommand.match("to")) {
             let termsBefore = docCommand.before('to').terms().out('array')
             let termsAfter = docCommand.after('to').terms().out('array')
-            const yearBefore = termsBefore[termsBefore.length-1]
+            const yearBefore = termsBefore[termsBefore.length - 1]
             const yearAfter = termsAfter[0]
-
-            if(!isNaN(yearBefore) && !isNaN(yearAfter)){
+            if (!isNaN(yearBefore) && !isNaN(yearAfter)) {
                 header.push(yearBefore)
                 header.push(yearAfter)
 
@@ -577,19 +584,22 @@ function extractFilteredHeaders(command, headerMatrix, data, headers){
         }
     }
 
-    function extractHeadersWithoutFilter(docCommand, headers, data){
+    function extractHeadersWithoutFilter(docCommand, headers, data) {
         let extractedHeaders = []
-        let foundTimeHeader = false
+        let foundTime = false
         let index;
+        console.log(headers)
         for (let i = 0; i < headers.length; i++) {
 
-            if(findType(headers[i], data) === "temporal"){
-                foundTimeHeader = true
-                index = i
+            if(docCommand.has(headers[i]) && findType(headers[i], data) === "temporal"){
+                index = i;
+                foundTime=true
+                break;
             }
         }
         let timeHeader = headers[index]
-        return {foundTimeHeader, timeHeader}
+        console.log(timeHeader)
+        return { foundTime, timeHeader }
     }
     return extractedFilteredHeaders;
 }
@@ -666,6 +676,19 @@ function reorderForTimeAgain(extractedHeaders, data) {
         let tmpHeader = extractedHeaders[1]
         extractedHeaders[1] = extractedHeaders[2]
         extractedHeaders[2] = tmpHeader
+    } else if(findType(extractedHeaders[0], data) === "quantitative") {
+        let tmpHeader = extractedHeaders[1]
+        extractedHeaders[1] = extractedHeaders[0]
+        extractedHeaders[0] = tmpHeader
+    }
+    if(findType(extractedHeaders[2], data) === "temporal"){
+        let tmpHeader = extractedHeaders[0]
+        extractedHeaders[0] = extractedHeaders[2]
+        extractedHeaders[2] = tmpHeader
+    } else if(findType(extractedHeaders[1], data) === "temporal"){
+        let tmpHeader = extractedHeaders[0]
+        extractedHeaders[0] = extractedHeaders[1]
+        extractedHeaders[1] = tmpHeader
     }
     return extractedHeaders
 }
@@ -673,15 +696,15 @@ function reorderForTimeAgain(extractedHeaders, data) {
 function filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj) {
     let accessors = []
     let keys = Object.keys(filteredHeaders);
-    for(let i = 0; i < keys.length; i++) {
-        if(filteredHeaders[keys[i]].length > 0){
-            if(findType(keys[i], data) === "nominal"){
+    for (let i = 0; i < keys.length; i++) {
+        if (filteredHeaders[keys[i]].length > 0) {
+            if (findType(keys[i], data) === "nominal") {
                 chartObj.charts.spec.transform.push({
-                    filter: {field: keys[i], oneOf: filteredHeaders[keys[i]]}
+                    filter: { field: keys[i], oneOf: filteredHeaders[keys[i]] }
                 })
-            } else if(findType(keys[i], data) === "temporal"){
+            } else if (findType(keys[i], data) === "temporal") {
                 chartObj.charts.spec.transform.push({
-                    filter: {timeUnit: 'year', field: keys[i], range: [filteredHeaders[keys[i]][0], filteredHeaders[keys[i]][1]]}
+                    filter: { timeUnit: 'year', field: keys[i], range: [filteredHeaders[keys[i]][0], filteredHeaders[keys[i]][1]] }
                 })
             }
         }
