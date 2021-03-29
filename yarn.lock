@@ -953,6 +953,19 @@ commander@~2.6.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.6.0.tgz#9df7e52fb2a0cb0fb89058ee80c3104225f37e1d"
   integrity sha1-nfflL7Kgyw+4kFjugMMQQiXzfh0=
 
+compromise-dates@^1.5.6:
+  version "1.5.6"
+  resolved "https://registry.yarnpkg.com/compromise-dates/-/compromise-dates-1.5.6.tgz#c2be5d0695b7cd684db7ffabd4eb19d5a7bc6235"
+  integrity sha512-i51/snFZtaW+cLx16HrBMHdgqc9eB3lsT5igtm9pOw6sNsNMX64lKiJdp3/kxGtOnl0fjGbZ69DoHb6o4pGUJw==
+  dependencies:
+    spacetime "6.14.0"
+    spacetime-holiday "0.1.0"
+
+compromise-numbers@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/compromise-numbers/-/compromise-numbers-1.2.0.tgz#0c577ab5c06c9e9363c710afb28a45dee4f48a22"
+  integrity sha512-oGQvO5pK+5DLFAV/mk9FDhr4QWnCG6fMAZqoykqvOmP3g/R0haEVazcXgdhz72VlJIURMfIkeslaa5vdjVlffg==
+
 compromise@^13.10.2:
   version "13.10.2"
   resolved "https://registry.yarnpkg.com/compromise/-/compromise-13.10.2.tgz#eef9d43fbd998f4b9d04504c3bdf7fec6afcae86"
@@ -2274,6 +2287,16 @@ source-map@~0.6.1:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
 
+spacetime-holiday@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/spacetime-holiday/-/spacetime-holiday-0.1.0.tgz#e680d17e0ac26e36b2101ee4ac40eb642b6d31d4"
+  integrity sha512-rYIpSDbHnznZRstUrmYYFAaruW8e96t+1JfS0b6qMiAAQ2DrkLKc8oMotAAkB9qMTUwXXf5bIkdTHfP434uitQ==
+
+spacetime@6.14.0:
+  version "6.14.0"
+  resolved "https://registry.yarnpkg.com/spacetime/-/spacetime-6.14.0.tgz#3acb5e82d1d93637cd95c26eacc3a4aca9ccd3d8"
+  integrity sha512-pz/nMIRGNSJeFfDFvhPjMHXhFU1NcrYnpydMuSS2Zsk0NEoHJc2rRKXugkmlqUv/l/fPxWVJVnj8isVS0//vbQ==
+
 spawn-command@^0.0.2-1:
   version "0.0.2-1"
   resolved "https://registry.yarnpkg.com/spawn-command/-/spawn-command-0.0.2-1.tgz#62f5e9466981c1b796dc5929937e11c9c6921bd0"
@@ -2379,6 +2402,11 @@ term-size@^2.1.0:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/term-size/-/term-size-2.2.1.tgz#2a6a54840432c2fb6320fea0f415531e90189f54"
   integrity sha512-wK0Ri4fOGjv/XPy8SBHZChl8CM7uMc5VML7SqiQ0zG7+J5Vr+RMQDoHa2CNT6KHUnTGIXH34UDMkPzAUyapBZg==
+
+thesaurus@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/thesaurus/-/thesaurus-0.0.1.tgz#cd41b7b7ecd4f3f439e5ca330d1afcef8e5672cb"
+  integrity sha512-EhaO3KcD3e3SgEeMvcaS0/lehYf4zpB0dL3cq/xT6VhWrz3G2bWmney6icIDi0hXGV40NI9T2f63AKBQ0ubfSQ==
 
 to-readable-stream@^1.0.0:
   version "1.0.0"
@@ -2557,6 +2585,24 @@ window-size@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/window-size/-/window-size-0.1.0.tgz#5438cd2ea93b202efa3a19fe8887aee7c94f9c9d"
   integrity sha1-VDjNLqk7IC76Ohn+iIeu58lPnJ0=
+
+wink-lemmatizer@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/wink-lemmatizer/-/wink-lemmatizer-3.0.2.tgz#344f4a2f4966aada1e6670985f1ca2194d8a0ead"
+  integrity sha512-0G572wdcujnRfpjSKs2lDXjA2+8APzkQu+gsREzzOjqg39C1ACE912veMwx2onlbYfUifsZRVaLZUOXjsHFVzA==
+  dependencies:
+    wink-lexicon "^2.1.2"
+    wink-porter2-stemmer "^2.0.0"
+
+wink-lexicon@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/wink-lexicon/-/wink-lexicon-2.1.2.tgz#6cbbb7662259993972e137271fdf477caf3c84e8"
+  integrity sha512-LUIVIKNIURMHN38leZXWP+ZE0b1jWUdGDHfgV6kmPSHy2AqwHS/n8xGADRsfJxJamLb6BwQY713/w2XnWYk/HQ==
+
+wink-porter2-stemmer@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/wink-porter2-stemmer/-/wink-porter2-stemmer-2.0.1.tgz#f7680e584e2b9b4c44766642325671662e98f44a"
+  integrity sha512-0g+RkkqhRXFmSpJQStVXW5N/WsshWpJXsoDRW7DwVkGI2uDT6IBCoq3xdH5p6IHLaC6ygk7RWUsUx4alKxoagQ==
 
 with@~4.0.0:
   version "4.0.3"
