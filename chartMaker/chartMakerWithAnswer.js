@@ -570,7 +570,7 @@ function extractFilteredHeaders(command, headerMatrix, data, headers, command) {
     }
     console.log(extractedFilteredHeaders)
     function findDates(docCommand, header) {
-        if (docCommand.match("to")) {
+        if (docCommand.match("to") || docCommand.match("through") || docCommand.match("and")) {
             let termsBefore = docCommand.before('to').terms().out('array')
             let termsAfter = docCommand.after('to').terms().out('array')
             const yearBefore = termsBefore[termsBefore.length - 1]
