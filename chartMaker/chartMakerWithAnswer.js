@@ -568,7 +568,7 @@ function extractFilteredHeaders(command, headerMatrix, data, headers, command) {
         }
 
     }
-    console.log(extractedFilteredHeaders)
+
     function findDates(docCommand, header) {
         if (docCommand.match("to") || docCommand.match("through") || docCommand.match("and")) {
             let termsBefore = docCommand.before('to').terms().out('array')
@@ -616,11 +616,29 @@ function createRandomColors(extractedHeader, data) {
     return colors
 }
 
+/* 
+Function used to calculate the number of unique words for a category
+
+Args:
+    Extracted headers -> keyword attributes extracted from the command
+    Data: Actual data from data set
+
+Returns: 
+    Vector length of unique words from every attribute header
+*/
 function countCategories(extractedHeeader, data) {
     const unique = [...new Set(data.map(item => item[extractedHeeader]))];
     return unique.length
 }
 
+/* 
+Args:
+    Extracted headers -> keyword attributes extracted from the command
+    Data: Actual data from data set
+
+Returns: 
+    Vector length of unique words from every attribute header
+*/
 function createLayers(extractedHeaders, data) {
     let layers = [];
     for (let i = 0; i < extractedHeaders.length; i++) {
