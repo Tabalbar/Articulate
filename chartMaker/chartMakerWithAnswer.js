@@ -617,7 +617,8 @@ function createRandomColors(extractedHeader, data) {
 }
 
 /* 
-Function used to calculate the number of unique words for a category
+Function used to calculate the number of unique words for a category.
+This is used to infer what to parse in the comparison branch
 
 Args:
     Extracted headers -> keyword attributes extracted from the command
@@ -632,12 +633,15 @@ function countCategories(extractedHeeader, data) {
 }
 
 /* 
+Function used to calculate the number of unique words for a category.
+This is used to infer what to parse in the comparison branch. 
+
 Args:
     Extracted headers -> keyword attributes extracted from the command
     Data: Actual data from data set
 
 Returns: 
-    Vector length of unique words from every attribute header
+    Returns layer specification for comparison branch to use to crete multiple
 */
 function createLayers(extractedHeaders, data) {
     let layers = [];

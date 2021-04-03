@@ -60,7 +60,7 @@ function App() {
     const response = await fetch('http://localhost:5000/addHeaders', {
       method: 'POST',
 
-      body: JSON.stringify({ headers: headers}),
+      body: JSON.stringify({ headers: headers }),
       headers: {
         'Content-Type': 'application/json',
       }
@@ -98,7 +98,7 @@ function App() {
     await fetch('http://localhost:5000/addHeaders', {
       method: 'POST',
 
-      body: JSON.stringify({ headers: attributes}),
+      body: JSON.stringify({ headers: attributes }),
       headers: {
         'Content-Type': 'application/json',
       }
@@ -111,10 +111,10 @@ function App() {
       }
     });
     const body = await response.text();
-    const {chartObj} = JSON.parse(body)
+    const { chartObj } = JSON.parse(body)
     console.log(chartObj)
-    if(chartObj.errMsg === '' && chartObj.charts !== null) {
-      setCharts(prev=>[...prev, chartObj.charts])
+    if (chartObj.errMsg === '' && chartObj.charts !== null) {
+      setCharts(prev => [...prev, chartObj.charts])
 
     } else {
       console.log('here')
@@ -129,17 +129,20 @@ function App() {
   }
   return (
     <>
-      <br /><br />
+      <br />
       <Grid centered={true}>
         <Grid.Row>
           <Form onSubmit={createCharts}>
-            <Input placeholder={'...Enter query Here'} onChange={handleChange} />
+            <Input placeholder={'...Enter query Here'} onChange={handleChange} size="large" style={{ width: 500, fontWeight: 50 }} />
+
           </Form>
-          <Button onClick={createCharts}>Create Visualization</Button>
+          <Button size="large" onClick={createCharts}>Create Visualization</Button>
+
+        </Grid.Row>
+        <Grid.Row>
 
           <Input type='file' onChange={laodData} />
           <Button onClick={clearGraphs}>Clear Graphs</Button>
-
         </Grid.Row>
         <Grid.Row>
           <Header as="h3" color="red">{errMsg}</Header>
@@ -150,7 +153,7 @@ function App() {
               charts.map(element => {
                 return (
                   <>
-                    <VegaLite spec={element.spec} data={{table: data}} />
+                    <VegaLite spec={element.spec} data={{ table: data }} />
                   </>
                 )
               })
