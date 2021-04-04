@@ -13,7 +13,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
         case "comparison":
             hasTime = checkTimeAndReorder(extractedHeaders, data);
             if (hasTime) {
-                let numCategories = countCategories(extractedHeaders[1], data)
+                let numCategories = countCategories(extractedHeaders[2], data)
+                console.log(numCategories)
                 if (extractedHeaders.length === 2) {
                     chartObj.charts = {
                         data: { table: data },
@@ -33,7 +34,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                 } else if (extractedHeaders.length === 3) {
                     extractedHeaders = reorderForTimeAgain(extractedHeaders, data)
 
-                    if (numCategories > 3) {
+                    if (numCategories > 5) {
                         chartObj.charts = {
                             data: { table: data },
                             spec: {
@@ -43,8 +44,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                                 transform: [],
                                 mark: 'line',
                                 encoding: {
-                                    x: { field: extractedHeaders[0], type: 'temporal' },
-                                    y: { field: extractedHeaders[1], type: 'quantitative' },
+                                    x: { field: extractedHeaders[1], type: 'temporal' },
+                                    y: { field: extractedHeaders[0], type: 'quantitative' },
                                     color: { field: extractedHeaders[2], type: "nominal" }
                                 },
                                 data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
@@ -55,7 +56,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                             data: { table: data },
                             spec: {
                                 title: actualCommand,
-                                width: { step: 50 },
+                                width: { step: 500 },
                                 mark: "bar",
                                 transform: [],
                                 encoding: {
@@ -63,19 +64,41 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                                         field: extractedHeaders[2], type: "nominal", spacing: 10
                                     },
                                     y: {
-                                        field: extractedHeaders[1],
+                                        field: extractedHeaders[0],
                                         type: "quantitative",
-                                        title: extractedHeaders[1],
+                                        title: extractedHeaders[0],
                                         exis: { grid: false }
                                     },
                                     x: {
-                                        field: extractedHeaders[0],
+                                        tickCount: 8,
+                                        field: extractedHeaders[1],
                                         type: "temporal",
-                                        axis: { title: "" }
+                                        axis: {
+                                          tickCount: 8,
+                                          labelAlign: "left",
+                                          labelExpr: "[timeFormat(datum.value, '%b'), timeFormat(datum.value, '%m') == '01' ? timeFormat(datum.value, '%Y') : '']",
+                                          labelOffset: 4,
+                                          labelPadding: -24,
+                                          tickSize: 30,
+                                          gridDash: {
+                                            condition: {
+                                              test: {field: "value", timeUnit: "month", "equal": 1},
+                                              value: []
+                                            },
+                                            value: [2, 2]
+                                          },
+                                          tickDash: {
+                                            condition: {
+                                              test: {field: "value", timeUnit: "month", "equal": 1},
+                                              value: []
+                                            },
+                                            "value": [2, 2]
+                                          }
+                                        }
                                     },
                                     color: {
-                                        field: extractedHeaders[0],
-                                        scale: { range: createRandomColors(extractedHeaders[0], data) }
+                                        field: extractedHeaders[1],
+                                        scale: { range: createRandomColors(extractedHeaders[1], data) }
                                     }
                                 },
                                 data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
@@ -117,22 +140,22 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                             transform: [],
                             encoding: {
                                 column: {
-                                    field: extractedHeaders[2], type: "nominal", spacing: 10
+                                    field: extractedHeaders[1], type: "nominal", spacing: 10
                                 },
                                 y: {
-                                    field: extractedHeaders[1],
+                                    field: extractedHeaders[0],
                                     type: "quantitative",
-                                    title: extractedHeaders[1],
+                                    title: extractedHeaders[0],
                                     exis: { grid: false }
                                 },
                                 x: {
-                                    field: extractedHeaders[0],
+                                    field: extractedHeaders[2],
                                     type: "nominal",
                                     axis: { title: "" }
                                 },
                                 color: {
-                                    field: extractedHeaders[0],
-                                    scale: { range: createRandomColors(extractedHeaders[0], data) }
+                                    field: extractedHeaders[2],
+                                    scale: { range: createRandomColors(extractedHeaders[2], data) }
                                 }
                             },
                             data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
@@ -431,20 +454,24 @@ function reorderHeadersForCategories(extractedHeaders, data) {
             extractedHeaders[0] = tmpHeader
         }
     } else if (extractedHeaders.length === 3) {
-        if (findType(extractedHeaders[0], data) === "quantitative") {
-            let tmpHeader = extractedHeaders[1];
-            extractedHeaders[1] = extractedHeaders[0];
-            extractedHeaders[0] = tmpHeader
-        } else if (findType(extractedHeaders[2], data) === "quantitative") {
-            let tmpHeader = extractedHeaders[1];
-            extractedHeaders[1] = extractedHeaders[2];
+
+        if (findType(extractedHeaders[1], data) === "quantitative") {
+
+            let tmpHeader = extractedHeaders[0];
+            extractedHeaders[0] = extractedHeaders[1];
+            extractedHeaders[1] = tmpHeader
+        }
+        if (findType(extractedHeaders[2], data) === "quantitative") {
+
+            let tmpHeader = extractedHeaders[0];
+            extractedHeaders[0] = extractedHeaders[2];
             extractedHeaders[2] = tmpHeader
         }
         let lowestCategories = 0;
-        if (countCategories(extractedHeaders[0], data) > countCategories(extractedHeaders[2], data)) {
-            let tmpHeader = extractedHeaders[0]
-            extractedHeaders[0] = extractedHeaders[2]
-            extractedHeaders[2] = tmpHeader
+        if (countCategories(extractedHeaders[1], data) > countCategories(extractedHeaders[2], data)) {
+            let tmpHeader = extractedHeaders[2]
+            extractedHeaders[2] = extractedHeaders[1]
+            extractedHeaders[1] = tmpHeader
         }
 
     }
@@ -485,13 +512,13 @@ function checkTimeAndReorderComposition(extractedHeaders, data) {
 }
 
 function findType(header, data) {
-    header = header.toLowerCase()
-    if (header.includes('date')
-        || header.includes('year') || header.includes('month')
-        || header.includes('day') || header.includes('months')
-        || header.includes('dates')) {
+    let lowerCaseHeader = header.toLowerCase()
+    if (lowerCaseHeader.includes('date')
+        || lowerCaseHeader.includes('year') || lowerCaseHeader.includes('month')
+        || lowerCaseHeader.includes('day') || lowerCaseHeader.includes('months')
+        || lowerCaseHeader.includes('dates')) {
         return "temporal"
-    } else if (isNaN(data[0][header])) {
+    } else if (isNaN(data[1][header])) {
         return "nominal"
     } else {
         return "quantitative"
@@ -539,7 +566,6 @@ function extractFilteredHeaders(command, headerMatrix, data, headers, command) {
         }
 
         if (findType(headerMatrix[i][0], data) === "temporal" && !foundTimeHeader) {
-            console.log(headerMatrix[i][0])
             const { foundTime, timeHeader } = extractHeadersWithoutFilter(doc, headers, data, command)
             if (!foundTime) {
 
@@ -550,11 +576,9 @@ function extractFilteredHeaders(command, headerMatrix, data, headers, command) {
                 findDates(doc, extractedFilteredHeaders[headerMatrix[i][0]])
                 command += " " + headerMatrix[i][0]
                 foundTimeHeader = true;
-                console.log(timeHeader, headerMatrix[i][0])
-                console.log(foundTime)
+
                 // findDates(doc, extractedFilteredHeaders["State"])
             } else {
-                console.log(foundTime)
 
                 if (timeHeader === headerMatrix[i][0]) {
                     findDates(doc, extractedFilteredHeaders[headerMatrix[i][0]])
@@ -588,17 +612,15 @@ function extractFilteredHeaders(command, headerMatrix, data, headers, command) {
         let extractedHeaders = []
         let foundTime = false
         let index;
-        console.log(headers)
         for (let i = 0; i < headers.length; i++) {
 
-            if(docCommand.has(headers[i]) && findType(headers[i], data) === "temporal"){
+            if (docCommand.has(headers[i]) && findType(headers[i], data) === "temporal") {
                 index = i;
-                foundTime=true
+                foundTime = true
                 break;
             }
         }
         let timeHeader = headers[index]
-        console.log(timeHeader)
         return { foundTime, timeHeader }
     }
     return extractedFilteredHeaders;
@@ -629,6 +651,7 @@ Returns:
 */
 function countCategories(extractedHeeader, data) {
     const unique = [...new Set(data.map(item => item[extractedHeeader]))];
+    console.log(unique)
     return unique.length
 }
 
@@ -677,41 +700,44 @@ function checkTimeAndReorder(extractedHeaders, data) {
             || lowerCaseHeader.includes("date") || lowerCaseHeader.includes("day")
             || lowerCaseHeader.includes("time") || lowerCaseHeader.includes("hour")
             || lowerCaseHeader.includes("second")) {
-            let tmpHeader = extractedHeaders[0]
-            extractedHeaders[0] = extractedHeaders[i];
+            let tmpHeader = extractedHeaders[1]
+            extractedHeaders[1] = extractedHeaders[i];
             extractedHeaders[i] = tmpHeader
+            reorderForTimeAgain(extractedHeaders, data)
             return true
         } else if (findType(extractedHeaders[i], data) === "temporal") {
-            let tmpHeader = extractedHeaders[0]
-            extractedHeaders[0] = extractedHeaders[i];
+            let tmpHeader = extractedHeaders[1]
+            extractedHeaders[1] = extractedHeaders[i];
             extractedHeaders[i] = tmpHeader
+            reorderForTimeAgain(extractedHeaders, data)
+
             return true
         }
     }
+
 
     return false
 
 }
 
 function reorderForTimeAgain(extractedHeaders, data) {
-    if (findType(extractedHeaders[2], data) === "quantitative") {
-        let tmpHeader = extractedHeaders[1]
-        extractedHeaders[1] = extractedHeaders[2]
-        extractedHeaders[2] = tmpHeader
-    } else if(findType(extractedHeaders[0], data) === "quantitative") {
-        let tmpHeader = extractedHeaders[1]
-        extractedHeaders[1] = extractedHeaders[0]
-        extractedHeaders[0] = tmpHeader
-    }
-    if(findType(extractedHeaders[2], data) === "temporal"){
-        let tmpHeader = extractedHeaders[0]
-        extractedHeaders[0] = extractedHeaders[2]
-        extractedHeaders[2] = tmpHeader
-    } else if(findType(extractedHeaders[1], data) === "temporal"){
+
+    if (findType(extractedHeaders[1], data) === "quantitative") {
         let tmpHeader = extractedHeaders[0]
         extractedHeaders[0] = extractedHeaders[1]
         extractedHeaders[1] = tmpHeader
     }
+    if (findType(extractedHeaders[2], data) === "quantitative") {
+        let tmpHeader = extractedHeaders[0]
+        extractedHeaders[0] = extractedHeaders[2]
+        extractedHeaders[2] = tmpHeader
+    }
+    if (findType(extractedHeaders[2], data) === "temporal") {
+        let tmpHeader = extractedHeaders[1]
+        extractedHeaders[1] = extractedHeaders[2]
+        extractedHeaders[2] = tmpHeader
+    }
+
     return extractedHeaders
 }
 
