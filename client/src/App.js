@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import 'semantic-ui-css/semantic.min.css'
-import { Button, Form, Grid, Input, Header } from 'semantic-ui-react'
+import { Button, Form, Grid, Input, Header, Checkbox } from 'semantic-ui-react'
 import { VegaLite } from 'react-vega'
 import MaterialTable from 'material-table'
 import XLSX from 'xlsx'
@@ -15,6 +15,7 @@ function App() {
   const [dataHead, setDataHead] = useState([])
   const [attributes, setAttributes] = useState([])
   const [errMsg, setErrMsg] = useState('')
+  const [selected, setSelected] = useState(false)
 
   const processData = async (data) => {
     const dataStringLines = data.split(/\r\n|\n/);
@@ -103,9 +104,14 @@ function App() {
         'Content-Type': 'application/json',
       }
     });
+    let prevChart = false
+    if(selected===true){
+      prevChart = charts[charts.length-1]
+    }
+
     const response = await fetch('http://localhost:5000/', {
       method: 'POST',
-      body: JSON.stringify({ command: command, attributes: attributes, dataHead: dataHead }),
+      body: JSON.stringify({ command: command, attributes: attributes, dataHead: dataHead, prevChart: prevChart }),
       headers: {
         'Content-Type': 'application/json',
       }
@@ -114,10 +120,9 @@ function App() {
     const { chartObj } = JSON.parse(body)
     console.log(chartObj)
     if (chartObj.errMsg === '' && chartObj.charts !== null) {
-      setCharts(prev => [...prev, chartObj.charts])
-
+      setCharts(prev => [chartObj.charts, ...prev])
     } else {
-      console.log('here')
+      console.log('error')
 
       setErrMsg(chartObj.errMsg)
     }
@@ -126,7 +131,13 @@ function App() {
   }
   const clearGraphs = () => {
     setCharts([])
+    setSelected([])
   }
+
+  const handleSelect = (e) => {
+    setSelected(prev=>!prev)
+  }
+
   return (
     <>
       <br />
@@ -147,13 +158,16 @@ function App() {
         <Grid.Row>
           <Header as="h3" color="red">{errMsg}</Header>
         </Grid.Row>
+        <Checkbox label="Iterate on Graph" checked={selected} onChange={handleSelect}/>
         <Grid.Row>
           {
             charts.length ?
-              charts.map(element => {
+              charts.map((element, index) => {
                 return (
                   <>
-                    <VegaLite spec={element.spec} data={{ table: data }} />
+                    <Grid.Row>
+                      <VegaLite spec={element.spec} data={{ table: data }} />
+                    </Grid.Row>
                   </>
                 )
               })

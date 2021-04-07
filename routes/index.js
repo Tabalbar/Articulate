@@ -4,11 +4,11 @@ const { NlpManager } = require('node-nlp');
 
 const manager = new NlpManager({ languages: ['en'], forceNER: true });
 
-//Training the model
-// Comparison
+//comparison
 manager.addDocument('en', 'comparison', 'graph.comparison');
 manager.addDocument('en', 'show a bar chart with side by side values of quantitative and nominal', 'graph.comparison');
 manager.addDocument('en', 'show me a chart of quantitative and nominal', 'graph.comparison');
+manager.addDocument('en', 'show me a chart of nominal and quantitative', 'graph.comparison');
 manager.addDocument('en', 'i want to see how nominal and nominal compare to quantitative', 'graph.comparison');
 manager.addDocument('en', 'create a bar chart the shows how much each nominal is quantitative', 'graph.comparison');
 manager.addDocument('en', 'what is the quantitative of the different nominal', 'graph.comparison');
@@ -16,7 +16,10 @@ manager.addDocument('en', 'make me a graph showing my nominal by quantitative of
 manager.addDocument('en', 'for each nominal show a diagram of quantitative', 'graph.comparison');
 manager.addDocument('en', 'make me a benchmark graph of nominal showing the best performing quantitative', 'graph.comparison');
 manager.addDocument('en', 'show me a bar chart with nominal quantitative', 'graph.comparison');
-manager.addDocument('en', 'compareof nominal', 'graph.comparison');
+manager.addDocument('en', 'show me a chart with nominal nominal nominal and quantitative', 'graph.comparison');
+manager.addDocument('en', 'show me a chart with temporal nominal and quantitative', 'graph.comparison');
+manager.addDocument('en', 'show me a chart with temporal and quantitative', 'graph.comparison');
+manager.addDocument('en', 'compare of nominal', 'graph.comparison');
 
 //relationship
 manager.addDocument('en', 'relationship', 'graph.relationship');
@@ -42,7 +45,13 @@ manager.addDocument('en', 'show a bar chart for the quantitative and quantitativ
 
 
 //composition
+manager.addDocument('en', 'show me the percentage of nominal and quantitative', 'graph.composition');
+manager.addDocument('en', 'show me the percentage of quantitative and ordinal', 'graph.composition');
 manager.addDocument('en', 'composition', 'graph.composition');
+
+
+//Iterate
+manager.addDocument('en', 'can you add', 'graph.iterate');
 
 
 //Model Answers
@@ -58,6 +67,9 @@ manager.addAnswer('en', 'graph.distribution', 'distribution');
 //composition
 manager.addAnswer('en', 'graph.composition', 'composition');
 
+manager.addAnswer('en', 'graph.iterate', 'add');
+
+
 // Train and save the model.
 (async () => {
   await manager.train();
@@ -69,6 +81,8 @@ const chartMakerWithAnswer = require('../chartMaker/chartMakerWithAnswer')
 const createVector = require('../chartMaker/createVector')
 const normalizeCommand = require('../chartMaker/normalizeCommand')
 const generalizeCommand = require('../chartMaker/generalizeCommand')
+const iterateGraph = require('../chartMaker/iterateGraph')
+
 
 // const findommands = require('../chartMaker/findCommands')
 const nlp = require('compromise')
@@ -76,9 +90,9 @@ const nlp = require('compromise')
 /* GET home page. */
 router.post('/', async (req, res, next) => {
   let specs = [];
-  // const commands = findommands(req.body.command)
   const data = req.body.dataHead;
   const attributes = req.body.attributes
+
   let charts = []
   const command = req.body.command
   const normalizedCommand = normalizeCommand(command)
@@ -101,10 +115,11 @@ router.post('/', async (req, res, next) => {
 
   let chartObj = {
     charts: null,
-    errMsg: ''
+    errMsg: 'no command found'
   }
-  console.log(response.answer)
-  if (response) {
+  if (req.body.prevChart && response){
+    chartObj = iterateGraph(response.answer, synonymCommand, attributes, data, headerMatrix, command)
+  } else if (response) {
     chartObj = chartMakerWithAnswer(response.answer, synonymCommand, attributes, data, headerMatrix, command)
   }
 
@@ -114,6 +129,7 @@ router.post('/', async (req, res, next) => {
   res.json();
 
 });
+
 
 router.post('/addHeaders', async (req, res, next) => {
   nlp.extend((Doc, world) => {

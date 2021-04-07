@@ -3,7 +3,6 @@ const nlp = require('compromise')
 module.exports = (intent, command, headers, data, headerMatrix, actualCommand) => {
     let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers, command)
     let extractedHeaders = extractHeaders(command, headers, filteredHeaders)
-    console.log(command, extractedHeaders)
     let chartObj = {
         charts: null,
         errMsg: ''
@@ -14,7 +13,6 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
             hasTime = checkTimeAndReorder(extractedHeaders, data);
             if (hasTime) {
                 let numCategories = countCategories(extractedHeaders[2], data)
-                console.log(numCategories)
                 if (extractedHeaders.length === 2) {
                     chartObj.charts = {
                         data: { table: data },
@@ -39,8 +37,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                             data: { table: data },
                             spec: {
                                 title: actualCommand,
-                                width: 200,
-                                height: 200,
+                                width: 600,
+                                height: 600,
                                 transform: [],
                                 mark: 'line',
                                 encoding: {
@@ -56,7 +54,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                             data: { table: data },
                             spec: {
                                 title: actualCommand,
-                                width: { step: 500 },
+                                width: 400,
+                                height: 400,
                                 mark: "bar",
                                 transform: [],
                                 encoding: {
@@ -70,11 +69,11 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                                         exis: { grid: false }
                                     },
                                     x: {
-                                        tickCount: 8,
+                                        tickCount: 12,
                                         field: extractedHeaders[1],
                                         type: "temporal",
                                         axis: {
-                                          tickCount: 8,
+                                          tickCount: 12,
                                           labelAlign: "left",
                                           labelExpr: "[timeFormat(datum.value, '%b'), timeFormat(datum.value, '%m') == '01' ? timeFormat(datum.value, '%Y') : '']",
                                           labelOffset: 4,
@@ -85,14 +84,14 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                                               test: {field: "value", timeUnit: "month", "equal": 1},
                                               value: []
                                             },
-                                            value: [2, 2]
+                                            value: [5, 5]
                                           },
                                           tickDash: {
                                             condition: {
                                               test: {field: "value", timeUnit: "month", "equal": 1},
                                               value: []
                                             },
-                                            "value": [2, 2]
+                                            value: [5, 5]
                                           }
                                         }
                                     },
@@ -140,7 +139,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                             transform: [],
                             encoding: {
                                 column: {
-                                    field: extractedHeaders[1], type: "nominal", spacing: 10
+                                    field: extractedHeaders[1], type: "nominal", spacing: 0
                                 },
                                 y: {
                                     field: extractedHeaders[0],
@@ -252,21 +251,37 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
 
         case "distribution":
             if (extractedHeaders.length === 1) {
-                chartObj.charts = {
-                    data: { table: data },
-                    spec: {
-                        title: actualCommand,
-                        mark: "bar",
-                        transform: [],
-                        encoding: {
-                            x: {
-                                field: extractedHeaders[0]
+                if(findType(extractedHeaders[0], data) === "quantitative"){
+                    chartObj.charts = {
+                        data: { table: data },
+                        spec: {
+                            title: actualCommand,
+                            mark: "line",
+                            encoding: {
+                                x: {field: extractedHeaders[0], type: "quantitative"},
+                                y: { aggregate: 'count' }
+                              },
+                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                        }
+                    }
+                } else {
+                    chartObj.charts = {
+                        data: { table: data },
+                        spec: {
+                            title: actualCommand,
+                            mark: "bar",
+                            transform: [],
+                            encoding: {
+                                x: {
+                                    field: extractedHeaders[0]
+                                },
+                                y: { aggregate: 'count' }
                             },
-                            y: { aggregate: 'count' }
-                        },
-                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                        }
                     }
                 }
+
             } else if (extractedHeaders.length === 2) {
                 chartObj.charts = {
                     data: { table: data },
@@ -569,15 +584,10 @@ function extractFilteredHeaders(command, headerMatrix, data, headers, command) {
             const { foundTime, timeHeader } = extractHeadersWithoutFilter(doc, headers, data, command)
             if (!foundTime) {
 
-                //todo: ******* find a way to add the accessor to extractedFilteredHeaders array before adding the filters
-
-
-
                 findDates(doc, extractedFilteredHeaders[headerMatrix[i][0]])
                 command += " " + headerMatrix[i][0]
                 foundTimeHeader = true;
 
-                // findDates(doc, extractedFilteredHeaders["State"])
             } else {
 
                 if (timeHeader === headerMatrix[i][0]) {
@@ -651,7 +661,6 @@ Returns:
 */
 function countCategories(extractedHeeader, data) {
     const unique = [...new Set(data.map(item => item[extractedHeeader]))];
-    console.log(unique)
     return unique.length
 }
 

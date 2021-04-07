@@ -29,7 +29,6 @@ module.exports = (command, attributes, data) => {
     }
     generalizedCommand = doc.text()
     synonymCommand = catchSynonymCommand.text()
-    console.log(synonymCommand)
     return {generalizedCommand, synonymCommand}
 }
 
