@@ -291,6 +291,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                 chartObj.charts = {
                     data: { table: data },
                     spec: {
+                        title: actualCommand,
                         vconcat: [
                             {
                                 mark: "bar",
@@ -332,6 +333,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                     }
 
                 }
+            } else {
+                chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
             }
             break;
         case "heatmap":
@@ -339,6 +342,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                 chartObj.charts = {
                     data: { table: data },
                     spec: {
+                        title: actualCommand,
                         mark: "rect",
                         wdith: 300,
                         height: 200,
@@ -359,8 +363,55 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                     }
 
                 }
+            } else {
+                chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
             }
             break;
+            // case "lineArea":
+            // if (extractedHeaders.length == 3) {
+            //     hasTime = checkTimeAndReorder(extractedHeaders, data)
+            //     reorderForLineArea(extractedHeaders, data)
+            //         if(hasTime){
+            //             chartObj.charts = {
+            //                 data: { table: data },
+            //                 spec: {
+            //                     title: actualCommand,
+            //                     mark: "rect",
+            //                     wdith: 300,
+            //                     height: 200,
+            //                     mark: "area",
+            //                     encoding: {
+            //                       x: {timeUnit: "yearmonth", field: extractedHeaders[0], axis: {"format": "%Y"}},
+            //                       y: {aggregate: "sum", field: "count"},
+            //                       color: {field: extractedHeaders[1], scale: {scheme: "category20b"}}
+            //                     },
+            //                     data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+            //                 }
+        
+            //             }
+            //         } else {
+            //             chartObj.charts = {
+            //                 data: { table: data },
+            //                 spec: {
+            //                     title: actualCommand,
+            //                     mark: "rect",
+            //                     wdith: 300,
+            //                     height: 200,
+            //                     mark: "area",
+            //                     encoding: {
+            //                       x: {field: extractedHeaders[1]},
+            //                       y: {field: extractedHeaders[2]},
+            //                       color: {field: extractedHeaders[0], scale: {scheme: "category20b"}}
+            //                     },
+            //                     data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+            //                 }
+        
+            //             }
+            //         }
+            // }else {
+            //     chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
+            // }
+            // break;
         default:
             chartObj.errMsg = "Could not specify graph."
     }
@@ -371,6 +422,14 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
     return chartObj;
 }
 
+function reorderForLineArea(extractedHeaders, data) {
+    if (findType(extractedHeaders[0], data) === "quantitative") {
+        let tmpHeader = extractedHeaders[1];
+        extractedHeaders[1] = extractedHeaders[0];
+        extractedHeaders[0] = tmpHeader
+    }
+    return extractedHeaders
+}
 
 function reorderHeaders(extractedHeaders, data) {
     if (findType(extractedHeaders[1], data) === "quantitative") {

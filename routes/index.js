@@ -52,6 +52,11 @@ manager.addDocument('en', 'show me a heat map of quantitative and quantitative',
 manager.addDocument('en', 'show me a 2D histogram of quantitative and quantitative', 'graph.heatmap');
 manager.addAnswer('en', 'graph.heatmap', 'heatmap');
 
+manager.addDocument('en', 'show me a area chart of ', 'graph.lineArea');
+manager.addDocument('en', 'show me a area chart of temporal and quantitative', 'graph.lineArea');
+manager.addDocument('en', 'show me a area chart of nominal and quantitative', 'graph.lineArea');
+manager.addAnswer('en', 'graph.lineArea', 'lineArea');
+
 //comparison
 // manager.addDocument('en', 'comparison', 'graph.comparison');
 // manager.addDocument('en', 'show a bar chart with side by side values of quantitative and nominal', 'graph.comparison');
