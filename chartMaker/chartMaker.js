@@ -288,6 +288,10 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
         default:
             chartObj.errMsg = "Could not specify graph."
     }
+    if (chartObj.errMsg === "") {
+        filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
+
+    }
     return chartObj;
 }
 
@@ -612,22 +616,30 @@ function checkTimeAndReorder(extractedHeaders, data) {
 }
 
 function reorderForTimeAgain(extractedHeaders, data) {
+    if(extractedHeaders.length === 2) {
+        if (findType(extractedHeaders[1], data) === "temporal") {
+            let tmpHeader = extractedHeaders[0]
+            extractedHeaders[0] = extractedHeaders[1]
+            extractedHeaders[1] = tmpHeader
+        }
+    } else if(extractedHeaders.length === 3) {
+        if (findType(extractedHeaders[1], data) === "quantitative") {
+            let tmpHeader = extractedHeaders[0]
+            extractedHeaders[0] = extractedHeaders[1]
+            extractedHeaders[1] = tmpHeader
+        }
+        if (findType(extractedHeaders[2], data) === "quantitative") {
+            let tmpHeader = extractedHeaders[0]
+            extractedHeaders[0] = extractedHeaders[2]
+            extractedHeaders[2] = tmpHeader
+        }
+        if (findType(extractedHeaders[2], data) === "temporal") {
+            let tmpHeader = extractedHeaders[1]
+            extractedHeaders[1] = extractedHeaders[2]
+            extractedHeaders[2] = tmpHeader
+        }
+    }
 
-    if (findType(extractedHeaders[1], data) === "quantitative") {
-        let tmpHeader = extractedHeaders[0]
-        extractedHeaders[0] = extractedHeaders[1]
-        extractedHeaders[1] = tmpHeader
-    }
-    if (findType(extractedHeaders[2], data) === "quantitative") {
-        let tmpHeader = extractedHeaders[0]
-        extractedHeaders[0] = extractedHeaders[2]
-        extractedHeaders[2] = tmpHeader
-    }
-    if (findType(extractedHeaders[2], data) === "temporal") {
-        let tmpHeader = extractedHeaders[1]
-        extractedHeaders[1] = extractedHeaders[2]
-        extractedHeaders[2] = tmpHeader
-    }
 
     return extractedHeaders
 }
