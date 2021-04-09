@@ -131,7 +131,7 @@ function App() {
   }
   const clearGraphs = () => {
     setCharts([])
-    setSelected([])
+    setSelected(false);
   }
 
   const handleSelect = (e) => {

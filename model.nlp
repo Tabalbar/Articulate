@@ -38,7 +38,55 @@
             "intent": "graph.bar",
             "domain": "default"
           },
+          "a,and,bar,graph,me,nomin,of,quantit,show": {
+            "intent": "graph.bar",
+            "domain": "default"
+          },
+          "and,me,nomin,quantit,show": {
+            "intent": "graph.bar",
+            "domain": "default"
+          },
+          "anf,me,nomin,quantit,show": {
+            "intent": "graph.bar",
+            "domain": "default"
+          },
+          "and,best,is,nomin,quantit,repres,the,to,way,what": {
+            "intent": "graph.bar",
+            "domain": "default"
+          },
+          "and,do,how,nomin,quantit": {
+            "intent": "graph.bar",
+            "domain": "default"
+          },
           "a,graph,line,me,of,show": {
+            "intent": "graph.line",
+            "domain": "default"
+          },
+          "ditribut,me,of,quantit,show,the": {
+            "intent": "graph.line",
+            "domain": "default"
+          },
+          "for,me,month,of,quantit,show,tempor,the": {
+            "intent": "graph.line",
+            "domain": "default"
+          },
+          "and,me,of,quantit,show,tempor,the,year": {
+            "intent": "graph.line",
+            "domain": "default"
+          },
+          "and,me,over,quantit,show,tempraol,time": {
+            "intent": "graph.line",
+            "domain": "default"
+          },
+          "and,for,me,month,nomin,of,quantit,show,tempor,the": {
+            "intent": "graph.line",
+            "domain": "default"
+          },
+          "and,me,nomin,of,quantit,show,tempor,the,year": {
+            "intent": "graph.line",
+            "domain": "default"
+          },
+          "and,me,nomin,over,quantit,show,tempor,time": {
             "intent": "graph.line",
             "domain": "default"
           },
@@ -46,8 +94,68 @@
             "intent": "graph.scatter",
             "domain": "default"
           },
+          "a,and,me,of,plot,quantit,scatter,show": {
+            "intent": "graph.scatter",
+            "domain": "default"
+          },
+          "a,me,of,plot,quantit,scatter,show": {
+            "intent": "graph.scatter",
+            "domain": "default"
+          },
+          "and,do,how,i,quantit,repres": {
+            "intent": "graph.scatter",
+            "domain": "default"
+          },
+          "and,by,me,quantit,show,size": {
+            "intent": "graph.scatter",
+            "domain": "default"
+          },
+          "is,of,quantiat,quantit,the,what": {
+            "intent": "graph.scatter",
+            "domain": "default"
+          },
           "a,chart,me,of,pie,show": {
             "intent": "graph.pie",
+            "domain": "default"
+          },
+          "a,and,chart,me,nomin,of,pie,quantit,show": {
+            "intent": "graph.pie",
+            "domain": "default"
+          },
+          "and,me,nomin,of,percentag,quantit,show,the": {
+            "intent": "graph.pie",
+            "domain": "default"
+          },
+          "and,is,nomin,of,percentag,quantit,the,what": {
+            "intent": "graph.pie",
+            "domain": "default"
+          },
+          "doe,nomin,of,percent,quantit,what": {
+            "intent": "graph.pie",
+            "domain": "default"
+          },
+          "a,histogram,margin,me,of,show": {
+            "intent": "graph.marginalHistogram",
+            "domain": "default"
+          },
+          "a,and,histogram,margin,me,of,quantit,show": {
+            "intent": "graph.marginalHistogram",
+            "domain": "default"
+          },
+          "a,and,bar,chart,heat,map,me,of,quantit,show,with": {
+            "intent": "graph.marginalHistogram",
+            "domain": "default"
+          },
+          "a,and,bar,chart,heat,map,me,of,on,quantit,show,side,the,with": {
+            "intent": "graph.marginalHistogram",
+            "domain": "default"
+          },
+          "a,and,heat,map,me,of,quantit,show": {
+            "intent": "graph.heatmap",
+            "domain": "default"
+          },
+          "2d,a,and,histogram,me,of,quantit,show": {
+            "intent": "graph.heatmap",
             "domain": "default"
           }
         },
@@ -55,7 +163,9 @@
           "graph.bar": "default",
           "graph.line": "default",
           "graph.scatter": "default",
-          "graph.pie": "default"
+          "graph.pie": "default",
+          "graph.marginalHistogram": "default",
+          "graph.heatmap": "default"
         },
         "sentences": [
           {
@@ -65,7 +175,82 @@
           },
           {
             "domain": "default",
+            "utterance": "show me a bar graph of nominal and quantitative",
+            "intent": "graph.bar"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a bar graph of nominal nominal and quantitative",
+            "intent": "graph.bar"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me quantitative and nominal",
+            "intent": "graph.bar"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me quantitative nominal anf nominal",
+            "intent": "graph.bar"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is the best way to represent quantitative and nominal",
+            "intent": "graph.bar"
+          },
+          {
+            "domain": "default",
+            "utterance": "What is the best way to represent quantitative nominal and nominal",
+            "intent": "graph.bar"
+          },
+          {
+            "domain": "default",
+            "utterance": "how do nominal and quantitative",
+            "intent": "graph.bar"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me quantitative nominal nominal and nominal",
+            "intent": "graph.bar"
+          },
+          {
+            "domain": "default",
             "utterance": "show me a line graph of ",
+            "intent": "graph.line"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me the ditribution of quantitative",
+            "intent": "graph.line"
+          },
+          {
+            "domain": "default",
+            "utterance": "for the months of temporal show me quantitative",
+            "intent": "graph.line"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me the years of temporal and quantitative",
+            "intent": "graph.line"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me quantitative and tempraol over time",
+            "intent": "graph.line"
+          },
+          {
+            "domain": "default",
+            "utterance": "for the months of temporal show me quantitative and nominal",
+            "intent": "graph.line"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me the years of temporal nominal and quantitative",
+            "intent": "graph.line"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me quantitative nominal and temporal over time",
             "intent": "graph.line"
           },
           {
@@ -75,8 +260,88 @@
           },
           {
             "domain": "default",
+            "utterance": "show me a scatter plot of quantitative and quantitative",
+            "intent": "graph.scatter"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a scatter plot of quantitative quantitative quantitative",
+            "intent": "graph.scatter"
+          },
+          {
+            "domain": "default",
+            "utterance": "how do i represent quantitative quantitative and quantitative",
+            "intent": "graph.scatter"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me quantitative and quantitative sized by quantitative",
+            "intent": "graph.scatter"
+          },
+          {
+            "domain": "default",
+            "utterance": "what is the quantiative of quantitative",
+            "intent": "graph.scatter"
+          },
+          {
+            "domain": "default",
             "utterance": "show me a pie chart of ",
             "intent": "graph.pie"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a pie chart of quantitative and nominal",
+            "intent": "graph.pie"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me the percentage of quantitative and nominal",
+            "intent": "graph.pie"
+          },
+          {
+            "domain": "default",
+            "utterance": "what is the percentage of nominal and quantitative",
+            "intent": "graph.pie"
+          },
+          {
+            "domain": "default",
+            "utterance": "what percent of nominal does quantitative",
+            "intent": "graph.pie"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a marginal histogram of",
+            "intent": "graph.marginalHistogram"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a marginal histogram of quantitative and quantitative",
+            "intent": "graph.marginalHistogram"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a heat map of quantitative and quantitative with bar charts",
+            "intent": "graph.marginalHistogram"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a heat map of quantitative and quantitative with bar charts on the side",
+            "intent": "graph.marginalHistogram"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a heat map of quantitative and quantitative",
+            "intent": "graph.heatmap"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a heat map of quantitative and quantitative",
+            "intent": "graph.heatmap"
+          },
+          {
+            "domain": "default",
+            "utterance": "show me a 2D histogram of quantitative and quantitative",
+            "intent": "graph.heatmap"
           }
         ],
         "domains": {
@@ -99,17 +364,55 @@
               "bar": 1,
               "graph": 1,
               "of": 1,
+              "nomin": 1,
+              "and": 1,
+              "quantit": 1,
+              "anf": 1,
+              "what": 1,
+              "is": 1,
+              "the": 1,
+              "best": 1,
+              "way": 1,
+              "to": 1,
+              "repres": 1,
+              "how": 1,
+              "do": 1,
               "line": 1,
+              "ditribut": 1,
+              "for": 1,
+              "month": 1,
+              "tempor": 1,
+              "year": 1,
+              "tempraol": 1,
+              "over": 1,
+              "time": 1,
               "scatter": 1,
               "plot": 1,
+              "i": 1,
+              "size": 1,
+              "by": 1,
+              "quantiat": 1,
               "pie": 1,
-              "chart": 1
+              "chart": 1,
+              "percentag": 1,
+              "percent": 1,
+              "doe": 1,
+              "margin": 1,
+              "histogram": 1,
+              "heat": 1,
+              "map": 1,
+              "with": 1,
+              "on": 1,
+              "side": 1,
+              "2d": 1
             },
             "intents": {
               "graph.bar": 1,
               "graph.line": 1,
               "graph.scatter": 1,
-              "graph.pie": 1
+              "graph.pie": 1,
+              "graph.marginalHistogram": 1,
+              "graph.heatmap": 1
             },
             "intentFeatures": {
               "graph.bar": {
@@ -118,7 +421,20 @@
                 "a": 1,
                 "bar": 1,
                 "graph": 1,
-                "of": 1
+                "of": 1,
+                "nomin": 1,
+                "and": 1,
+                "quantit": 1,
+                "anf": 1,
+                "what": 1,
+                "is": 1,
+                "the": 1,
+                "best": 1,
+                "way": 1,
+                "to": 1,
+                "repres": 1,
+                "how": 1,
+                "do": 1
               },
               "graph.line": {
                 "show": 1,
@@ -126,7 +442,19 @@
                 "a": 1,
                 "line": 1,
                 "graph": 1,
-                "of": 1
+                "of": 1,
+                "the": 1,
+                "ditribut": 1,
+                "quantit": 1,
+                "for": 1,
+                "month": 1,
+                "tempor": 1,
+                "year": 1,
+                "and": 1,
+                "tempraol": 1,
+                "over": 1,
+                "time": 1,
+                "nomin": 1
               },
               "graph.scatter": {
                 "show": 1,
@@ -134,7 +462,19 @@
                 "a": 1,
                 "scatter": 1,
                 "plot": 1,
-                "of": 1
+                "of": 1,
+                "quantit": 1,
+                "and": 1,
+                "how": 1,
+                "do": 1,
+                "i": 1,
+                "repres": 1,
+                "size": 1,
+                "by": 1,
+                "what": 1,
+                "is": 1,
+                "the": 1,
+                "quantiat": 1
               },
               "graph.pie": {
                 "show": 1,
@@ -142,7 +482,46 @@
                 "a": 1,
                 "pie": 1,
                 "chart": 1,
-                "of": 1
+                "of": 1,
+                "quantit": 1,
+                "and": 1,
+                "nomin": 1,
+                "the": 1,
+                "percentag": 1,
+                "what": 1,
+                "is": 1,
+                "percent": 1,
+                "doe": 1
+              },
+              "graph.marginalHistogram": {
+                "show": 1,
+                "me": 1,
+                "a": 1,
+                "margin": 1,
+                "histogram": 1,
+                "of": 1,
+                "quantit": 1,
+                "and": 1,
+                "heat": 1,
+                "map": 1,
+                "with": 1,
+                "bar": 1,
+                "chart": 1,
+                "on": 1,
+                "the": 1,
+                "side": 1
+              },
+              "graph.heatmap": {
+                "show": 1,
+                "me": 1,
+                "a": 1,
+                "heat": 1,
+                "map": 1,
+                "of": 1,
+                "quantit": 1,
+                "and": 1,
+                "2d": 1,
+                "histogram": 1
               }
             },
             "featuresToIntent": {
@@ -150,22 +529,29 @@
                 "graph.bar",
                 "graph.line",
                 "graph.scatter",
-                "graph.pie"
+                "graph.pie",
+                "graph.marginalHistogram",
+                "graph.heatmap"
               ],
               "me": [
                 "graph.bar",
                 "graph.line",
                 "graph.scatter",
-                "graph.pie"
+                "graph.pie",
+                "graph.marginalHistogram",
+                "graph.heatmap"
               ],
               "a": [
                 "graph.bar",
                 "graph.line",
                 "graph.scatter",
-                "graph.pie"
+                "graph.pie",
+                "graph.marginalHistogram",
+                "graph.heatmap"
               ],
               "bar": [
-                "graph.bar"
+                "graph.bar",
+                "graph.marginalHistogram"
               ],
               "graph": [
                 "graph.bar",
@@ -175,9 +561,97 @@
                 "graph.bar",
                 "graph.line",
                 "graph.scatter",
+                "graph.pie",
+                "graph.marginalHistogram",
+                "graph.heatmap"
+              ],
+              "nomin": [
+                "graph.bar",
+                "graph.line",
                 "graph.pie"
               ],
+              "and": [
+                "graph.bar",
+                "graph.line",
+                "graph.scatter",
+                "graph.pie",
+                "graph.marginalHistogram",
+                "graph.heatmap"
+              ],
+              "quantit": [
+                "graph.bar",
+                "graph.line",
+                "graph.scatter",
+                "graph.pie",
+                "graph.marginalHistogram",
+                "graph.heatmap"
+              ],
+              "anf": [
+                "graph.bar"
+              ],
+              "what": [
+                "graph.bar",
+                "graph.scatter",
+                "graph.pie"
+              ],
+              "is": [
+                "graph.bar",
+                "graph.scatter",
+                "graph.pie"
+              ],
+              "the": [
+                "graph.bar",
+                "graph.line",
+                "graph.scatter",
+                "graph.pie",
+                "graph.marginalHistogram"
+              ],
+              "best": [
+                "graph.bar"
+              ],
+              "way": [
+                "graph.bar"
+              ],
+              "to": [
+                "graph.bar"
+              ],
+              "repres": [
+                "graph.bar",
+                "graph.scatter"
+              ],
+              "how": [
+                "graph.bar",
+                "graph.scatter"
+              ],
+              "do": [
+                "graph.bar",
+                "graph.scatter"
+              ],
               "line": [
+                "graph.line"
+              ],
+              "ditribut": [
+                "graph.line"
+              ],
+              "for": [
+                "graph.line"
+              ],
+              "month": [
+                "graph.line"
+              ],
+              "tempor": [
+                "graph.line"
+              ],
+              "year": [
+                "graph.line"
+              ],
+              "tempraol": [
+                "graph.line"
+              ],
+              "over": [
+                "graph.line"
+              ],
+              "time": [
                 "graph.line"
               ],
               "scatter": [
@@ -186,11 +660,60 @@
               "plot": [
                 "graph.scatter"
               ],
+              "i": [
+                "graph.scatter"
+              ],
+              "size": [
+                "graph.scatter"
+              ],
+              "by": [
+                "graph.scatter"
+              ],
+              "quantiat": [
+                "graph.scatter"
+              ],
               "pie": [
                 "graph.pie"
               ],
               "chart": [
+                "graph.pie",
+                "graph.marginalHistogram"
+              ],
+              "percentag": [
                 "graph.pie"
+              ],
+              "percent": [
+                "graph.pie"
+              ],
+              "doe": [
+                "graph.pie"
+              ],
+              "margin": [
+                "graph.marginalHistogram"
+              ],
+              "histogram": [
+                "graph.marginalHistogram",
+                "graph.heatmap"
+              ],
+              "heat": [
+                "graph.marginalHistogram",
+                "graph.heatmap"
+              ],
+              "map": [
+                "graph.marginalHistogram",
+                "graph.heatmap"
+              ],
+              "with": [
+                "graph.marginalHistogram"
+              ],
+              "on": [
+                "graph.marginalHistogram"
+              ],
+              "side": [
+                "graph.marginalHistogram"
+              ],
+              "2d": [
+                "graph.heatmap"
               ]
             },
             "neuralNetwork": {
@@ -212,74 +735,356 @@
                 "bar",
                 "graph",
                 "of",
+                "nomin",
+                "and",
+                "quantit",
+                "anf",
+                "what",
+                "is",
+                "the",
+                "best",
+                "way",
+                "to",
+                "repres",
+                "how",
+                "do",
                 "line",
+                "ditribut",
+                "for",
+                "month",
+                "tempor",
+                "year",
+                "tempraol",
+                "over",
+                "time",
                 "scatter",
                 "plot",
+                "i",
+                "size",
+                "by",
+                "quantiat",
                 "pie",
-                "chart"
+                "chart",
+                "percentag",
+                "percent",
+                "doe",
+                "margin",
+                "histogram",
+                "heat",
+                "map",
+                "with",
+                "on",
+                "side",
+                "2d"
               ],
               "intents": [
                 "graph.bar",
                 "graph.line",
                 "graph.scatter",
-                "graph.pie"
+                "graph.pie",
+                "graph.marginalHistogram",
+                "graph.heatmap"
               ],
               "perceptrons": [
                 [
-                  0.5569331645965576,
-                  0.5569331645965576,
-                  0.5569331645965576,
-                  8.531637191772461,
-                  3.0783557891845703,
-                  0.5569331645965576,
-                  -5.45908260345459,
-                  -1.2606502771377563,
-                  -1.2606502771377563,
-                  -1.254712462425232,
-                  -1.254712462425232,
-                  0.2773633565994093
+                  4.118455410003662,
+                  4.118455410003662,
+                  -1.6503506898880005,
+                  8.178339958190918,
+                  3.3917620182037354,
+                  -9.432608604431152,
+                  7.832491397857666,
+                  -1.2953063249588013,
+                  -5.377645492553711,
+                  -0.7905381321907043,
+                  0.8762909173965454,
+                  2.3401544094085693,
+                  -3.0187408924102783,
+                  3.299645185470581,
+                  3.299645185470581,
+                  3.299645185470581,
+                  -1.4821512699127197,
+                  4.203404903411865,
+                  4.203404903411865,
+                  -5.123579978942871,
+                  -0.8024513125419617,
+                  -1.6120964288711548,
+                  -1.6120964288711548,
+                  -5.964303016662598,
+                  -1.4501750469207764,
+                  -1.2753983736038208,
+                  -4.021821022033691,
+                  -4.021821022033691,
+                  -0.8844788670539856,
+                  -0.8844788670539856,
+                  -4.779205799102783,
+                  -3.0598244667053223,
+                  -3.0598244667053223,
+                  0,
+                  -2.8333852291107178,
+                  -3.212570905685425,
+                  -1.7098021507263184,
+                  -1.4163825511932373,
+                  -1.4163825511932373,
+                  -0.8537539839744568,
+                  -0.8537539839744568,
+                  -0.3071567118167877,
+                  -0.3071567118167877,
+                  -0.3071567118167877,
+                  0,
+                  0,
+                  0,
+                  4.597167473702474
                 ],
                 [
-                  0.537305474281311,
-                  0.537305474281311,
-                  0.537305474281311,
-                  -5.389134883880615,
-                  3.160459041595459,
-                  0.537305474281311,
-                  8.555970191955566,
-                  -1.273266315460205,
-                  -1.273266315460205,
-                  -1.3351236581802368,
-                  -1.3351236581802368,
-                  0.27133321605431227
+                  1.2811133861541748,
+                  1.2811133861541748,
+                  -2.5965898036956787,
+                  -5.399014472961426,
+                  4.008930206298828,
+                  1.964840054512024,
+                  -0.24357260763645172,
+                  -0.10814368724822998,
+                  -1.5289998054504395,
+                  -1.3497482538223267,
+                  -1.7340055704116821,
+                  -1.7340055704116821,
+                  4.100375652313232,
+                  0,
+                  0,
+                  0,
+                  -0.43500789999961853,
+                  -0.43500789999961853,
+                  -0.43500789999961853,
+                  8.948970794677734,
+                  7.6865973472595215,
+                  1.583277702331543,
+                  1.583277702331543,
+                  4.875051498413086,
+                  3.218893527984619,
+                  4.615285873413086,
+                  4.686209678649902,
+                  4.686209678649902,
+                  -2.961026668548584,
+                  -2.961026668548584,
+                  -0.43500789999961853,
+                  -2.5051567554473877,
+                  -2.5051567554473877,
+                  -1.697374939918518,
+                  -1.3964532613754272,
+                  -1.8560459613800049,
+                  -6.073147773742676,
+                  0,
+                  0,
+                  -1.2909488677978516,
+                  -1.350166916847229,
+                  -0.7063579559326172,
+                  -0.7063579559326172,
+                  -0.399465411901474,
+                  -0.399465411901474,
+                  -0.399465411901474,
+                  -0.021469129249453545,
+                  -0.6000638268870526
                 ],
                 [
-                  0.8349570035934448,
-                  0.8349570035934448,
-                  0.8349570035934448,
-                  -1.3265258073806763,
-                  -2.549546003341675,
-                  0.8349570035934448,
-                  -1.207745909690857,
-                  5.264199733734131,
-                  5.264199733734131,
-                  -1.879227638244629,
-                  -1.879227638244629,
-                  0.41747869236931834
+                  -0.190812885761261,
+                  -0.190812885761261,
+                  -1.0124250650405884,
+                  -0.5288219451904297,
+                  -0.30052417516708374,
+                  -0.6957944631576538,
+                  -7.719058036804199,
+                  -0.2361311912536621,
+                  0.3204398453235626,
+                  0,
+                  3.1220974922180176,
+                  3.6219558715820312,
+                  -0.5196150541305542,
+                  -1.3368217945098877,
+                  -1.3368217945098877,
+                  -1.3368217945098877,
+                  2.8009703159332275,
+                  2.3162992000579834,
+                  2.3162992000579834,
+                  -0.20965087413787842,
+                  -1.6293377876281738,
+                  -0.5855319499969482,
+                  -0.5855319499969482,
+                  -0.9299557209014893,
+                  -0.26125577092170715,
+                  -0.9909037947654724,
+                  -0.9909037947654724,
+                  -0.9909037947654724,
+                  6.794095039367676,
+                  6.794095039367676,
+                  4.137598037719727,
+                  5.972855091094971,
+                  5.972855091094971,
+                  5.7904157638549805,
+                  -2.3180365562438965,
+                  -3.2618472576141357,
+                  -2.1554179191589355,
+                  -0.4071992337703705,
+                  -0.4071992337703705,
+                  -2.095278263092041,
+                  -2.536813497543335,
+                  -1.8259681463241577,
+                  -1.8259681463241577,
+                  -0.407145619392395,
+                  -0.0010919859632849693,
+                  -0.0010919859632849693,
+                  -0.27503013610839844,
+                  2.6235361296852377
                 ],
                 [
-                  0.8370054960250854,
-                  0.8370054960250854,
-                  0.8370054960250854,
-                  -1.2670068740844727,
-                  -2.536665439605713,
-                  0.8370054960250854,
-                  -1.2554796934127808,
-                  -1.883257508277893,
-                  -1.883257508277893,
-                  5.259592533111572,
-                  5.259592533111572,
-                  0.41850277115356355
+                  -0.5051540732383728,
+                  -0.5051540732383728,
+                  -1.2277135848999023,
+                  -3.544278383255005,
+                  -2.4347739219665527,
+                  4.988532543182373,
+                  4.2827324867248535,
+                  -1.3427258729934692,
+                  -2.8352086544036865,
+                  -0.8676454424858093,
+                  1.2101707458496094,
+                  -2.172893762588501,
+                  0.6233618259429932,
+                  -1.6778583526611328,
+                  -1.6778583526611328,
+                  -1.6778583526611328,
+                  -1.6778583526611328,
+                  -0.9552115797996521,
+                  -0.9552115797996521,
+                  -0.20733070373535156,
+                  -1.6045042276382446,
+                  -1.277078628540039,
+                  -1.277078628540039,
+                  -3.050243616104126,
+                  -1.692362666130066,
+                  0,
+                  0,
+                  0,
+                  -1.2978813648223877,
+                  -1.2978813648223877,
+                  0,
+                  0,
+                  0,
+                  -2.1796531677246094,
+                  6.504624366760254,
+                  5.112430572509766,
+                  9.680628776550293,
+                  3.38329815864563,
+                  3.38329815864563,
+                  -1.7670650482177734,
+                  -2.1543307304382324,
+                  -1.6713849306106567,
+                  -1.6713849306106567,
+                  -1.2399181127548218,
+                  -0.3440909683704376,
+                  -0.3440909683704376,
+                  -0.27993565797805786,
+                  -0.13580338451727406
+                ],
+                [
+                  -0.28601232171058655,
+                  -0.28601232171058655,
+                  -0.020074855536222458,
+                  3.8514797687530518,
+                  -2.8470780849456787,
+                  -0.30369484424591064,
+                  -0.7517555952072144,
+                  0.14922846853733063,
+                  -0.13439138233661652,
+                  0,
+                  -0.01108532678335905,
+                  -0.01108532678335905,
+                  -0.18811781704425812,
+                  0,
+                  0,
+                  0,
+                  -0.01661060005426407,
+                  -0.01661060005426407,
+                  -0.01661060005426407,
+                  0,
+                  -0.1735074520111084,
+                  -0.04126309975981712,
+                  -0.04126309975981712,
+                  -0.04126309975981712,
+                  0,
+                  0,
+                  0,
+                  0,
+                  -0.06738407164812088,
+                  -0.06738407164812088,
+                  -0.01661060005426407,
+                  0,
+                  0,
+                  -0.01108532678335905,
+                  -2.849071979522705,
+                  3.909188985824585,
+                  0,
+                  0,
+                  0,
+                  9.926353454589844,
+                  5.407118797302246,
+                  0.4028823971748352,
+                  0.4028823971748352,
+                  6.758535385131836,
+                  0.09550214558839798,
+                  0.09550214558839798,
+                  -4.5177412033081055,
+                  -0.16058840881274095
+                ],
+                [
+                  -1.1586058139801025,
+                  -1.1586058139801025,
+                  2.644458055496216,
+                  -6.682554244995117,
+                  -3.12253475189209,
+                  0.9053293466567993,
+                  -3.411142587661743,
+                  2.154675006866455,
+                  0.9043309092521667,
+                  -0.0837521031498909,
+                  -0.06623142212629318,
+                  -0.06623142212629318,
+                  -1.9920169115066528,
+                  -0.06623142212629318,
+                  -0.06623142212629318,
+                  -0.06623142212629318,
+                  -0.6442703604698181,
+                  -0.6728325486183167,
+                  -0.6728325486183167,
+                  -0.22847603261470795,
+                  -0.5021229982376099,
+                  -0.30537647008895874,
+                  -0.30537647008895874,
+                  -0.9452724456787109,
+                  -0.529380738735199,
+                  -0.4830760359764099,
+                  -0.4830760359764099,
+                  -0.4830760359764099,
+                  -1.8958927392959595,
+                  -1.8958927392959595,
+                  -0.5602059364318848,
+                  -0.24666208028793335,
+                  -0.24666208028793335,
+                  0,
+                  -0.22295710444450378,
+                  -3.9963245391845703,
+                  0,
+                  0,
+                  0,
+                  -5.863984107971191,
+                  2.5550730228424072,
+                  5.487791061401367,
+                  5.487791061401367,
+                  -3.744760274887085,
+                  -0.18130499124526978,
+                  -0.18130499124526978,
+                  8.419107437133789,
+                  -0.9811075071055748
                 ]
               ]
             }
@@ -295,7 +1100,67 @@
       ],
       [
         "en",
+        "show me a bar graph of nominal and quantitative"
+      ],
+      [
+        "en",
+        "show me a bar graph of nominal nominal and quantitative"
+      ],
+      [
+        "en",
+        "show me quantitative and nominal"
+      ],
+      [
+        "en",
+        "show me quantitative nominal anf nominal"
+      ],
+      [
+        "en",
+        "What is the best way to represent quantitative and nominal"
+      ],
+      [
+        "en",
+        "What is the best way to represent quantitative nominal and nominal"
+      ],
+      [
+        "en",
+        "how do nominal and quantitative"
+      ],
+      [
+        "en",
+        "show me quantitative nominal nominal and nominal"
+      ],
+      [
+        "en",
         "show me a line graph of "
+      ],
+      [
+        "en",
+        "show me the ditribution of quantitative"
+      ],
+      [
+        "en",
+        "for the months of temporal show me quantitative"
+      ],
+      [
+        "en",
+        "show me the years of temporal and quantitative"
+      ],
+      [
+        "en",
+        "show me quantitative and tempraol over time"
+      ],
+      [
+        "en",
+        "for the months of temporal show me quantitative and nominal"
+      ],
+      [
+        "en",
+        "show me the years of temporal nominal and quantitative"
+      ],
+      [
+        "en",
+        "show me quantitative nominal and temporal over time"
       ],
       [
         "en",
@@ -303,7 +1168,71 @@
       ],
       [
         "en",
+        "show me a scatter plot of quantitative and quantitative"
+      ],
+      [
+        "en",
+        "show me a scatter plot of quantitative quantitative quantitative"
+      ],
+      [
+        "en",
+        "how do i represent quantitative quantitative and quantitative"
+      ],
+      [
+        "en",
+        "show me quantitative and quantitative sized by quantitative"
+      ],
+      [
+        "en",
+        "what is the quantiative of quantitative"
+      ],
+      [
+        "en",
         "show me a pie chart of "
+      ],
+      [
+        "en",
+        "show me a pie chart of quantitative and nominal"
+      ],
+      [
+        "en",
+        "show me the percentage of quantitative and nominal"
+      ],
+      [
+        "en",
+        "what is the percentage of nominal and quantitative"
+      ],
+      [
+        "en",
+        "what percent of nominal does quantitative"
+      ],
+      [
+        "en",
+        "show me a marginal histogram of"
+      ],
+      [
+        "en",
+        "show me a marginal histogram of quantitative and quantitative"
+      ],
+      [
+        "en",
+        "show me a heat map of quantitative and quantitative with bar charts"
+      ],
+      [
+        "en",
+        "show me a heat map of quantitative and quantitative with bar charts on the side"
+      ],
+      [
+        "en",
+        "show me a heat map of quantitative and quantitative"
+      ],
+      [
+        "en",
+        "show me a heat map of quantitative and quantitative"
+      ],
+      [
+        "en",
+        "show me a 2D histogram of quantitative and quantitative"
       ]
     ]
   },
@@ -339,6 +1268,16 @@
         "graph.pie": [
           {
             "answer": "pie"
+          }
+        ],
+        "graph.marginalHistogram": [
+          {
+            "answer": "marginalHistogram"
+          }
+        ],
+        "graph.heatmap": [
+          {
+            "answer": "heatmap"
           }
         ]
       }

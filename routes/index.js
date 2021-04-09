@@ -6,16 +6,51 @@ const manager = new NlpManager({ languages: ['en'], forceNER: true });
 
 
 manager.addDocument('en', 'show me a bar graph of ', 'graph.bar');
+manager.addDocument('en', 'show me a bar graph of nominal and quantitative', 'graph.bar');
+manager.addDocument('en', 'show me a bar graph of nominal nominal and quantitative', 'graph.bar');
+manager.addDocument('en', 'show me quantitative and nominal', 'graph.bar');
+manager.addDocument('en', 'show me quantitative nominal anf nominal', 'graph.bar');
+manager.addDocument('en', 'What is the best way to represent quantitative and nominal', 'graph.bar');
+manager.addDocument('en', 'What is the best way to represent quantitative nominal and nominal', 'graph.bar');
+manager.addDocument('en', 'how do nominal and quantitative', 'graph.bar');
+manager.addDocument('en', 'show me quantitative nominal nominal and nominal', 'graph.bar');
 manager.addAnswer('en', 'graph.bar', 'bar');
 
 manager.addDocument('en', 'show me a line graph of ', 'graph.line');
+manager.addDocument('en', 'show me the ditribution of quantitative', 'graph.line');
+manager.addDocument('en', 'for the months of temporal show me quantitative', 'graph.line');
+manager.addDocument('en', 'show me the years of temporal and quantitative', 'graph.line');
+manager.addDocument('en', 'show me quantitative and tempraol over time', 'graph.line');
+manager.addDocument('en', 'for the months of temporal show me quantitative and nominal', 'graph.line');
+manager.addDocument('en', 'show me the years of temporal nominal and quantitative', 'graph.line');
+manager.addDocument('en', 'show me quantitative nominal and temporal over time', 'graph.line');
 manager.addAnswer('en', 'graph.line', 'line');
 
 manager.addDocument('en', 'show me a scatter plot of ', 'graph.scatter');
+manager.addDocument('en', 'show me a scatter plot of quantitative and quantitative', 'graph.scatter');
+manager.addDocument('en', 'show me a scatter plot of quantitative quantitative quantitative', 'graph.scatter');
+manager.addDocument('en', 'how do i represent quantitative quantitative and quantitative', 'graph.scatter');
+manager.addDocument('en', 'show me quantitative and quantitative sized by quantitative', 'graph.scatter');
+manager.addDocument('en', 'what is the quantiative of quantitative', 'graph.scatter');
 manager.addAnswer('en', 'graph.scatter', 'scatter');
 
 manager.addDocument('en', 'show me a pie chart of ', 'graph.pie');
+manager.addDocument('en', 'show me a pie chart of quantitative and nominal', 'graph.pie');
+manager.addDocument('en', 'show me the percentage of quantitative and nominal', 'graph.pie');
+manager.addDocument('en', 'what is the percentage of nominal and quantitative', 'graph.pie');
+manager.addDocument('en', 'what percent of nominal does quantitative', 'graph.pie');
 manager.addAnswer('en', 'graph.pie', 'pie');
+
+manager.addDocument('en', 'show me a marginal histogram of', 'graph.marginalHistogram');
+manager.addDocument('en', 'show me a marginal histogram of quantitative and quantitative', 'graph.marginalHistogram');
+manager.addDocument('en', 'show me a heat map of quantitative and quantitative with bar charts', 'graph.marginalHistogram');
+manager.addDocument('en', 'show me a heat map of quantitative and quantitative with bar charts on the side', 'graph.marginalHistogram');
+manager.addAnswer('en', 'graph.marginalHistogram', 'marginalHistogram');
+
+manager.addDocument('en', 'show me a heat map of quantitative and quantitative', 'graph.heatmap');
+manager.addDocument('en', 'show me a heat map of quantitative and quantitative', 'graph.heatmap');
+manager.addDocument('en', 'show me a 2D histogram of quantitative and quantitative', 'graph.heatmap');
+manager.addAnswer('en', 'graph.heatmap', 'heatmap');
 
 //comparison
 // manager.addDocument('en', 'comparison', 'graph.comparison');
@@ -136,7 +171,7 @@ router.post('/', async (req, res, next) => {
   } else if (response) {
     chartObj = chartMaker(response.answer, synonymCommand, attributes, data, headerMatrix, command)
   }
-
+  // console.log(response)
 
   res.send({ chartObj })
   res.status(201);

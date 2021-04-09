@@ -254,7 +254,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         encoding: {
                             x: { field: extractedHeaders[0], type: "quantitative" },
                             y: { field: extractedHeaders[1], type: "quantitative" },
-                            color: { field: extractedHeaders[2], type: "nominal" },
+                            size: { field: extractedHeaders[2], type: "quantitative" },
                         },
                         data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                     }
@@ -273,8 +273,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         mark: "arc",
                         transform: [],
                         encoding: {
-                            theta: { field: extractedHeaders[0], "type": "quantitative" },
-                            color: { field: extractedHeaders[1], "type": "nominal" }
+                            theta: { field: extractedHeaders[0], type: "quantitative" },
+                            color: { field: extractedHeaders[1], type: "nominal" }
                         },
                         view: { stroke: null },
                         data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
@@ -283,6 +283,82 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
             } else {
                 chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
 
+            }
+            break;
+        case "marginalHistogram":
+            if (extractedHeaders.length == 2) {
+                console.log(extractedHeaders)
+                chartObj.charts = {
+                    data: { table: data },
+                    spec: {
+                        vconcat: [
+                            {
+                                mark: "bar",
+                                height: 60,
+                                encoding: {
+                                    x: { bin: true, field: extractedHeaders[0], axis: null },
+                                    y: { aggregate: "count", scale: { domain: [0, 500] }, title: "" }
+                                }
+                            },
+                            {
+                                spacing: 15,
+                                bounds: "flush",
+                                hconcat: [
+                                    {
+                                        mark: "rect",
+                                        encoding: {
+                                            x: { bin: true, field: extractedHeaders[0], type: "quantitative" },
+                                            y: { bin: true, field: extractedHeaders[1], type: "quantitative" },
+                                            color: { aggregate: "count" }
+                                        }
+                                    },
+                                    {
+                                        mark: "bar",
+                                        width: 60,
+                                        encoding: {
+                                            y: { "bin": true, field: extractedHeaders[1], axis: null },
+                                            x: {
+                                                aggregate: "count",
+                                                scale: { domain: [0, 500] },
+                                                title: ""
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+
+                    }
+
+                }
+            }
+            break;
+        case "heatmap":
+            if (extractedHeaders.length == 2) {
+                chartObj.charts = {
+                    data: { table: data },
+                    spec: {
+                        mark: "rect",
+                        wdith: 300,
+                        height: 200,
+                        encoding: {
+                            x: {
+                                bin: true,
+                                field: extractedHeaders[0],
+                                type: "quantitative"
+                            },
+                            y: {
+                                bin: true,
+                                field: extractedHeaders[1],
+                                type: "quantitative"
+                            },
+                            color: { aggregate: "count", type: "quantitative" },
+                        },
+                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                    }
+
+                }
             }
             break;
         default:
@@ -616,13 +692,13 @@ function checkTimeAndReorder(extractedHeaders, data) {
 }
 
 function reorderForTimeAgain(extractedHeaders, data) {
-    if(extractedHeaders.length === 2) {
+    if (extractedHeaders.length === 2) {
         if (findType(extractedHeaders[1], data) === "temporal") {
             let tmpHeader = extractedHeaders[0]
             extractedHeaders[0] = extractedHeaders[1]
             extractedHeaders[1] = tmpHeader
         }
-    } else if(extractedHeaders.length === 3) {
+    } else if (extractedHeaders.length === 3) {
         if (findType(extractedHeaders[1], data) === "quantitative") {
             let tmpHeader = extractedHeaders[0]
             extractedHeaders[0] = extractedHeaders[1]
