@@ -53,9 +53,20 @@ manager.addDocument('en', 'show me a 2D histogram of quantitative and quantitati
 manager.addAnswer('en', 'graph.heatmap', 'heatmap');
 
 manager.addDocument('en', 'show me a area chart of ', 'graph.lineArea');
-manager.addDocument('en', 'show me a area chart of temporal and quantitative', 'graph.lineArea');
-manager.addDocument('en', 'show me a area chart of nominal and quantitative', 'graph.lineArea');
+manager.addDocument('en', 'show me a area chart of temporal quantitative and nominal', 'graph.lineArea');
 manager.addAnswer('en', 'graph.lineArea', 'lineArea');
+
+manager.addDocument('en', 'show me a normalized area chart of ', 'graph.normalizedLineArea');
+manager.addDocument('en', 'show me a normalized area chart of temporal quantitative and nominal ', 'graph.normalizedLineArea');
+manager.addAnswer('en', 'graph.normalizedLineArea', 'normalizedLineArea');
+
+manager.addDocument('en', 'show me a stacked bar chart of ', 'graph.stackedBar');
+manager.addDocument('en', 'show me a stacked bar chart of of temporal quantitative and nominal', 'graph.stackedBar');
+manager.addAnswer('en', 'graph.stackedBar', 'stackedBar');
+
+manager.addDocument('en', 'show me a normalized stacked bar chart of ', 'graph.normalizedStackedBar');
+manager.addDocument('en', 'show me a normalized stacked bar chart of of temporal quantitative and nominal', 'graph.normalizedStackedBar');
+manager.addAnswer('en', 'graph.normalizedStackedBar', 'normalizedStackedBar');
 
 //comparison
 // manager.addDocument('en', 'comparison', 'graph.comparison');
@@ -171,6 +182,7 @@ router.post('/', async (req, res, next) => {
     charts: null,
     errMsg: 'no command found'
   }
+  console.log(response)
   if (req.body.prevChart && response){
     chartObj = iterateGraph(response.answer, synonymCommand, attributes, data, headerMatrix, command)
   } else if (response) {

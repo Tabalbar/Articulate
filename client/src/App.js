@@ -5,6 +5,7 @@ import { VegaLite } from 'react-vega'
 import MaterialTable from 'material-table'
 import XLSX from 'xlsx'
 
+
 function App() {
 
   //data used for charts and table
