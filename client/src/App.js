@@ -4,7 +4,7 @@ import { Button, Form, Grid, Input, Header, Checkbox } from 'semantic-ui-react'
 import { VegaLite } from 'react-vega'
 import MaterialTable from 'material-table'
 import XLSX from 'xlsx'
-
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 function App() {
 
@@ -130,6 +130,43 @@ function App() {
 
     // console.log(responseObj.charts)
   }
+
+  const createChartWithVoice = async (transcript) => {
+    await fetch('http://localhost:5000/addHeaders', {
+      method: 'POST',
+
+      body: JSON.stringify({ headers: attributes }),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    let prevChart = false
+    if(selected===true){
+      prevChart = charts[charts.length-1]
+    }
+
+    const response = await fetch('http://localhost:5000/', {
+      method: 'POST',
+      body: JSON.stringify({ command: transcript, attributes: attributes, dataHead: dataHead, prevChart: prevChart }),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    const body = await response.text();
+    const { chartObj } = JSON.parse(body)
+    console.log(chartObj)
+    if (chartObj.errMsg === '' && chartObj.charts !== null) {
+      setCharts(prev => [chartObj.charts, ...prev])
+    } else {
+      console.log('error')
+
+      setErrMsg(chartObj.errMsg)
+    }
+
+    // console.log(responseObj.charts)
+  }
+
+
   const clearGraphs = () => {
     setCharts([])
     setSelected(false);
@@ -149,8 +186,10 @@ function App() {
 
           </Form>
           <Button size="large" onClick={createCharts}>Create Visualization</Button>
-
         </Grid.Row>
+        <Dictaphone
+          createChartWithVoice={createChartWithVoice}
+        />
         <Grid.Row>
 
           <Input type='file' onChange={laodData} />
@@ -186,3 +225,24 @@ function App() {
 }
 
 export default App;
+
+const Dictaphone = ({
+  createChartWithVoice
+}) => {
+  const { transcript, resetTranscript } = useSpeechRecognition()
+
+  if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
+    return null
+  }
+
+  return (
+    <div>
+      <button onClick={SpeechRecognition.startListening}>Start</button>
+      <button onClick={()=>{
+        SpeechRecognition.stopListening();
+        createChartWithVoice(transcript);
+        }}>Create Visualization</button>
+      <p>{transcript}</p>
+    </div>
+  )
+}

@@ -17,6 +17,7 @@ manager.addDocument('en', 'show me quantitative nominal nominal and nominal', 'g
 manager.addAnswer('en', 'graph.bar', 'bar');
 
 manager.addDocument('en', 'show me a line graph of ', 'graph.line');
+manager.addDocument('en', 'can i see a line chart of quantitative ', 'graph.line');
 manager.addDocument('en', 'show me the ditribution of quantitative', 'graph.line');
 manager.addDocument('en', 'for the months of temporal show me quantitative', 'graph.line');
 manager.addDocument('en', 'show me the years of temporal and quantitative', 'graph.line');
@@ -61,12 +62,16 @@ manager.addDocument('en', 'show me a normalized area chart of temporal quantitat
 manager.addAnswer('en', 'graph.normalizedLineArea', 'normalizedLineArea');
 
 manager.addDocument('en', 'show me a stacked bar chart of ', 'graph.stackedBar');
-manager.addDocument('en', 'show me a stacked bar chart of of temporal quantitative and nominal', 'graph.stackedBar');
+manager.addDocument('en', 'show me a stacked bar chart of temporal quantitative and nominal', 'graph.stackedBar');
 manager.addAnswer('en', 'graph.stackedBar', 'stackedBar');
 
 manager.addDocument('en', 'show me a normalized stacked bar chart of ', 'graph.normalizedStackedBar');
-manager.addDocument('en', 'show me a normalized stacked bar chart of of temporal quantitative and nominal', 'graph.normalizedStackedBar');
+manager.addDocument('en', 'show me a normalized stacked bar chart of temporal quantitative and nominal', 'graph.normalizedStackedBar');
 manager.addAnswer('en', 'graph.normalizedStackedBar', 'normalizedStackedBar');
+
+// manager.addDocument('en', 'show me a waterfall chart for', 'graph.waterfall');
+// manager.addDocument('en', 'show me a waterfallchart of temporal quantitative and nominal', 'graph.waterfall');
+// manager.addAnswer('en', 'graph.waterfall', 'waterfall');
 
 //comparison
 // manager.addDocument('en', 'comparison', 'graph.comparison');

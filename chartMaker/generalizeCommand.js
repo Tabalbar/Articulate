@@ -18,17 +18,17 @@ module.exports = (command, attributes, data) => {
     }
     doc.numbers().replaceWith("quantitative")
     doc.dates().replaceWith("temporal")
-
     for(let i = 0; i < synonymMatrix.length; i++){
         for(let n = 0; n < synonymMatrix[i].length; n++){
-            if(catchSynonymCommand.match(synonymMatrix[i][n])){
-                // console.log(catchSynonymCommand.match(synonymMatrix[i][n]).text())
-                catchSynonymCommand.replace(synonymMatrix[i][n], synonymMatrix[i][0])
+            if(catchSynonymCommand.text().includes(synonymMatrix[i][n].toLowerCase())){
+                console.log(synonymMatrix[i][n], synonymMatrix[i][0].toLowerCase())
+                catchSynonymCommand.replace(synonymMatrix[i][n], synonymMatrix[i])
             }
         }
     }
     generalizedCommand = doc.text()
     synonymCommand = catchSynonymCommand.text()
+    console.log(synonymCommand)
     return {generalizedCommand, synonymCommand}
 }
 
@@ -50,7 +50,6 @@ function createMatrixForAll(headers, data){
     let featureMatrix = [];
     let synonymMatrix = [];
     for (let i = 0; i < headers.length; i++) {
-        let isNominal = false;
         synonyms = [headers[i]]
         if (findType(headers[i], data) === "nominal") {
             var flags = [], output = [headers[i]], l = data.length, n;
@@ -80,10 +79,12 @@ function createMatrixForAll(headers, data){
         //     }
 
         // }
-        synonyms.push(thesaurus.find(headers[i]))
+        synonyms.push(thesaurus.find(headers[i].toLowerCase()))
+        // console.log(synonyms)
         synonyms = synonyms.flat()
         synonymMatrix.push(synonyms)
 
     }
+    // console.log(featureMatrix)
     return {featureMatrix, synonymMatrix}
 }

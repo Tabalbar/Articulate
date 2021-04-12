@@ -74,8 +74,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
 
                 }
             } else {
-                extracteHeaders = reorderHeadersForCategories(extractedHeaders, data)
-
+                extractedHeaders = reorderHeadersForCategories(extractedHeaders, data)
                 if (extractedHeaders.length === 1) {
                     chartObj.charts = {
                         data: { table: data },
@@ -167,6 +166,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         spec: {
                             title: actualCommand,
                             mark: "line",
+                            transform: [],
                             encoding: {
                                 x: { field: extractedHeaders[0], type: "quantitative" },
                                 y: { aggregate: 'count' }
@@ -179,7 +179,6 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
 
                 }
             } else if (extractedHeaders.length === 2) {
-                console.log(extractedHeaders)
                 hasTime = checkTimeAndReorder(extractedHeaders, data);
                 if (hasTime) {
 
@@ -200,6 +199,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                     }
                 }
             } else if (extractedHeaders.length === 3) {
+                console.log(extractedHeaders)
+
                 hasTime = checkTimeAndReorder(extractedHeaders, data);
                 if (hasTime) {
                     chartObj.charts = {
@@ -218,9 +219,12 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                             data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                         }
                     }
+                } else {
+                    chartObj.errMsg = "Could not create graph. Expected temporal data. "
                 }
             } else {
                 chartObj.errMsg = "Could not create graph. Expected 2 or 3 headers. Got " + extractedHeaders.length
+
             }
             break;
         case "scatter":
@@ -287,7 +291,6 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
             break;
         case "marginalHistogram":
             if (extractedHeaders.length == 2) {
-                console.log(extractedHeaders)
                 chartObj.charts = {
                     data: { table: data },
                     spec: {
@@ -500,6 +503,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                     chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
                 }
                 break;
+        
         default:
             chartObj.errMsg = "Could not specify graph."
     }
@@ -820,7 +824,6 @@ function createLayers(extractedHeaders, data) {
 
 function checkTimeAndReorder(extractedHeaders, data) {
     for (let i = 0; i < extractedHeaders.length; i++) {
-        console.log(extractedHeaders[i].toLowerCase())
 
         let lowerCaseHeader = extractedHeaders[i].toLowerCase();
         if (lowerCaseHeader.includes("year") || lowerCaseHeader.includes("month")
@@ -894,3 +897,132 @@ function filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
     }
 }
 
+
+
+//Waterfall chart is too specific to make
+// case "waterfall":
+//             if (extractedHeaders.length == 2) {
+//                 hasTime = checkTimeAndReorder(extractedHeaders, data)
+//                 reorderForLineArea(extractedHeaders, data)
+//                 if (hasTime) {
+//                     chartObj.charts = {
+//                         data: { table: data },
+//                         spec: {
+//                             title: actualCommand,
+//                             width: 800,
+//                             height: 450,
+//                             layer: [
+//                               {
+//                                 mark: {type: "bar", size: 45},
+//                                 encoding: {
+//                                   x: {
+//                                     field: extractedHeaders[1],
+//                                     type: "ordinal",
+//                                     sort: null,
+//                                     axis: {labelAngle: 0}
+//                                   },
+//                                   y: {
+//                                     field: "previous_sum",
+//                                     type: "quantitative",
+//                                     title: "Amount"
+//                                   },
+//                                   y2: {field: "sum"}
+//                                 }
+//                               },
+//                               {
+//                                 mark: {
+//                                   type: "rule",
+//                                   color: "#404040",
+//                                   opacity: 1,
+//                                   strokeWidth: 2,
+//                                   xOffset: -22.5,
+//                                   x2Offset: 22.5
+//                                 },
+//                                 encoding: {
+//                                     x: {
+//                                     field: extractedHeaders[1],
+//                                     type: "ordinal",
+//                                     sort: null
+//                                   },
+//                                   x2: {field: "lead"},
+//                                   y: {field: "sum", "type": "quantitative"}
+//                                 }
+//                               },
+//                               {
+//                                 mark: {type: "text", dy: -4, baseline: "bottom"},
+//                                 encoding: {
+//                                   x: {
+//                                     field: "label",
+//                                     type: "ordinal",
+//                                     sort: null
+//                                   },
+//                                   y: {field: "sum_inc", type: "quantitative"},
+//                                   text: {field: "sum_inc", type: "nominal"}
+//                                 }
+//                               },
+//                               {
+//                                 mark: {type: "text", dy: 4, baseline: "top"},
+//                                 encoding: {
+//                                   x: {
+//                                     field: "label",
+//                                     type: "ordinal",
+//                                     sort: null
+//                                   },
+//                                   y: {field: "sum_dec", type: "quantitative"},
+//                                   text: {field: "sum_dec", type: "nominal"}
+//                                 }
+//                               },
+//                               {
+//                                 mark: {type: "text", fontWeight: "bold", baseline: "middle"},
+//                                 encoding: {
+//                                   x: {
+//                                     field: extractedHeaders[1],
+//                                     type: "ordinal",
+//                                     sort: null
+//                                   },
+//                                   y: {field: "center", type: "quantitative"},
+//                                   text: {field: "text_amount", type: "nominal"}
+//                                 }
+//                               }
+//                             ],
+//                             config: {text: {fontWeight: "bold", color: "#404040"}},
+//                             transform: [
+//                               {window: [{op: "sum", field: extractedHeaders[0], "as": "sum"}]},
+//                               {window: [{op: "lead", field: extractedHeaders[1], as: "lead"}]},
+//                               {
+//                                 calculate: "datum.lead === null ? datum.label : datum.lead",
+//                                 as: "lead"
+//                               },
+//                               {
+//                                 calculate: "datum.label === 'End' ? 0 : datum.sum - datum.amount",
+//                                 as: "previous_sum"
+//                               },
+//                               {
+//                                 calculate: "datum.label === 'End' ? datum.sum : datum.amount",
+//                                 as: "amount"
+//                               },
+//                               {
+//                                 calculate: "(datum.label !== 'Begin' && datum.label !== 'End' && datum.amount > 0 ? '+' : '') + datum.amount",
+//                                 as: "text_amount"
+//                               },
+//                               {calculate: "(datum.sum + datum.previous_sum) / 2", "as": "center"},
+//                               {
+//                                 calculate: "datum.sum < datum.previous_sum ? datum.sum : ''",
+//                                 as: "sum_dec"
+//                               },
+//                               {
+//                                 calculate: "datum.sum > datum.previous_sum ? datum.sum : ''",
+//                                 as: "sum_inc"
+//                               }
+//                             ],
+//                             data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+//                         }
+
+//                     }
+//                 } else {
+//                     chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
+//                 }
+//             } else {
+//                 chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
+//             }
+//             break;
