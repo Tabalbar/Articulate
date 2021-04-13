@@ -120,14 +120,15 @@ function App() {
     const body = await response.text();
     const { chartObj } = JSON.parse(body)
     console.log(chartObj)
-    if (chartObj.errMsg === '' && chartObj.charts !== null) {
-      setCharts(prev => [chartObj.charts, ...prev])
-    } else {
-      console.log('error')
-
-      setErrMsg(chartObj.errMsg)
+    for(let i = 0; i < chartObj.length; i++) {
+      if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
+        setCharts(prev => [chartObj[i].charts, ...prev])
+      } else {
+        console.log('error')
+  
+        setErrMsg(chartObj[i].errMsg)
+      }
     }
-
     // console.log(responseObj.charts)
   }
 
@@ -155,13 +156,16 @@ function App() {
     const body = await response.text();
     const { chartObj } = JSON.parse(body)
     console.log(chartObj)
-    if (chartObj.errMsg === '' && chartObj.charts !== null) {
-      setCharts(prev => [chartObj.charts, ...prev])
-    } else {
-      console.log('error')
-
-      setErrMsg(chartObj.errMsg)
+    for(let i = 0; i < chartObj.length; i++) {
+      if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
+        setCharts(prev => [chartObj[i].charts, ...prev])
+      } else {
+        console.log('error')
+  
+        setErrMsg(chartObj[i].errMsg)
+      }
     }
+
 
     // console.log(responseObj.charts)
   }

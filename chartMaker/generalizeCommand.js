@@ -21,8 +21,8 @@ module.exports = (command, attributes, data) => {
     for(let i = 0; i < synonymMatrix.length; i++){
         for(let n = 0; n < synonymMatrix[i].length; n++){
             if(catchSynonymCommand.text().includes(synonymMatrix[i][n].toLowerCase())){
-                console.log(synonymMatrix[i][n], synonymMatrix[i][0].toLowerCase())
-                catchSynonymCommand.replace(synonymMatrix[i][n], synonymMatrix[i])
+                console.log(synonymMatrix[i][n], synonymMatrix[i][0].toLowerCase(), 'here')
+                catchSynonymCommand.replace(synonymMatrix[i][n], synonymMatrix[i][0])
             }
         }
     }
@@ -85,6 +85,7 @@ function createMatrixForAll(headers, data){
         synonymMatrix.push(synonyms)
 
     }
+
     // console.log(featureMatrix)
     return {featureMatrix, synonymMatrix}
 }
