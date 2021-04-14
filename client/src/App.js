@@ -118,17 +118,18 @@ function App() {
       }
     });
     const body = await response.text();
+    setErrMsg("")
     const { chartObj } = JSON.parse(body)
-    console.log(chartObj)
+    let count = 0;
     for(let i = 0; i < chartObj.length; i++) {
       if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
         setCharts(prev => [chartObj[i].charts, ...prev])
-      } else {
-        console.log('error')
-  
-        setErrMsg(chartObj[i].errMsg)
+        count++
+      } else {  
+        setErrMsg(prev => prev +  chartObj[i].errMsg + ".\n")
       }
     }
+    setErrMsg(prev => prev + "Returned " + count + " chart(s)")
     // console.log(responseObj.charts)
   }
 
@@ -154,17 +155,18 @@ function App() {
       }
     });
     const body = await response.text();
+    setErrMsg("")
     const { chartObj } = JSON.parse(body)
-    console.log(chartObj)
+    let count = 0;
     for(let i = 0; i < chartObj.length; i++) {
       if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
         setCharts(prev => [chartObj[i].charts, ...prev])
-      } else {
-        console.log('error')
-  
-        setErrMsg(chartObj[i].errMsg)
+        count++
+      } else {  
+        setErrMsg(prev => prev +  chartObj[i].errMsg + "\n")
       }
     }
+    setErrMsg(prev => prev + "Returned " + count + " charts")
 
 
     // console.log(responseObj.charts)
@@ -173,6 +175,7 @@ function App() {
 
   const clearGraphs = () => {
     setCharts([])
+    setErrMsg("")
     setSelected(false);
   }
 
@@ -184,6 +187,9 @@ function App() {
     <>
       <br />
       <Grid centered={true}>
+      <Grid.Row>
+          <MaterialTable columns={dataHeaders} data={data} title='' />
+        </Grid.Row>
         <Grid.Row>
           <Form onSubmit={createCharts}>
             <Input placeholder={'...Enter query Here'} onChange={handleChange} size="large" style={{ width: 500, fontWeight: 50 }} />
@@ -200,10 +206,9 @@ function App() {
           <Button onClick={clearGraphs}>Clear Graphs</Button>
         </Grid.Row>
         <Grid.Row>
-          <Header as="h3" color="red">{errMsg}</Header>
+          <Header as="h3" color="blue">{errMsg}</Header>
         </Grid.Row>
         <Checkbox label="Iterate on Graph" checked={selected} onChange={handleSelect}/>
-        <Grid.Row>
           {
             charts.length ?
               charts.map((element, index) => {
@@ -218,10 +223,7 @@ function App() {
               :
               null
           }
-        </Grid.Row>
-        <Grid.Row>
-          <MaterialTable columns={dataHeaders} data={data} title='' />
-        </Grid.Row>
+
       </Grid>
 
     </>

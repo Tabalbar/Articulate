@@ -6,22 +6,23 @@ const manager = new NlpManager({ languages: ['en'], forceNER: true });
 
 
 manager.addDocument('en', 'show me a bar graph of ', 'bar');
+manager.addDocument('en', 'show me a histogram of quantitative', 'bar');
 manager.addDocument('en', 'show me a bar graph of nominal and quantitative', 'bar');
-manager.addDocument('en', 'show me a bar graph of nominal nominal and quantitative', 'bar');
 manager.addDocument('en', 'show me a bar graph of nominal nominal nominal and quantitative', 'bar');
+manager.addDocument('en', 'show me a bar graph of quantitative nominal nominal and nominal', 'bar');
+manager.addDocument('en', 'show me a graph of nominal nominal and quantitative', 'bar');
 manager.addDocument('en', 'show me quantitative and nominal', 'bar');
 manager.addDocument('en', 'show me quantitative nominal and nominal', 'bar');
-manager.addDocument('en', 'how do nominal and quantitative', 'bar');
 manager.addDocument('en', 'show me quantitative nominal nominal and nominal', 'bar');
 manager.addAnswer('en', 'bar', 'bar');
 
 manager.addDocument('en', 'show me a line graph of ', 'line');
 manager.addDocument('en', 'can i see a line chart of quantitative ', 'line');
 manager.addDocument('en', 'show me the ditribution of quantitative', 'line');
+manager.addDocument('en', 'what is the ditribution of quantitative', 'line');
 manager.addDocument('en', 'for the months of temporal show me quantitative', 'line');
 manager.addDocument('en', 'show me the years of temporal and quantitative', 'line');
-manager.addDocument('en', 'show me quantitative and tempraol over time', 'line');
-manager.addDocument('en', 'for the months of temporal show me quantitative and nominal', 'line');
+manager.addDocument('en', 'show me quantitative and nominal over time', 'line');
 manager.addDocument('en', 'show me the years of temporal nominal and quantitative', 'line');
 manager.addDocument('en', 'show me quantitative nominal and temporal over time', 'line');
 manager.addAnswer('en', 'line', 'line');
@@ -41,8 +42,8 @@ manager.addDocument('en', 'what is the percentage of nominal and quantitative', 
 manager.addDocument('en', 'what percent of nominal does quantitative', 'pie');
 manager.addAnswer('en', 'pie', 'pie');
 
-manager.addDocument('en', 'show me a marginal histogram of', 'marginalHistogram');
-manager.addDocument('en', 'show me a marginal histogram of quantitative and quantitative', 'marginalHistogram');
+manager.addDocument('en', 'show me a marginal of', 'marginalHistogram');
+manager.addDocument('en', 'show me a marginal of quantitative and quantitative', 'marginalHistogram');
 manager.addDocument('en', 'show me a heat map of quantitative and quantitative with bar charts', 'marginalHistogram');
 manager.addDocument('en', 'show me a heat map of quantitative and quantitative with bar charts on the side', 'marginalHistogram');
 manager.addAnswer('en', 'marginalHistogram', 'marginalHistogram');
@@ -83,7 +84,6 @@ const normalizeCommand = require('../chartMaker/normalizeCommand')
 const generalizeCommand = require('../chartMaker/generalizeCommand')
 const iterateGraph = require('../chartMaker/iterateGraph')
 
-
 // const findommands = require('../chartMaker/findCommands')
 const nlp = require('compromise')
 
@@ -97,9 +97,10 @@ router.post('/', async (req, res, next) => {
   const command = req.body.command
   const normalizedCommand = normalizeCommand(command)
   const { generalizedCommand, synonymCommand } = generalizeCommand(normalizedCommand, attributes, data)
-
   const response = await manager.process('en', generalizedCommand)
   const headerMatrix = createVector(attributes, data)
+  console.log(response)
+  
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
     // add methods to run after the tagger
@@ -119,7 +120,9 @@ router.post('/', async (req, res, next) => {
   // }
   let chartObj = []
   for(let i = 0; i < response.classifications.length; i++) {
-    if(response.classifications[i].score > .3) {
+    if(response.classifications[i].score > .1) {
+      console.log(response.classifications[i].intent)
+
       chartObj.push(chartMaker(response.classifications[i].intent, synonymCommand, attributes, data, headerMatrix, command))
 
     }
@@ -129,8 +132,6 @@ router.post('/', async (req, res, next) => {
   // } else if (response) {
   //   chartObj = chartMaker(response.answer, synonymCommand, attributes, data, headerMatrix, command)
   // }
-  // console.log(response)
-  console.log(chartObj[0])
   res.send({ chartObj })
   res.status(201);
   res.json();

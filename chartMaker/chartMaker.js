@@ -2,7 +2,7 @@
 const nlp = require('compromise')
 module.exports = (intent, command, headers, data, headerMatrix, actualCommand) => {
     let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers, command)
-    let extractedHeaders = extractHeaders(command, headers, filteredHeaders)
+    let extractedHeaders = extractHeaders(command, headers, filteredHeaders, data)
     let chartObj = {
         charts: null,
         errMsg: ''
@@ -92,6 +92,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         }
                     }
                 } else if (extractedHeaders.length === 2) {
+                    console.log(extractedHeaders, 'herehrehrhehrehrhe')
                     chartObj.charts = {
                         data: { table: data },
                         spec: {
@@ -387,7 +388,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                             mark: "area",
                             transform: [],
                             encoding: {
-                                x: { timeUnit: "yearmonth", field: extractedHeaders[1]},
+                                x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
                                 y: { aggregate: "sum", field: extractedHeaders[0] },
                                 color: { field: extractedHeaders[2] }
                             },
@@ -417,7 +418,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                             mark: "area",
                             transform: [],
                             encoding: {
-                                x: { timeUnit: "yearmonth", field: extractedHeaders[1]},
+                                x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
                                 y: {
                                     aggregate: "sum",
                                     field: extractedHeaders[0],
@@ -451,7 +452,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                             height: 200,
                             transform: [],
                             encoding: {
-                                x: { timeUnit: "yearmonth", field: extractedHeaders[1]},
+                                x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
                                 y: {
                                     aggregate: "sum",
                                     field: extractedHeaders[0]
@@ -469,45 +470,45 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                 chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
             }
             break;
-            case "normalizedStackedBar":
-                if (extractedHeaders.length == 3) {
-                    hasTime = checkTimeAndReorder(extractedHeaders, data)
-                    reorderForLineArea(extractedHeaders, data)
-                    if (hasTime) {
-                        chartObj.charts = {
-                            data: { table: data },
-                            spec: {
-                                title: actualCommand,
-                                mark: { type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 },
-                                width: 600,
-                                height: 200,
-                                transform: [],
-                                encoding: {
-                                    x: { timeUnit: "yearmonth", field: extractedHeaders[1]},
-                                    y: {
-                                        aggregate: "sum",
-                                        field: extractedHeaders[0],
-                                        axis: null,
-                                        stack: "normalize"
-                                    },
-                                    color: { field: extractedHeaders[2] }
+        case "normalizedStackedBar":
+            if (extractedHeaders.length == 3) {
+                hasTime = checkTimeAndReorder(extractedHeaders, data)
+                reorderForLineArea(extractedHeaders, data)
+                if (hasTime) {
+                    chartObj.charts = {
+                        data: { table: data },
+                        spec: {
+                            title: actualCommand,
+                            mark: { type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 },
+                            width: 600,
+                            height: 200,
+                            transform: [],
+                            encoding: {
+                                x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
+                                y: {
+                                    aggregate: "sum",
+                                    field: extractedHeaders[0],
+                                    axis: null,
+                                    stack: "normalize"
                                 },
-                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                            }
-    
+                                color: { field: extractedHeaders[2] }
+                            },
+                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                         }
-                    } else {
-                        chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
+
                     }
                 } else {
-                    chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
+                    chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
                 }
-                break;
-        
+            } else {
+                chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
+            }
+            break;
+
         default:
             chartObj.errMsg = "Could not specify graph."
     }
-    if (chartObj.errMsg === "") {
+    if (chartObj.errMsg === "" && chartObj.charts !== null) {
         filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
 
     }
@@ -582,6 +583,8 @@ function reorderFourHeadersForRelationship(extractedHeaders, data) {
 }
 
 function reorderHeadersForCategories(extractedHeaders, data) {
+    console.log(extractedHeaders.length, 'fjnwfnlkwe')
+
     if (extractedHeaders.length == 2) {
         if (findType(extractedHeaders[1], data) === "nominal") {
             let tmpHeader = extractedHeaders[1];
@@ -660,11 +663,12 @@ function findType(header, data) {
     }
 }
 
-function extractHeaders(command, headers, filteredHeaders) {
+function extractHeaders(command, headers, filteredHeaders, data) {
     let doc = nlp(command)
     let extractedHeaders = []
     for (let i = 0; i < headers.length; i++) {
-        if (doc.has(headers[i])) {
+        if (doc.has(headers[i].toLowerCase())) {
+            console.log(headers[i])
             extractedHeaders.push(headers[i])
         }
     }
@@ -672,7 +676,7 @@ function extractHeaders(command, headers, filteredHeaders) {
     let keys = Object.keys(filteredHeaders);
     for (let i = 0; i < keys.length; i++) {
         let found = false;
-        if (filteredHeaders[keys[i]].length > 0) {
+        if (filteredHeaders[keys[i]].length > 0 && findType(keys[i], data) === "temporal") {
             for (let n = 0; n < extractedHeaders.length; n++) {
                 if (extractedHeaders[n] === keys[i]) {
                     found = true
@@ -684,6 +688,24 @@ function extractHeaders(command, headers, filteredHeaders) {
         }
 
     }
+    if(doc.match("overtime") || doc.match("time")) {
+        let foundTime = false
+        for(let i = 0; i < extractedHeaders.length; i++) {
+            if(findType(extractedHeaders[i], data) === "temporal") {
+                foundTime = true
+                break
+            }
+        }
+        if(!foundTime) {
+            for(let i = 0; i < headers.length; i ++) {
+                if(findType(headers[i], data) === "temporal") {
+                    extractedHeaders.push(headers[i])
+                    break;
+                }
+            }
+        }
+    }
+
     return extractedHeaders;
 }
 
@@ -703,13 +725,11 @@ function extractFilteredHeaders(command, headerMatrix, data, headers, command) {
         if (findType(headerMatrix[i][0], data) === "temporal" && !foundTimeHeader) {
             const { foundTime, timeHeader } = extractHeadersWithoutFilter(doc, headers, data, command)
             if (!foundTime) {
-
                 findDates(doc, extractedFilteredHeaders[headerMatrix[i][0]])
                 command += " " + headerMatrix[i][0]
                 foundTimeHeader = true;
 
             } else {
-
                 if (timeHeader === headerMatrix[i][0]) {
                     findDates(doc, extractedFilteredHeaders[headerMatrix[i][0]])
 

@@ -9,6 +9,11 @@ module.exports = (command, attributes, data) => {
     let doc = nlp(command)
     let catchSynonymCommand = nlp(command);
     const {featureMatrix, synonymMatrix} = createMatrixForAll(attributes, data)
+    for(let i = 0; i < attributes.length; i++) {
+        if(doc.match(attributes[i])) {
+            doc.replace(attributes[i], findType(attributes[i], data))
+        }
+    }
     for (let i = 0; i < featureMatrix.length; i++) {
         for (let n = 0; n < featureMatrix[i].length; n++) {
             if (doc.match(featureMatrix[i][n])) {
@@ -21,14 +26,15 @@ module.exports = (command, attributes, data) => {
     for(let i = 0; i < synonymMatrix.length; i++){
         for(let n = 0; n < synonymMatrix[i].length; n++){
             if(catchSynonymCommand.text().includes(synonymMatrix[i][n].toLowerCase())){
-                console.log(synonymMatrix[i][n], synonymMatrix[i][0].toLowerCase(), 'here')
+                // console.log(synonymMatrix[i][n], synonymMatrix[i][0], 'here')
                 catchSynonymCommand.replace(synonymMatrix[i][n], synonymMatrix[i][0])
             }
         }
     }
+
     generalizedCommand = doc.text()
     synonymCommand = catchSynonymCommand.text()
-    console.log(synonymCommand)
+    // console.log(synonymCommand)
     return {generalizedCommand, synonymCommand}
 }
 
@@ -67,25 +73,48 @@ function createMatrixForAll(headers, data){
         }
 
         // console.log(headers[i].split(/\W/g))
-        // if(headers[i].match(/\W/g)){
-        //     let words = headers[i].split(/\W/g)
-        //     for(let i = 0; i < words.length; i++){
-        //         let doc = nlp(words[i])
-        //         if(doc.has('#Noun')){
-        //             console.log(doc.text())
-        //             synonyms.push(thesaurus.find(words[i]))
-        //             synonyms.push(words[i])
-        //         }
-        //     }
+        if(headers[i].match(/\W/g)){
+            let words = headers[i].split(/\W/g)
+            for(let i = 0; i < words.length; i++){
+                let doc = nlp(words[i])
+                if(doc.has('#Noun')){
+                    synonyms.push(thesaurus.find(words[i]))
+                    synonyms.push(words[i])
+                }
+            }
 
-        // }
+        }
         synonyms.push(thesaurus.find(headers[i].toLowerCase()))
-        // console.log(synonyms)
         synonyms = synonyms.flat()
+
+        // for(let j = 1; j < synonyms.length; j++) {
+        //     console.log(synonyms[j], headers[i].toLowerCase())
+        //     if(synonyms[j] == headers[i].toLowerCase()) {
+        //         synonyms = synonyms.splice(j, 1)
+        //     }
+        // }
+        // console.log(synonyms)
+
         synonymMatrix.push(synonyms)
 
     }
 
-    // console.log(featureMatrix)
+    for(let i = 0; i < synonymMatrix.length; i++) {
+        for(let j = 1; j < synonymMatrix[i].length; j++) {
+            for(let n = 0; n <  headers.length; n++) {
+                if(synonymMatrix[i][j] === headers[n].toLowerCase()) {
+                    // console.log(synonymMatrix[i][j], headers[n].toLowerCase())
+                    // console.log(synonymMatrix[i].splice(j, 1), i , j)
+
+                    synonymMatrix[i].splice(j, 1)
+                }
+            }
+        }
+    }
+    
+    // for(let i = 0; i < synonymMatrix.length; i++) {
+        
+    // }
+    // console.log(synonymMatrix)
     return {featureMatrix, synonymMatrix}
 }
