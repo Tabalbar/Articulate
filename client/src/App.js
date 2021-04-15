@@ -208,7 +208,7 @@ function App() {
         <Grid.Row>
           <Header as="h3" color="blue">{errMsg}</Header>
         </Grid.Row>
-        <Checkbox label="Iterate on Graph" checked={selected} onChange={handleSelect}/>
+        {/* <Checkbox label="Iterate on Graph" checked={selected} onChange={handleSelect}/> */}
           {
             charts.length ?
               charts.map((element, index) => {
