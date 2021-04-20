@@ -124,13 +124,13 @@ function App() {
     for(let i = 0; i < chartObj.length; i++) {
       if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
         setCharts(prev => [chartObj[i].charts, ...prev])
+        console.log(chartObj[i].charts)
         count++
       } else {  
         setErrMsg(prev => prev +  chartObj[i].errMsg + ".\n")
       }
     }
     setErrMsg(prev => prev + "Returned " + count + " chart(s)")
-    // console.log(responseObj.charts)
   }
 
   const createChartWithVoice = async (transcript) => {

@@ -69,6 +69,11 @@ manager.addDocument('en', 'show me a normalized stacked bar chart of ', 'normali
 manager.addDocument('en', 'show me a normalized stacked bar chart of temporal quantitative and nominal', 'normalizedStackedBar');
 manager.addAnswer('en', 'normalizedStackedBar', 'normalizedStackedBar');
 
+manager.addDocument('en', 'show me the stock trend', 'candleStick');
+manager.addAnswer('en', 'candleStick', 'candleStick');
+
+manager.addDocument('en', 'show me parallel coordniates for', 'parallelCoordinates');
+manager.addAnswer('en', 'parallelCoordinates', 'parallelCoordinates');
 
 // Train and save the model.
 (async () => {

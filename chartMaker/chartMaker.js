@@ -504,6 +504,95 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                 chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
             }
             break;
+        case "candleStick":
+            if (extractedHeaders.length == 5) {
+                hasTime = checkTimeAndReorder(extractedHeaders, data)
+                reorderForCandleStick(extractedHeaders, data)
+                if (hasTime) {
+                    chartObj.charts = {
+                        data: { table: data },
+                        spec: {
+                            title: actualCommand,
+                            width: 1200,
+                            transform: [],
+                            encoding: {
+                                x: {
+                                    field: extractedHeaders[0],
+                                    type: "temporal",
+                                    format: "%m/%d",
+                                    axis: {
+                                        labelAngle: -45
+                                    }
+                                },
+                                y: {
+                                    type: "quantitative",
+                                    scale: { zero: false }
+                                },
+                                color: {
+                                    condition: {
+                                        test: "datum.open < datum.close",
+                                        value: "#06982d"
+                                    },
+                                    value: "#ae1325"
+                                }
+                            },
+                            layer: [
+                                {
+                                    mark: "rule",
+                                    encoding: {
+                                        y: { field: extractedHeaders[1] }, //low
+                                        y2: { field: extractedHeaders[2] } //high
+                                    }
+                                },
+                                {
+                                    mark: "bar",
+                                    encoding: {
+                                        y: { field: extractedHeaders[3] }, //open
+                                        y2: { field: extractedHeaders[4] } //close
+                                    }
+                                }
+                            ],
+                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                        }
+
+                    }
+                } else {
+                    chartObj.errMsg = "Could not create graph. Expected dates attribute"
+                }
+            } else {
+                chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
+            }
+            break;
+        case "parallelCoordinates":
+            console.log('******************************************')
+            if (extractedHeaders.length == 5) {
+                extractedHeaders = reorderForParallel(extractedHeaders, data)
+                chartObj.charts = {
+                    data: { table: data },
+                    spec: {
+                        title: actualCommand,
+                        mark: { type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 },
+                        width: 1200,
+                        transform: [
+                            { window: [{ op: "count", as: "index" }] },
+                            { fold: [extractedHeaders[0], extractedHeaders[1], extractedHeaders[2], extractedHeaders[3]] }
+                        ],
+                        mark: "line",
+                        encoding: {
+                            color: { type: "nominal", field: extractedHeaders[4] },
+                            detail: { type: "nominal", field: "index" },
+                            opacity: { value: 0.3 },
+                            x: { type: "nominal", field: "key" },
+                            y: { type: "quantitative", field: "value" }
+                        },
+
+                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                    }
+                }
+            } else {
+                chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
+            }
+            break;
 
         default:
             chartObj.errMsg = "Could not specify graph."
@@ -513,6 +602,48 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
 
     }
     return chartObj;
+}
+
+function reorderForParallel(extractedHeaders, data) {
+    for(let i = 0; i < extractedHeaders.length; i++) {
+        if(findType(extractedHeaders[i], data) === "nominal") {
+            let tmpHeader = extractedHeaders[4]
+            extractedHeaders[4] = extractedHeaders[i]
+            extractedHeaders[i] = tmpHeader
+        }
+    }
+    return extractedHeaders;
+}
+
+
+function reorderForCandleStick(extractedHeaders, data) {
+    for (let i = 0; i < extractedHeaders.length; i++) {
+        if (findType(extractedHeaders[i], data) === "temporal") {
+            let tmpHeader = extractedHeaders[0]
+            extractedHeaders[0] = extractedHeaders[i]
+            extractedHeaders[i] = tmpHeader;
+        }
+        if (extractedHeaders[i].includes("low")) {
+            let tmpHeader = extractedHeaders[1]
+            extractedHeaders[1] = extractedHeaders[i]
+            extractedHeaders[i] = tmpHeader;
+        }
+        if (extractedHeaders[i].includes("high")) {
+            let tmpHeader = extractedHeaders[2]
+            extractedHeaders[2] = extractedHeaders[i]
+            extractedHeaders[i] = tmpHeader;
+        }
+        if (extractedHeaders[i].includes("open")) {
+            let tmpHeader = extractedHeaders[3]
+            extractedHeaders[3] = extractedHeaders[i]
+            extractedHeaders[i] = tmpHeader;
+        }
+        if (extractedHeaders[i].includes("close")) {
+            let tmpHeader = extractedHeaders[4]
+            extractedHeaders[4] = extractedHeaders[i]
+            extractedHeaders[i] = tmpHeader;
+        }
+    }
 }
 
 function reorderForLineArea(extractedHeaders, data) {
@@ -688,17 +819,17 @@ function extractHeaders(command, headers, filteredHeaders, data) {
         }
 
     }
-    if(doc.match("overtime") || doc.match("time")) {
+    if (doc.match("overtime") || doc.match("time")) {
         let foundTime = false
-        for(let i = 0; i < extractedHeaders.length; i++) {
-            if(findType(extractedHeaders[i], data) === "temporal") {
+        for (let i = 0; i < extractedHeaders.length; i++) {
+            if (findType(extractedHeaders[i], data) === "temporal") {
                 foundTime = true
                 break
             }
         }
-        if(!foundTime) {
-            for(let i = 0; i < headers.length; i ++) {
-                if(findType(headers[i], data) === "temporal") {
+        if (!foundTime) {
+            for (let i = 0; i < headers.length; i++) {
+                if (findType(headers[i], data) === "temporal") {
                     extractedHeaders.push(headers[i])
                     break;
                 }
