@@ -26,7 +26,6 @@ module.exports = (command, attributes, data) => {
     for(let i = 0; i < synonymMatrix.length; i++){
         for(let n = 0; n < synonymMatrix[i].length; n++){
             if(catchSynonymCommand.text().includes(synonymMatrix[i][n].toLowerCase())){
-                // console.log(synonymMatrix[i][n], synonymMatrix[i][0], 'here')
                 catchSynonymCommand.replace(synonymMatrix[i][n], synonymMatrix[i][0])
             }
         }
@@ -34,7 +33,6 @@ module.exports = (command, attributes, data) => {
 
     generalizedCommand = doc.text()
     synonymCommand = catchSynonymCommand.text()
-    // console.log(synonymCommand)
     return {generalizedCommand, synonymCommand}
 }
 

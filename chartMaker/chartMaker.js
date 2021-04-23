@@ -564,9 +564,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
             }
             break;
         case "parallelCoordinates":
-            console.log('******************************************')
-            if (extractedHeaders.length == 5) {
-                extractedHeaders = reorderForParallel(extractedHeaders, data)
+            if (extractedHeaders.length >2 ) {
+                let folds = reorderForParallel(extractedHeaders, data)
                 chartObj.charts = {
                     data: { table: data },
                     spec: {
@@ -575,11 +574,11 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         width: 1200,
                         transform: [
                             { window: [{ op: "count", as: "index" }] },
-                            { fold: [extractedHeaders[0], extractedHeaders[1], extractedHeaders[2], extractedHeaders[3]] }
+                            { fold: folds }
                         ],
                         mark: "line",
                         encoding: {
-                            color: { type: "nominal", field: extractedHeaders[4] },
+                            color: { type: "nominal", field: extractedHeaders[0] },
                             detail: { type: "nominal", field: "index" },
                             opacity: { value: 0.3 },
                             x: { type: "nominal", field: "key" },
@@ -589,9 +588,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                     }
                 }
-            } else {
-                chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
-            }
+            } 
             break;
 
         default:
@@ -605,14 +602,19 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
 }
 
 function reorderForParallel(extractedHeaders, data) {
+    let folds = []
     for(let i = 0; i < extractedHeaders.length; i++) {
         if(findType(extractedHeaders[i], data) === "nominal") {
-            let tmpHeader = extractedHeaders[4]
-            extractedHeaders[4] = extractedHeaders[i]
+            let tmpHeader = extractedHeaders[0]
+            extractedHeaders[0] = extractedHeaders[i]
             extractedHeaders[i] = tmpHeader
         }
     }
-    return extractedHeaders;
+
+    for(let i = 1; i < extractedHeaders.length; i++) {
+        folds.push(extractedHeaders[i])
+    }
+    return  folds;
 }
 
 
@@ -795,8 +797,10 @@ function findType(header, data) {
 }
 
 function extractHeaders(command, headers, filteredHeaders, data) {
+
     let doc = nlp(command)
     let extractedHeaders = []
+
     for (let i = 0; i < headers.length; i++) {
         if (doc.has(headers[i].toLowerCase())) {
             console.log(headers[i])
@@ -807,7 +811,7 @@ function extractHeaders(command, headers, filteredHeaders, data) {
     let keys = Object.keys(filteredHeaders);
     for (let i = 0; i < keys.length; i++) {
         let found = false;
-        if (filteredHeaders[keys[i]].length > 0 && findType(keys[i], data) === "temporal") {
+        if (filteredHeaders[keys[i]].length > 0 ) {
             for (let n = 0; n < extractedHeaders.length; n++) {
                 if (extractedHeaders[n] === keys[i]) {
                     found = true
@@ -819,7 +823,8 @@ function extractHeaders(command, headers, filteredHeaders, data) {
         }
 
     }
-    if (doc.match("overtime") || doc.match("time")) {
+
+    if (doc.has("overtime") || doc.has("time")) {
         let foundTime = false
         for (let i = 0; i < extractedHeaders.length; i++) {
             if (findType(extractedHeaders[i], data) === "temporal") {
@@ -836,7 +841,6 @@ function extractHeaders(command, headers, filteredHeaders, data) {
             }
         }
     }
-
     return extractedHeaders;
 }
 
@@ -904,6 +908,7 @@ function extractFilteredHeaders(command, headerMatrix, data, headers, command) {
         let timeHeader = headers[index]
         return { foundTime, timeHeader }
     }
+    console.log(extractedFilteredHeaders)
     return extractedFilteredHeaders;
 }
 
