@@ -3,6 +3,7 @@ const nlp = require('compromise')
 module.exports = (intent, command, headers, data, headerMatrix, actualCommand) => {
     let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers, command)
     let extractedHeaders = extractHeaders(command, headers, filteredHeaders, data)
+
     let chartObj = {
         charts: null,
         errMsg: ''
@@ -81,6 +82,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         spec: {
                             title: actualCommand,
                             mark: "bar",
+                            width: 400,
+                            height: 400,
                             transform: [],
                             encoding: {
                                 x: {
@@ -92,7 +95,6 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         }
                     }
                 } else if (extractedHeaders.length === 2) {
-                    console.log(extractedHeaders, 'herehrehrhehrehrhe')
                     chartObj.charts = {
                         data: { table: data },
                         spec: {
@@ -115,6 +117,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                             title: actualCommand,
                             width: { step: 10 },
                             mark: "bar",
+                            width: 400,
+                            height: 400,
                             transform: [],
                             encoding: {
                                 column: {
@@ -147,6 +151,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         spec: {
                             title: actualCommand,
                             transform: [],
+                            width: 400,
+                            height: 400,
                             columns: extractedHeaders.length - 1,
                             concat: createLayers(extractedHeaders, data),
                             data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
@@ -167,6 +173,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         spec: {
                             title: actualCommand,
                             mark: "line",
+                            width: 400,
+                            height: 400,
                             transform: [],
                             encoding: {
                                 x: { field: extractedHeaders[0], type: "quantitative" },
@@ -200,7 +208,6 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                     }
                 }
             } else if (extractedHeaders.length === 3) {
-                console.log(extractedHeaders)
 
                 hasTime = checkTimeAndReorder(extractedHeaders, data);
                 if (hasTime) {
@@ -277,6 +284,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         title: actualCommand,
                         mark: "arc",
                         transform: [],
+                        width: 400,
+                        height: 400,
                         encoding: {
                             theta: { field: extractedHeaders[0], type: "quantitative" },
                             color: { field: extractedHeaders[1], type: "nominal" }
@@ -297,6 +306,8 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                     spec: {
                         title: actualCommand,
                         transform: [],
+                        width: 400,
+                        height: 400,
                         vconcat: [
                             {
                                 mark: "bar",
@@ -514,6 +525,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         spec: {
                             title: actualCommand,
                             width: 1200,
+                            height: 500,
                             transform: [],
                             encoding: {
                                 x: {
@@ -572,6 +584,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                         title: actualCommand,
                         mark: { type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 },
                         width: 1200,
+                        height: 200,
                         transform: [
                             { window: [{ op: "count", as: "index" }] },
                             { fold: folds }
@@ -716,7 +729,6 @@ function reorderFourHeadersForRelationship(extractedHeaders, data) {
 }
 
 function reorderHeadersForCategories(extractedHeaders, data) {
-    console.log(extractedHeaders.length, 'fjnwfnlkwe')
 
     if (extractedHeaders.length == 2) {
         if (findType(extractedHeaders[1], data) === "nominal") {
@@ -803,26 +815,26 @@ function extractHeaders(command, headers, filteredHeaders, data) {
 
     for (let i = 0; i < headers.length; i++) {
         if (doc.has(headers[i].toLowerCase())) {
-            console.log(headers[i])
             extractedHeaders.push(headers[i])
         }
     }
     let accessors = []
-    let keys = Object.keys(filteredHeaders);
-    for (let i = 0; i < keys.length; i++) {
-        let found = false;
-        if (filteredHeaders[keys[i]].length > 0 ) {
-            for (let n = 0; n < extractedHeaders.length; n++) {
-                if (extractedHeaders[n] === keys[i]) {
-                    found = true
-                }
-            }
-            if (!found) {
-                extractedHeaders.push(keys[i])
-            }
-        }
+    // let keys = Object.keys(filteredHeaders);
+    // for (let i = 0; i < keys.length; i++) {
+    //     let found = false;
+    //     if (filteredHeaders[keys[i]].length > 0 ) {
+    //         for (let n = 0; n < extractedHeaders.length; n++) {
+    //             if (extractedHeaders[n] === keys[i]) {
+    //                 found = true
+    //             }
+    //         }
+    //         if (!found) {
+    //             extractedHeaders.push(keys[i])
+    //         }
+    //     }
 
-    }
+    // }
+    console.log(extractedHeaders)
 
     if (doc.has("overtime") || doc.has("time")) {
         let foundTime = false
@@ -908,7 +920,6 @@ function extractFilteredHeaders(command, headerMatrix, data, headers, command) {
         let timeHeader = headers[index]
         return { foundTime, timeHeader }
     }
-    console.log(extractedFilteredHeaders)
     return extractedFilteredHeaders;
 }
 

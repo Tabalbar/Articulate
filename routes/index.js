@@ -104,7 +104,6 @@ router.post('/', async (req, res, next) => {
   const { generalizedCommand, synonymCommand } = generalizeCommand(normalizedCommand, attributes, data)
   const response = await manager.process('en', generalizedCommand)
   const headerMatrix = createVector(attributes, data)
-  console.log(response)
   
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
@@ -126,7 +125,6 @@ router.post('/', async (req, res, next) => {
   let chartObj = []
   for(let i = 0; i < response.classifications.length; i++) {
     if(response.classifications[i].score > .1) {
-      console.log(response.classifications[i].intent)
 
       chartObj.push(chartMaker(response.classifications[i].intent, synonymCommand, attributes, data, headerMatrix, command))
 

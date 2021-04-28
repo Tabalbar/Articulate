@@ -5,6 +5,9 @@ import { VegaLite } from 'react-vega'
 import MaterialTable from 'material-table'
 import XLSX from 'xlsx'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+import UseVoice from './UseVoice';
+import DraggableGraph from './DraggableGraph';
+import InputBar from './InputBar';
 
 function App() {
 
@@ -69,7 +72,7 @@ function App() {
     });
   }
 
-  const laodData = (e) => {
+  const loadData = (e) => {
     e.preventDefault()
     const file = e.target.files[0]
     if (file) {
@@ -117,13 +120,7 @@ function App() {
         'Content-Type': 'application/json',
       }
     });
-    var msg = new SpeechSynthesisUtterance();
-    var voices = window.speechSynthesis.getVoices();
-    msg.voice = voices[49]; 
-    msg.volume = 1; // From 0 to 1
-    msg.rate = 1; // From 0.1 to 10
-    msg.pitch = 0; // From 0 to 2
-    msg.lang = 'en';
+
     const body = await response.text();
     setErrMsg("")
     const { chartObj } = JSON.parse(body)
@@ -140,9 +137,7 @@ function App() {
     }
     setErrMsg(prev => prev + "Returned " + count + " charts")
     tmpText += "Returned " + count + " chart(s)"
-
-    msg.text = tmpText
-    window.speechSynthesis.speak(msg);
+    UseVoice(tmpText)
   }
 
   const createChartWithVoice = async (transcript) => {
@@ -166,13 +161,7 @@ function App() {
         'Content-Type': 'application/json',
       }
     });
-    var msg = new SpeechSynthesisUtterance();
-    var voices = window.speechSynthesis.getVoices();
-    msg.voice = voices[49]; 
-    msg.volume = 1; // From 0 to 1
-    msg.rate = 1; // From 0.1 to 10
-    msg.pitch = 0; // From 0 to 2
-    msg.lang = 'en';
+
     const body = await response.text();
     setErrMsg("")
     const { chartObj } = JSON.parse(body)
@@ -189,12 +178,9 @@ function App() {
     }
     setErrMsg(prev => prev + "Returned " + count + " charts")
     tmpText += "Returned " + count + " chart(s)"
+    
+    UseVoice(tmpText)
 
-    msg.text = tmpText
-
-    window.speechSynthesis.speak(msg);
-
-    // console.log(responseObj.charts)
   }
 
 
@@ -208,59 +194,53 @@ function App() {
     setSelected(prev=>!prev)
   }
 
-  const speechTest = () => {
-
-  
-    speechSynthesis.getVoices().forEach(function(voice) {
-      console.log(voice.name, voice.default ? voice.default :'');
-    });
-  }
 
   return (
     <>
       <br />
       <Grid centered={true}>
-        <Button onClick={speechTest}>
-          click
-        </Button>
       <Grid.Row>
-          <MaterialTable columns={dataHeaders} data={data} title='' />
-        </Grid.Row>
-        <Grid.Row>
-          <Form onSubmit={createCharts}>
-            <Input placeholder={'...Enter query Here'} onChange={handleChange} size="large" style={{ width: 500, fontWeight: 50 }} />
-
-          </Form>
-          <Button size="large" onClick={createCharts}>Create Visualization</Button>
+          {/* <MaterialTable columns={dataHeaders} data={data} title='' /> */}
         </Grid.Row>
         <Dictaphone
           createChartWithVoice={createChartWithVoice}
         />
         <Grid.Row>
 
-          <Input type='file' onChange={laodData} />
-          <Button onClick={clearGraphs}>Clear Graphs</Button>
+          <Input type='file' onChange={loadData} />
         </Grid.Row>
         <Grid.Row>
           <Header as="h3" color="blue">{errMsg}</Header>
         </Grid.Row>
         {/* <Checkbox label="Iterate on Graph" checked={selected} onChange={handleSelect}/> */}
-          {
+
+
+      </Grid>
+
+    <InputBar
+      createCharts={createCharts}
+      handleChange={handleChange}
+      dataHeaders={dataHeaders}
+      data={data}
+      clearGraphs={clearGraphs}
+    />
+      {
             charts.length ?
               charts.map((element, index) => {
                 return (
                   <>
-                    <Grid.Row>
-                      <VegaLite spec={element.spec} data={{ table: data }} />
-                    </Grid.Row>
+                      <DraggableGraph
+                        spec={element.spec}
+                        data={data}
+
+                        style={{position: "absolute"}}
+                      />
                   </>
                 )
               })
               :
               null
           }
-
-      </Grid>
 
     </>
   );

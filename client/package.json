@@ -11,6 +11,7 @@
     "material-table": "^1.69.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-draggable": "^4.4.3",
     "react-scripts": "4.0.3",
     "react-speech-recognition": "^3.7.0",
     "react-vega": "^7.4.2",
