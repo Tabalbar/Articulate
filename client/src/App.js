@@ -224,6 +224,7 @@ function App() {
       data={data}
       clearGraphs={clearGraphs}
     />
+    <div style={{position: "absolute"}}>
       {
             charts.length ?
               charts.map((element, index) => {
@@ -233,7 +234,7 @@ function App() {
                         spec={element.spec}
                         data={data}
 
-                        style={{position: "absolute"}}
+                        
                       />
                   </>
                 )
@@ -241,7 +242,7 @@ function App() {
               :
               null
           }
-
+</div>
     </>
   );
 }

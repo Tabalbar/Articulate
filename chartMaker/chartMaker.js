@@ -360,7 +360,7 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                     spec: {
                         title: actualCommand,
                         mark: "rect",
-                        wdith: 300,
+                        width: 300,
                         height: 200,
                         transform: [],
                         encoding: {

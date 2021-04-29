@@ -15,20 +15,22 @@ function InputBar(
 ) {
     const [open, setOpen] = useState(false)
 
+    const handleOpen = () => {
+        setOpen(prev => !prev)
+    }
+
     return (
         <>
-            {
-                open ?
-                    <div className="StickyTable">
-                        <Container>
-                            <MaterialTable columns={dataHeaders} data={data} title='' />
-                        </Container>
-                    </div> : null
-            }
+                
+            <div className="StickyTable" style={{display: open? "none":null}}>
+                <Container>
+                    <MaterialTable columns={dataHeaders} data={data} title='' />
+                </Container>
+            </div>
             <div className="StickyButton">
                 <Grid centered="true">
 
-                    <Button size="tiny" color="teal" icon onClick={() => setOpen(prev => !prev)}>
+                    <Button size="tiny" color="teal" icon onClick={handleOpen}>
                         <Icon name="bars" />
                     </Button>
                 </Grid>
@@ -40,7 +42,7 @@ function InputBar(
                     <Grid.Row>
 
                     </Grid.Row>
-                    <Button onClick={clearGraphs} color="red" icon><Icon name="trash alternate outline"/></Button>
+                    <Button onClick={clearGraphs} color="red" icon><Icon name="trash alternate outline" /></Button>
 
                     <Form onSubmit={createCharts}>
                         <Input placeholder={'...Enter query Here'} onChange={handleChange} size="large" style={{ width: 1000, fontWeight: 50 }} />
