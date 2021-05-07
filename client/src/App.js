@@ -21,6 +21,8 @@ function App() {
   const [errMsg, setErrMsg] = useState('')
   const [selected, setSelected] = useState(false)
 
+  const [overHearingData, setOverHearingData] = useState('')
+
   const processData = async (data) => {
     const dataStringLines = data.split(/\r\n|\n/);
     const headers = dataStringLines[0].split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/);
@@ -115,7 +117,7 @@ function App() {
 
     const response = await fetch('http://localhost:5000/', {
       method: 'POST',
-      body: JSON.stringify({ command: command, attributes: attributes, dataHead: dataHead, prevChart: prevChart }),
+      body: JSON.stringify({ command: command, attributes: attributes, dataHead: dataHead, prevChart: prevChart, overHearingData: overHearingData  }),
       headers: {
         'Content-Type': 'application/json',
       }
@@ -156,7 +158,7 @@ function App() {
 
     const response = await fetch('http://localhost:5000/', {
       method: 'POST',
-      body: JSON.stringify({ command: transcript, attributes: attributes, dataHead: dataHead, prevChart: prevChart }),
+      body: JSON.stringify({ command: transcript, attributes: attributes, dataHead: dataHead, prevChart: prevChart, overHearingData: overHearingData }),
       headers: {
         'Content-Type': 'application/json',
       }
@@ -204,6 +206,7 @@ function App() {
         </Grid.Row>
         <Dictaphone
           createChartWithVoice={createChartWithVoice}
+          setOverHearingData={setOverHearingData}
         />
         <Grid.Row>
 
@@ -250,7 +253,8 @@ function App() {
 export default App;
 
 const Dictaphone = ({
-  createChartWithVoice
+  createChartWithVoice,
+  setOverHearingData
 }) => {
 
   const [listening, setListening] = useState(false)
@@ -260,7 +264,7 @@ const Dictaphone = ({
       command: "computer *",
       callback: (command) => {
         console.log('listening')
-        let utterance = createChartWithVoice(command)
+        let utterance = createChartWithVoice(command, transcript)
         utterance.onend = function(event) {
           console.log('Utterance has finished being spoken after ' + event.elapsedTime + ' milliseconds.');
           setListening(true)
@@ -292,21 +296,10 @@ const Dictaphone = ({
           setListening(true)
         }
       }
-    },
-    {
-      command: "*",
-      callback: (command) => {
-        if(listening){
-          console.log('executing')
-          let utterance = createChartWithVoice(command)
-          utterance.onend = function(event) {
-            console.log('Utterance has finished being spoken after ' + event.elapsedTime + ' milliseconds.');
-            setListening(true)
-          }
-        }
-      }
     }
   ]
+
+
 
   useEffect(() => {
     if(listening) {
@@ -339,6 +332,10 @@ const Dictaphone = ({
   // }
 
   const { transcript, resetTranscript } = useSpeechRecognition({ commands})
+
+  useEffect(() => {
+    setOverHearingData(transcript)
+  },[transcript])
 
   if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
     return null

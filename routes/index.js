@@ -88,6 +88,7 @@ const createVector = require('../chartMaker/createVector')
 const normalizeCommand = require('../chartMaker/normalizeCommand')
 const generalizeCommand = require('../chartMaker/generalizeCommand')
 const iterateGraph = require('../chartMaker/iterateGraph')
+const countVector = require('../chartMaker/countVector')
 
 // const findommands = require('../chartMaker/findCommands')
 const nlp = require('compromise')
@@ -98,13 +99,19 @@ router.post('/', async (req, res, next) => {
   const data = req.body.dataHead;
   const attributes = req.body.attributes
 
+
+  const transcript = req.body.overHearingData
+
   let charts = []
   const command = req.body.command
   const normalizedCommand = normalizeCommand(command)
   const { generalizedCommand, synonymCommand } = generalizeCommand(normalizedCommand, attributes, data)
   const response = await manager.process('en', generalizedCommand)
   const headerMatrix = createVector(attributes, data)
-  
+
+  const {headerFreq, filterFreq} = countVector(transcript, headerMatrix)
+
+
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
     // add methods to run after the tagger
