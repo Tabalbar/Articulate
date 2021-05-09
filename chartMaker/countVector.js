@@ -2,11 +2,16 @@ const nlp = require('compromise')
 
 //returns two vectors
 //1 for the attribute headers and 1 for the filtered headers
-module.exports = (transcript, headerMatrix) => {
+module.exports = (transcript, headerMatrix, data) => {
     let headers = []
     let filters = []
 
-    let headerFreq = []
+    let headerFreq = {
+        nominal: [],
+        quantitative: [],
+        temporal: []
+    }
+    let wordCount = []
     let filterFreq = []
 
     for(let i = 0; i < headerMatrix.length; i ++){
@@ -20,8 +25,34 @@ module.exports = (transcript, headerMatrix) => {
 
     doc.toLowerCase()
     doc.nouns().toSingular()
-    console.log(doc.nouns().out('array'))
 
+    const nouns = doc.nouns().out('array')
+    for(let i = 0; i < headers.length; i++) {
+        wordCount.push({header: headers[i], count: 0})
+    }
 
+    for(let i = 0; i < nouns.length; i ++) {
+        for(let j = 0; j < wordCount.length; j++) {
+            if(wordCount[j].header.includes(nouns[i])){
+                wordCount[j].count +=1
+            }
+        }
+    }
+
+    for(let i = 0; i < wordCount.length; i++) {
+        headerFreq[findType(wordCount[i].header, data)].push(wordCount[i])
+    }
     return {headerFreq, filterFreq}
+}
+
+
+function findType(header, data) {
+    if (data[0][header].includes('/') || data[0][header].includes('-') ||
+        data[0][header].includes(':')) {
+        return "temporal"
+    } else if (isNaN(data[0][header])) {
+        return "nominal"
+    } else {
+        return "quantitative"
+    }
 }

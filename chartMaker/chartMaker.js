@@ -1,70 +1,354 @@
 
 const nlp = require('compromise')
-module.exports = (intent, command, headers, data, headerMatrix, actualCommand) => {
-    let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers, command)
-    let extractedHeaders = extractHeaders(command, headers, filteredHeaders, data)
+const chartMakerWithAnswer = require('./chartMakerWithAnswer')
+module.exports = {
+    chartMaker: function chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq) {
+        let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers, command)
+        let extractedHeaders = extractHeaders(command, headers, filteredHeaders, data)
+        let hasTime = checkIfHasTime(extractedHeaders, data)
 
-    let chartObj = {
-        charts: null,
-        errMsg: ''
-    };
+        let chartObj = {
+            charts: null,
+            errMsg: ''
+        };
+        console.log(intent)
+        switch (intent) {
+            case "bar":
+                if (hasTime) {
+                    if (extractedHeaders.length === 3) {
 
-    let hasTime = false;
-    switch (intent) {
-        case "bar":
-            hasTime = checkTimeAndReorder(extractedHeaders, data);
-            if (hasTime) {
-                if (extractedHeaders.length === 3) {
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                width: 400,
+                                height: 400,
+                                mark: "bar",
+                                transform: [],
+                                encoding: {
+                                    column: {
+                                        field: extractedHeaders[0], type: "nominal", spacing: 10
+                                    },
+                                    y: {
+                                        field: extractedHeaders[1],
+                                        type: "quantitative",
+                                        title: extractedHeaders[1],
+                                        exis: { grid: false }
+                                    },
+                                    x: {
+                                        tickCount: 12,
+                                        field: extractedHeaders[2],
+                                        type: "temporal",
+                                        axis: {
+                                            tickCount: 12,
+                                            labelAlign: "left",
+                                            labelExpr: "[timeFormat(datum.value, '%b'), timeFormat(datum.value, '%m') == '01' ? timeFormat(datum.value, '%Y') : '']",
+                                            labelOffset: 4,
+                                            labelPadding: -24,
+                                            tickSize: 30,
+                                            gridDash: {
+                                                condition: {
+                                                    test: { field: "value", timeUnit: "month", "equal": 1 },
+                                                    value: []
+                                                },
+                                                value: [5, 5]
+                                            },
+                                            tickDash: {
+                                                condition: {
+                                                    test: { field: "value", timeUnit: "month", "equal": 1 },
+                                                    value: []
+                                                },
+                                                value: [5, 5]
+                                            }
+                                        }
+                                    },
+                                    color: {
+                                        field: extractedHeaders[1],
+                                        scale: { range: createRandomColors(extractedHeaders[1], data) }
+                                    }
+                                },
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+
+                            }
+
+                        }
+                    } else {
+                        chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
+
+                    }
+                } else {
+                    if (extractedHeaders.length === 1) {
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                mark: "bar",
+                                width: 400,
+                                height: 400,
+                                transform: [],
+                                encoding: {
+                                    x: {
+                                        field: extractedHeaders[0], type: "nominal"
+                                    },
+                                    y: { aggregate: 'count' }
+                                },
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                            }
+                        }
+                    } else if (extractedHeaders.length === 2) {
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                width: 200,
+                                height: 200,
+                                mark: 'bar',
+                                transform: [],
+                                encoding: {
+                                    x: { field: extractedHeaders[0], type: 'nominal' },
+                                    y: { field: extractedHeaders[1], type: "quantitative" },
+                                },
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                            }
+                        }
+                    } else if (extractedHeaders.length === 3) {
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                width: { step: 10 },
+                                mark: "bar",
+                                width: 400,
+                                height: 400,
+                                transform: [],
+                                encoding: {
+                                    column: {
+                                        field: extractedHeaders[1], type: "nominal", spacing: 0
+                                    },
+                                    y: {
+                                        field: extractedHeaders[0],
+                                        type: "quantitative",
+                                        title: extractedHeaders[0],
+                                        exis: { grid: false }
+                                    },
+                                    x: {
+                                        field: extractedHeaders[2],
+                                        type: "nominal",
+                                        axis: { title: "" }
+                                    },
+                                    color: {
+                                        field: extractedHeaders[2],
+                                        scale: { range: createRandomColors(extractedHeaders[2], data) }
+                                    }
+                                },
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+
+                            }
+
+                        }
+                    } else if (extractedHeaders.length > 3) {
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                transform: [],
+                                width: 400,
+                                height: 400,
+                                columns: extractedHeaders.length - 1,
+                                concat: createLayers(extractedHeaders, data),
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+
+                            }
+
+                        }
+                    } else {
+                        chartObj.errMsg = "Could not create graph. Got " + extractedHeaders.length + " headers"
+                    }
+                }
+                break;
+            case "line":
+                if (extractedHeaders.length === 1) {
+                    if (findType(extractedHeaders[0], data) === "quantitative") {
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                mark: "line",
+                                width: 400,
+                                height: 400,
+                                transform: [],
+                                encoding: {
+                                    x: { field: extractedHeaders[0], type: "quantitative" },
+                                    y: { aggregate: 'count' }
+                                },
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                            }
+                        }
+                    } else {
+                        chartObj.errMsg = "Could not create graph. Expected numerical values. Got " + findType(extractedHeaders[0], data)
+
+                    }
+                } else if (extractedHeaders.length === 2) {
+                    hasTime = checkTimeAndReorder(extractedHeaders, data);
+                    if (hasTime) {
+
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                width: 200,
+                                height: 200,
+                                transform: [],
+                                mark: 'line',
+                                encoding: {
+                                    x: { field: extractedHeaders[0], type: 'temporal' },
+                                    y: { field: extractedHeaders[1], type: 'quantitative' }
+                                },
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                            }
+                        }
+                    }
+                } else if (extractedHeaders.length === 3) {
+
+                    hasTime = checkTimeAndReorder(extractedHeaders, data);
+                    if (hasTime) {
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                width: 600,
+                                height: 600,
+                                transform: [],
+                                mark: 'line',
+                                encoding: {
+                                    x: { field: extractedHeaders[1], type: 'temporal' },
+                                    y: { field: extractedHeaders[0], type: 'quantitative' },
+                                    color: { field: extractedHeaders[2], type: "nominal" }
+                                },
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                            }
+                        }
+                    } else {
+                        chartObj.errMsg = "Could not create graph. Expected temporal data. "
+                    }
+                } else {
+                    chartObj.errMsg = "Could not create graph. Expected 2 or 3 headers. Got " + extractedHeaders.length
+
+                }
+                break;
+            case "scatter":
+                if (extractedHeaders.length === 2) {
+                    extracteHeaders = reorderTwoHeadersForRelationship(extractedHeaders, data)
                     chartObj.charts = {
                         data: { table: data },
                         spec: {
                             title: actualCommand,
-                            width: 400,
-                            height: 400,
-                            mark: "bar",
+                            width: 200,
+                            height: 200,
+                            mark: 'point',
                             transform: [],
                             encoding: {
-                                column: {
-                                    field: extractedHeaders[2], type: "nominal", spacing: 10
-                                },
-                                y: {
-                                    field: extractedHeaders[0],
-                                    type: "quantitative",
-                                    title: extractedHeaders[0],
-                                    exis: { grid: false }
-                                },
-                                x: {
-                                    tickCount: 12,
-                                    field: extractedHeaders[1],
-                                    type: "temporal",
-                                    axis: {
-                                        tickCount: 12,
-                                        labelAlign: "left",
-                                        labelExpr: "[timeFormat(datum.value, '%b'), timeFormat(datum.value, '%m') == '01' ? timeFormat(datum.value, '%Y') : '']",
-                                        labelOffset: 4,
-                                        labelPadding: -24,
-                                        tickSize: 30,
-                                        gridDash: {
-                                            condition: {
-                                                test: { field: "value", timeUnit: "month", "equal": 1 },
-                                                value: []
-                                            },
-                                            value: [5, 5]
-                                        },
-                                        tickDash: {
-                                            condition: {
-                                                test: { field: "value", timeUnit: "month", "equal": 1 },
-                                                value: []
-                                            },
-                                            value: [5, 5]
-                                        }
+                                x: { field: extractedHeaders[0], type: "quantitative" },
+                                y: { field: extractedHeaders[1], type: "quantitative" },
+                            },
+                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                        }
+                    }
+                } else {
+                    command = findMissing(extractedHeaders, data, 2, headerFreq, command, "QQQ")
+                    chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
+                }
+                if (extractedHeaders.length === 3) {
+                    extracteHeaders = reorderThreeHeadersForRelationship(extractedHeaders, data)
+                    chartObj.charts = {
+                        data: { table: data },
+                        spec: {
+                            title: actualCommand,
+                            width: 200,
+                            height: 200,
+                            mark: 'point',
+                            transform: [],
+                            encoding: {
+                                x: { field: extractedHeaders[0], type: "quantitative" },
+                                y: { field: extractedHeaders[1], type: "quantitative" },
+                                size: { field: extractedHeaders[2], type: "quantitative" },
+                            },
+                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                        }
+                    }
+                } else {
+                    command = findMissing(extractedHeaders, data, 3, headerFreq, command, "QQQ")
+                    chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
+                }
+                break;
+            case "pie":
+                if (extractedHeaders.length === 2) {
+                    chartObj.charts = {
+                        data: { table: data },
+                        spec: {
+                            title: actualCommand,
+                            mark: "arc",
+                            transform: [],
+                            width: 400,
+                            height: 400,
+                            encoding: {
+                                theta: { field: extractedHeaders[1], type: "quantitative" },
+                                color: { field: extractedHeaders[0], type: "nominal" }
+                            },
+                            view: { stroke: null },
+                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                        }
+                    }
+                } else {
+                    command = findMissing(extractedHeaders, data, 2, headerFreq, command, "NQT")
+                    chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
+                }
+                break;
+            case "marginalHistogram":
+                if (extractedHeaders.length == 2) {
+                    chartObj.charts = {
+                        data: { table: data },
+                        spec: {
+                            title: actualCommand,
+                            transform: [],
+                            width: 400,
+                            height: 400,
+                            vconcat: [
+                                {
+                                    mark: "bar",
+                                    height: 60,
+                                    encoding: {
+                                        x: { bin: true, field: extractedHeaders[0], axis: null },
+                                        y: { aggregate: "count", scale: { domain: [0, 500] }, title: "" }
                                     }
                                 },
-                                color: {
-                                    field: extractedHeaders[1],
-                                    scale: { range: createRandomColors(extractedHeaders[1], data) }
+                                {
+                                    spacing: 15,
+                                    bounds: "flush",
+                                    hconcat: [
+                                        {
+                                            mark: "rect",
+                                            encoding: {
+                                                x: { bin: true, field: extractedHeaders[0], type: "quantitative" },
+                                                y: { bin: true, field: extractedHeaders[1], type: "quantitative" },
+                                                color: { aggregate: "count" }
+                                            }
+                                        },
+                                        {
+                                            mark: "bar",
+                                            width: 60,
+                                            encoding: {
+                                                y: { "bin": true, field: extractedHeaders[1], axis: null },
+                                                x: {
+                                                    aggregate: "count",
+                                                    scale: { domain: [0, 500] },
+                                                    title: ""
+                                                }
+                                            }
+                                        }
+                                    ]
                                 }
-                            },
+                            ],
                             data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
 
                         }
@@ -72,562 +356,469 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
                     }
                 } else {
                     chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
-
                 }
-            } else {
-                extractedHeaders = reorderHeadersForCategories(extractedHeaders, data)
-                if (extractedHeaders.length === 1) {
+                break;
+            case "heatmap":
+                if (extractedHeaders.length == 2) {
                     chartObj.charts = {
                         data: { table: data },
                         spec: {
                             title: actualCommand,
-                            mark: "bar",
-                            width: 400,
-                            height: 400,
+                            mark: "rect",
+                            width: 300,
+                            height: 200,
                             transform: [],
                             encoding: {
                                 x: {
-                                    field: extractedHeaders[0]
-                                },
-                                y: { aggregate: 'count' }
-                            },
-                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                        }
-                    }
-                } else if (extractedHeaders.length === 2) {
-                    chartObj.charts = {
-                        data: { table: data },
-                        spec: {
-                            title: actualCommand,
-                            width: 200,
-                            height: 200,
-                            mark: 'bar',
-                            transform: [],
-                            encoding: {
-                                x: { field: extractedHeaders[0], type: findType(extractedHeaders[0], data) },
-                                y: { field: extractedHeaders[1], type: findType(extractedHeaders[1], data) },
-                            },
-                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                        }
-                    }
-                } else if (extractedHeaders.length === 3) {
-                    chartObj.charts = {
-                        data: { table: data },
-                        spec: {
-                            title: actualCommand,
-                            width: { step: 10 },
-                            mark: "bar",
-                            width: 400,
-                            height: 400,
-                            transform: [],
-                            encoding: {
-                                column: {
-                                    field: extractedHeaders[1], type: "nominal", spacing: 0
+                                    bin: true,
+                                    field: extractedHeaders[0],
+                                    type: "quantitative"
                                 },
                                 y: {
-                                    field: extractedHeaders[0],
-                                    type: "quantitative",
-                                    title: extractedHeaders[0],
-                                    exis: { grid: false }
+                                    bin: true,
+                                    field: extractedHeaders[1],
+                                    type: "quantitative"
                                 },
-                                x: {
-                                    field: extractedHeaders[2],
-                                    type: "nominal",
-                                    axis: { title: "" }
-                                },
-                                color: {
-                                    field: extractedHeaders[2],
-                                    scale: { range: createRandomColors(extractedHeaders[2], data) }
-                                }
+                                color: { aggregate: "count", type: "quantitative" },
                             },
                             data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-
-                        }
-
-                    }
-                } else if (extractedHeaders.length > 3) {
-                    chartObj.charts = {
-                        data: { table: data },
-                        spec: {
-                            title: actualCommand,
-                            transform: [],
-                            width: 400,
-                            height: 400,
-                            columns: extractedHeaders.length - 1,
-                            concat: createLayers(extractedHeaders, data),
-                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-
                         }
 
                     }
                 } else {
-                    chartObj.errMsg = "Could not create graph. Got " + extractedHeaders.length + " headers"
+                    chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
                 }
-            }
-            break;
-        case "line":
-            if (extractedHeaders.length === 1) {
-                if (findType(extractedHeaders[0], data) === "quantitative") {
-                    chartObj.charts = {
-                        data: { table: data },
-                        spec: {
-                            title: actualCommand,
-                            mark: "line",
-                            width: 400,
-                            height: 400,
-                            transform: [],
-                            encoding: {
-                                x: { field: extractedHeaders[0], type: "quantitative" },
-                                y: { aggregate: 'count' }
-                            },
-                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                        }
-                    }
-                } else {
-                    chartObj.errMsg = "Could not create graph. Expected numerical values. Got " + findType(extractedHeaders[0], data)
-
-                }
-            } else if (extractedHeaders.length === 2) {
-                hasTime = checkTimeAndReorder(extractedHeaders, data);
-                if (hasTime) {
-
-                    chartObj.charts = {
-                        data: { table: data },
-                        spec: {
-                            title: actualCommand,
-                            width: 200,
-                            height: 200,
-                            transform: [],
-                            mark: 'line',
-                            encoding: {
-                                x: { field: extractedHeaders[0], type: 'temporal' },
-                                y: { field: extractedHeaders[1], type: 'quantitative' }
-                            },
-                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                        }
-                    }
-                }
-            } else if (extractedHeaders.length === 3) {
-
-                hasTime = checkTimeAndReorder(extractedHeaders, data);
-                if (hasTime) {
-                    chartObj.charts = {
-                        data: { table: data },
-                        spec: {
-                            title: actualCommand,
-                            width: 600,
-                            height: 600,
-                            transform: [],
-                            mark: 'line',
-                            encoding: {
-                                x: { field: extractedHeaders[1], type: 'temporal' },
-                                y: { field: extractedHeaders[0], type: 'quantitative' },
-                                color: { field: extractedHeaders[2], type: "nominal" }
-                            },
-                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                        }
-                    }
-                } else {
-                    chartObj.errMsg = "Could not create graph. Expected temporal data. "
-                }
-            } else {
-                chartObj.errMsg = "Could not create graph. Expected 2 or 3 headers. Got " + extractedHeaders.length
-
-            }
-            break;
-        case "scatter":
-            if (extractedHeaders.length === 2) {
-                extracteHeaders = reorderTwoHeadersForRelationship(extractedHeaders, data)
-                chartObj.charts = {
-                    data: { table: data },
-                    spec: {
-                        title: actualCommand,
-                        width: 200,
-                        height: 200,
-                        mark: 'point',
-                        transform: [],
-                        encoding: {
-                            x: { field: extractedHeaders[0], type: "quantitative" },
-                            y: { field: extractedHeaders[1], type: "quantitative" },
-                        },
-                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                    }
-                }
-            } else if (extractedHeaders.length === 3) {
-                extracteHeaders = reorderThreeHeadersForRelationship(extractedHeaders, data)
-                chartObj.charts = {
-                    data: { table: data },
-                    spec: {
-                        title: actualCommand,
-                        width: 200,
-                        height: 200,
-                        mark: 'point',
-                        transform: [],
-                        encoding: {
-                            x: { field: extractedHeaders[0], type: "quantitative" },
-                            y: { field: extractedHeaders[1], type: "quantitative" },
-                            size: { field: extractedHeaders[2], type: "quantitative" },
-                        },
-                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                    }
-                }
-            } else {
-                chartObj.errMsg = "Could not create graph. Expected 2 or 3 headers. Got " + extractedHeaders.length
-            }
-            break;
-        case "pie":
-            if (extractedHeaders.length === 2) {
-                extractedHeaders = reoderTwoHeadersForComposition(extractedHeaders, data)
-                chartObj.charts = {
-                    data: { table: data },
-                    spec: {
-                        title: actualCommand,
-                        mark: "arc",
-                        transform: [],
-                        width: 400,
-                        height: 400,
-                        encoding: {
-                            theta: { field: extractedHeaders[0], type: "quantitative" },
-                            color: { field: extractedHeaders[1], type: "nominal" }
-                        },
-                        view: { stroke: null },
-                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                    }
-                }
-            } else {
-                chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
-
-            }
-            break;
-        case "marginalHistogram":
-            if (extractedHeaders.length == 2) {
-                chartObj.charts = {
-                    data: { table: data },
-                    spec: {
-                        title: actualCommand,
-                        transform: [],
-                        width: 400,
-                        height: 400,
-                        vconcat: [
-                            {
-                                mark: "bar",
-                                height: 60,
+                break;
+            case "lineArea":
+                if (extractedHeaders.length == 3) {
+                    hasTime = checkTimeAndReorder(extractedHeaders, data)
+                    reorderForLineArea(extractedHeaders, data)
+                    if (hasTime) {
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                mark: "rect",
+                                width: 600,
+                                height: 200,
+                                mark: "area",
+                                transform: [],
                                 encoding: {
-                                    x: { bin: true, field: extractedHeaders[0], axis: null },
-                                    y: { aggregate: "count", scale: { domain: [0, 500] }, title: "" }
-                                }
-                            },
-                            {
-                                spacing: 15,
-                                bounds: "flush",
-                                hconcat: [
+                                    x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
+                                    y: { aggregate: "sum", field: extractedHeaders[0] },
+                                    color: { field: extractedHeaders[2] }
+                                },
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                            }
+
+                        }
+                    } else {
+                        chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
+                    }
+                } else {
+                    chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
+                }
+                break;
+            case "normalizedLineArea":
+                if (extractedHeaders.length == 3) {
+                    hasTime = checkTimeAndReorder(extractedHeaders, data)
+                    reorderForLineArea(extractedHeaders, data)
+                    if (hasTime) {
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                mark: "rect",
+                                width: 600,
+                                height: 200,
+                                mark: "area",
+                                transform: [],
+                                encoding: {
+                                    x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
+                                    y: {
+                                        aggregate: "sum",
+                                        field: extractedHeaders[0],
+                                        axis: null,
+                                        stack: "normalize"
+                                    },
+                                    color: { field: extractedHeaders[2] }
+                                },
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                            }
+
+                        }
+                    } else {
+                        chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
+                    }
+                } else {
+                    chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
+                }
+                break;
+            case "stackedBar":
+                if (extractedHeaders.length == 3) {
+                    hasTime = checkTimeAndReorder(extractedHeaders, data)
+                    reorderForLineArea(extractedHeaders, data)
+                    if (hasTime) {
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                mark: { type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 },
+                                width: 600,
+                                height: 200,
+                                transform: [],
+                                encoding: {
+                                    x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
+                                    y: {
+                                        aggregate: "sum",
+                                        field: extractedHeaders[0]
+                                    },
+                                    color: { field: extractedHeaders[2] }
+                                },
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                            }
+
+                        }
+                    } else {
+                        chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
+                    }
+                } else {
+                    chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
+                }
+                break;
+            case "normalizedStackedBar":
+                if (extractedHeaders.length == 3) {
+                    hasTime = checkTimeAndReorder(extractedHeaders, data)
+                    reorderForLineArea(extractedHeaders, data)
+                    if (hasTime) {
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                mark: { type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 },
+                                width: 600,
+                                height: 200,
+                                transform: [],
+                                encoding: {
+                                    x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
+                                    y: {
+                                        aggregate: "sum",
+                                        field: extractedHeaders[0],
+                                        axis: null,
+                                        stack: "normalize"
+                                    },
+                                    color: { field: extractedHeaders[2] }
+                                },
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+                            }
+
+                        }
+                    } else {
+                        chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
+                    }
+                } else {
+                    chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
+                }
+                break;
+            case "candleStick":
+                if (extractedHeaders.length == 5) {
+                    hasTime = checkTimeAndReorder(extractedHeaders, data)
+                    reorderForCandleStick(extractedHeaders, data)
+                    if (hasTime) {
+                        chartObj.charts = {
+                            data: { table: data },
+                            spec: {
+                                title: actualCommand,
+                                width: 1200,
+                                height: 500,
+                                transform: [],
+                                encoding: {
+                                    x: {
+                                        field: extractedHeaders[0],
+                                        type: "temporal",
+                                        format: "%m/%d",
+                                        axis: {
+                                            labelAngle: -45
+                                        }
+                                    },
+                                    y: {
+                                        type: "quantitative",
+                                        scale: { zero: false }
+                                    },
+                                    color: {
+                                        condition: {
+                                            test: "datum.open < datum.close",
+                                            value: "#06982d"
+                                        },
+                                        value: "#ae1325"
+                                    }
+                                },
+                                layer: [
                                     {
-                                        mark: "rect",
+                                        mark: "rule",
                                         encoding: {
-                                            x: { bin: true, field: extractedHeaders[0], type: "quantitative" },
-                                            y: { bin: true, field: extractedHeaders[1], type: "quantitative" },
-                                            color: { aggregate: "count" }
+                                            y: { field: extractedHeaders[1] }, //low
+                                            y2: { field: extractedHeaders[2] } //high
                                         }
                                     },
                                     {
                                         mark: "bar",
-                                        width: 60,
                                         encoding: {
-                                            y: { "bin": true, field: extractedHeaders[1], axis: null },
-                                            x: {
-                                                aggregate: "count",
-                                                scale: { domain: [0, 500] },
-                                                title: ""
-                                            }
+                                            y: { field: extractedHeaders[3] }, //open
+                                            y2: { field: extractedHeaders[4] } //close
                                         }
                                     }
-                                ]
+                                ],
+                                data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                             }
-                        ],
-                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
 
-                    }
-
-                }
-            } else {
-                chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
-            }
-            break;
-        case "heatmap":
-            if (extractedHeaders.length == 2) {
-                chartObj.charts = {
-                    data: { table: data },
-                    spec: {
-                        title: actualCommand,
-                        mark: "rect",
-                        width: 300,
-                        height: 200,
-                        transform: [],
-                        encoding: {
-                            x: {
-                                bin: true,
-                                field: extractedHeaders[0],
-                                type: "quantitative"
-                            },
-                            y: {
-                                bin: true,
-                                field: extractedHeaders[1],
-                                type: "quantitative"
-                            },
-                            color: { aggregate: "count", type: "quantitative" },
-                        },
-                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                    }
-
-                }
-            } else {
-                chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
-            }
-            break;
-        case "lineArea":
-            if (extractedHeaders.length == 3) {
-                hasTime = checkTimeAndReorder(extractedHeaders, data)
-                reorderForLineArea(extractedHeaders, data)
-                if (hasTime) {
-                    chartObj.charts = {
-                        data: { table: data },
-                        spec: {
-                            title: actualCommand,
-                            mark: "rect",
-                            width: 600,
-                            height: 200,
-                            mark: "area",
-                            transform: [],
-                            encoding: {
-                                x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
-                                y: { aggregate: "sum", field: extractedHeaders[0] },
-                                color: { field: extractedHeaders[2] }
-                            },
-                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                         }
-
+                    } else {
+                        chartObj.errMsg = "Could not create graph. Expected dates attribute"
                     }
                 } else {
-                    chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
+                    chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
                 }
-            } else {
-                chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
-            }
-            break;
-        case "normalizedLineArea":
-            if (extractedHeaders.length == 3) {
-                hasTime = checkTimeAndReorder(extractedHeaders, data)
-                reorderForLineArea(extractedHeaders, data)
-                if (hasTime) {
-                    chartObj.charts = {
-                        data: { table: data },
-                        spec: {
-                            title: actualCommand,
-                            mark: "rect",
-                            width: 600,
-                            height: 200,
-                            mark: "area",
-                            transform: [],
-                            encoding: {
-                                x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
-                                y: {
-                                    aggregate: "sum",
-                                    field: extractedHeaders[0],
-                                    axis: null,
-                                    stack: "normalize"
-                                },
-                                color: { field: extractedHeaders[2] }
-                            },
-                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                        }
-
-                    }
-                } else {
-                    chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
-                }
-            } else {
-                chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
-            }
-            break;
-        case "stackedBar":
-            if (extractedHeaders.length == 3) {
-                hasTime = checkTimeAndReorder(extractedHeaders, data)
-                reorderForLineArea(extractedHeaders, data)
-                if (hasTime) {
+                break;
+            case "parallelCoordinates":
+                if (extractedHeaders.length > 2) {
+                    let folds = reorderForParallel(extractedHeaders, data)
                     chartObj.charts = {
                         data: { table: data },
                         spec: {
                             title: actualCommand,
                             mark: { type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 },
-                            width: 600,
-                            height: 200,
-                            transform: [],
-                            encoding: {
-                                x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
-                                y: {
-                                    aggregate: "sum",
-                                    field: extractedHeaders[0]
-                                },
-                                color: { field: extractedHeaders[2] }
-                            },
-                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                        }
-
-                    }
-                } else {
-                    chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
-                }
-            } else {
-                chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
-            }
-            break;
-        case "normalizedStackedBar":
-            if (extractedHeaders.length == 3) {
-                hasTime = checkTimeAndReorder(extractedHeaders, data)
-                reorderForLineArea(extractedHeaders, data)
-                if (hasTime) {
-                    chartObj.charts = {
-                        data: { table: data },
-                        spec: {
-                            title: actualCommand,
-                            mark: { type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 },
-                            width: 600,
-                            height: 200,
-                            transform: [],
-                            encoding: {
-                                x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
-                                y: {
-                                    aggregate: "sum",
-                                    field: extractedHeaders[0],
-                                    axis: null,
-                                    stack: "normalize"
-                                },
-                                color: { field: extractedHeaders[2] }
-                            },
-                            data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
-                        }
-
-                    }
-                } else {
-                    chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
-                }
-            } else {
-                chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
-            }
-            break;
-        case "candleStick":
-            if (extractedHeaders.length == 5) {
-                hasTime = checkTimeAndReorder(extractedHeaders, data)
-                reorderForCandleStick(extractedHeaders, data)
-                if (hasTime) {
-                    chartObj.charts = {
-                        data: { table: data },
-                        spec: {
-                            title: actualCommand,
                             width: 1200,
-                            height: 500,
-                            transform: [],
-                            encoding: {
-                                x: {
-                                    field: extractedHeaders[0],
-                                    type: "temporal",
-                                    format: "%m/%d",
-                                    axis: {
-                                        labelAngle: -45
-                                    }
-                                },
-                                y: {
-                                    type: "quantitative",
-                                    scale: { zero: false }
-                                },
-                                color: {
-                                    condition: {
-                                        test: "datum.open < datum.close",
-                                        value: "#06982d"
-                                    },
-                                    value: "#ae1325"
-                                }
-                            },
-                            layer: [
-                                {
-                                    mark: "rule",
-                                    encoding: {
-                                        y: { field: extractedHeaders[1] }, //low
-                                        y2: { field: extractedHeaders[2] } //high
-                                    }
-                                },
-                                {
-                                    mark: "bar",
-                                    encoding: {
-                                        y: { field: extractedHeaders[3] }, //open
-                                        y2: { field: extractedHeaders[4] } //close
-                                    }
-                                }
+                            height: 200,
+                            transform: [
+                                { window: [{ op: "count", as: "index" }] },
+                                { fold: folds }
                             ],
+                            mark: "line",
+                            encoding: {
+                                color: { type: "nominal", field: extractedHeaders[0] },
+                                detail: { type: "nominal", field: "index" },
+                                opacity: { value: 0.3 },
+                                x: { type: "nominal", field: "key" },
+                                y: { type: "quantitative", field: "value" }
+                            },
+
                             data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                         }
-
                     }
-                } else {
-                    chartObj.errMsg = "Could not create graph. Expected dates attribute"
                 }
-            } else {
-                chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
+                break;
+
+            default:
+                chartObj.errMsg = "Could not specify graph."
+        }
+        if (chartObj.errMsg === "" && chartObj.charts !== null) {
+            filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
+
+        }
+        return chartObj;
+    }
+}
+
+
+function checkIfHasTime(extractedHeaders, data) {
+    for (let i = 0; i < extractedHeaders.length; i++) {
+        if (findType(extractedHeaders[i], data) === "temporal") {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function switchHeaders(extractedHeaders, targetIndex, sourceIndex) {
+    let tmpHeader = extractedHeaders[targetIndex]
+    extractedHeaders[targetIndex] = extractedHeaders[sourceIndex]
+    extractedHeaders[sourceIndex] = tmpHeader
+    return extractedHeaders
+}
+
+function findMissing(extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence) {
+
+    let missing = reorder(extractedHeaders, targetHeaderLength, data, sequence)
+    console.log(missing)
+    if (missing.n) {
+        command = findInferHeader(command, headerFreq, 'nominal', extractedHeaders)
+        return findMissing(extractedHeaders, data, targetHeaderLength, headerFreq)
+    }
+    if (missing.q) {
+        command = findInferHeader(command, headerFreq, 'quantitative', extractedHeaders)
+        return findMissing(extractedHeaders, data, targetHeaderLength, headerFreq)
+    }
+    if (missing.t) {
+        command = findInferHeader(command, headerFreq, 'temporal', extractedHeaders)
+        return findMissing(extractedHeaders, data, targetHeaderLength, headerFreq)
+    }
+
+    return extractedHeaders
+}
+
+function findInferHeader(command, headerFreq, type, extractedHeaders) {
+    let headerToAdd = null
+    if (headerFreq[type].length < 1) {
+        //todo error message
+    } else {
+        headerToAdd = headerFreq[type][0].header
+    }
+    for (let i = 1; i < headerFreq[type].length; i++) {
+        if (headerFreq[type][0].count < headerFreq[type][i].count) {
+            headerToAdd = headerFreq[type][i].header
+        }
+    }
+    extractedHeaders.push(headerToAdd)
+    command += " " + headerToAdd
+    return command
+}
+
+function reorder(extractedHeaders, targetHeaderLength, data, sequence) {
+    let missing = {
+        n: true,
+        q: true,
+        t: true,
+        q2: true,
+        q3: true
+    }
+    switch (sequence) {
+        case "NQT":
+            missing = {
+                n: true,
+                q: true,
+                t: true,
+                q2: false,
+                q3: false
             }
-            break;
-        case "parallelCoordinates":
-            if (extractedHeaders.length >2 ) {
-                let folds = reorderForParallel(extractedHeaders, data)
-                chartObj.charts = {
-                    data: { table: data },
-                    spec: {
-                        title: actualCommand,
-                        mark: { type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 },
-                        width: 1200,
-                        height: 200,
-                        transform: [
-                            { window: [{ op: "count", as: "index" }] },
-                            { fold: folds }
-                        ],
-                        mark: "line",
-                        encoding: {
-                            color: { type: "nominal", field: extractedHeaders[0] },
-                            detail: { type: "nominal", field: "index" },
-                            opacity: { value: 0.3 },
-                            x: { type: "nominal", field: "key" },
-                            y: { type: "quantitative", field: "value" }
-                        },
+            //For length 1
+            if (targetHeaderLength == 1) {
+                missing.t = false
+                missing.q = false
+                if (findType(extractedHeaders[0], data) == 'nominal') {
+                    missing.n = false
+                    return extractedHeaders
+                }
+            }
 
-                        data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+            //For length 2
+            if (targetHeaderLength == 2) {
+                missing.t = false
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'nominal') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 0, i)
+                        missing.n = false
+                        break
                     }
                 }
-            } 
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'quantitative') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 1, i)
+                        missing.q = false
+                        break
+                    }
+                }
+            }
+
+            //for length 3
+            if (targetHeaderLength == 3) {
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'nominal') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 0, i)
+                        missing.n = false
+                        break
+                    }
+                }
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'quantitative') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 1, i)
+                        missing.q = false
+                        break
+                    }
+                }
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'temporal') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 2, i)
+                        missing.t = false
+                        break
+                    }
+                }
+            }
+
+            return missing
             break;
+        case "QQQ":
+            missing = {
+                n: false,
+                q: true,
+                t: false,
+                q2: true,
+                q3: true
+            }
+            //For length 2
+            if (targetHeaderLength == 2) {
+                missing.q3 = false
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'quantitative') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 0, i)
+                        missing.q = false
+                        break
+                    }
+                }
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'quantitative') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 1, i)
+                        missing.q2 = false
+                        break
+                    }
+                }
+            }
 
+            //for length 3
+            if (targetHeaderLength == 3) {
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'quantitative') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 0, i)
+                        missing.q = false
+                        break
+                    }
+                }
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'quantitative') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 1, i)
+                        missing.q2 = false
+                        break
+                    }
+                }
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'quantitative') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 2, i)
+                        missing.q3 = false
+                        break
+                    }
+                }
+            }
+            return missing
         default:
-            chartObj.errMsg = "Could not specify graph."
+            break;
     }
-    if (chartObj.errMsg === "" && chartObj.charts !== null) {
-        filterSpecs(command, extractedHeaders, data, filteredHeaders, chartObj)
-
-    }
-    return chartObj;
 }
 
 function reorderForParallel(extractedHeaders, data) {
     let folds = []
-    for(let i = 0; i < extractedHeaders.length; i++) {
-        if(findType(extractedHeaders[i], data) === "nominal") {
+    for (let i = 0; i < extractedHeaders.length; i++) {
+        if (findType(extractedHeaders[i], data) === "nominal") {
             let tmpHeader = extractedHeaders[0]
             extractedHeaders[0] = extractedHeaders[i]
             extractedHeaders[i] = tmpHeader
         }
     }
 
-    for(let i = 1; i < extractedHeaders.length; i++) {
+    for (let i = 1; i < extractedHeaders.length; i++) {
         folds.push(extractedHeaders[i])
     }
-    return  folds;
+    return folds;
 }
 
 
@@ -834,7 +1025,6 @@ function extractHeaders(command, headers, filteredHeaders, data) {
     //     }
 
     // }
-    console.log(extractedHeaders)
 
     if (doc.has("overtime") || doc.has("time")) {
         let foundTime = false

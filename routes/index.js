@@ -109,7 +109,7 @@ router.post('/', async (req, res, next) => {
   const response = await manager.process('en', generalizedCommand)
   const headerMatrix = createVector(attributes, data)
 
-  const {headerFreq, filterFreq} = countVector(transcript, headerMatrix)
+  const {headerFreq, filterFreq} = countVector(transcript, headerMatrix, data)
 
 
   nlp.extend((Doc, world) => {
@@ -133,7 +133,7 @@ router.post('/', async (req, res, next) => {
   for(let i = 0; i < response.classifications.length; i++) {
     if(response.classifications[i].score > .1) {
 
-      chartObj.push(chartMaker(response.classifications[i].intent, synonymCommand, attributes, data, headerMatrix, command))
+      chartObj.push(chartMaker.chartMaker(response.classifications[i].intent, synonymCommand, attributes, data, headerMatrix, command, headerFreq))
 
     }
   }
