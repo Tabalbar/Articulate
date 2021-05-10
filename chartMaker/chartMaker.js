@@ -75,8 +75,12 @@ module.exports = {
                             }
 
                         }
-                    } else if(extractedHeaders.length < 3){
+                    } else if (extractedHeaders.length < 3) {
                         command = findMissing(extractedHeaders, data, 3, headerFreq, command, "NQT")
+                        if (command == "") {
+                            chartObj.errMsg = ""
+                            return chartObj
+                        }
                         chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
                     } else {
                         chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
@@ -260,15 +264,7 @@ module.exports = {
                             data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                         }
                     }
-                } else {
-                    command = findMissing(extractedHeaders, data, 2, headerFreq, command, "QQQ")
-                    if(command == ""){
-                        chartObj.errMsg = ""
-                        return chartObj
-                    }
-                    chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
-                }
-                if (extractedHeaders.length === 3) {
+                } else if (extractedHeaders.length === 3) {
                     extracteHeaders = reorderThreeHeadersForRelationship(extractedHeaders, data)
                     chartObj.charts = {
                         data: { table: data },
@@ -286,13 +282,15 @@ module.exports = {
                             data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                         }
                     }
-                } else {
-                    command = findMissing(extractedHeaders, data, 3, headerFreq, command, "QQQ")
-                    if(command == ""){
+                } else if(extractedHeaders.length < 2) {
+                    command = findMissing(extractedHeaders, data, 2, headerFreq, command, "QQQ")
+                    if (command == "") {
                         chartObj.errMsg = ""
                         return chartObj
                     }
                     chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
+                } else {
+                    chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
                 }
                 break;
             case "pie":
@@ -315,7 +313,7 @@ module.exports = {
                     }
                 } else {
                     command = findMissing(extractedHeaders, data, 2, headerFreq, command, "NQT")
-                    if(command == ""){
+                    if (command == "") {
                         chartObj.errMsg = ""
                         return chartObj
                     }
@@ -372,9 +370,9 @@ module.exports = {
                         }
 
                     }
-                } else if(extractedHeaders.length < 2){
+                } else if (extractedHeaders.length < 2) {
                     command = findMissing(extractedHeaders, data, 2, headerFreq, command, "QQQ")
-                    if(command == ""){
+                    if (command == "") {
                         chartObj.errMsg = ""
                         return chartObj
                     }
@@ -410,9 +408,9 @@ module.exports = {
                         }
 
                     }
-                } else if(extractedHeaders.length < 2){
+                } else if (extractedHeaders.length < 2) {
                     command = findMissing(extractedHeaders, data, 2, headerFreq, command, "QQQ")
-                    if(command == ""){
+                    if (command == "") {
                         chartObj.errMsg = ""
                         return chartObj
                     }
@@ -436,9 +434,9 @@ module.exports = {
                                 mark: "area",
                                 transform: [],
                                 encoding: {
-                                    x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
-                                    y: { aggregate: "sum", field: extractedHeaders[0] },
-                                    color: { field: extractedHeaders[2] }
+                                    x: { timeUnit: "yearmonth", field: extractedHeaders[2] },
+                                    y: { aggregate: "sum", field: extractedHeaders[1] },
+                                    color: { field: extractedHeaders[0] }
                                 },
                                 data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                             }
@@ -447,6 +445,13 @@ module.exports = {
                     } else {
                         chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
                     }
+                } else if (extractedHeaders.length < 3) {
+                    command = findMissing(extractedHeaders, data, 3, headerFreq, command, "NQT")
+                    if (command == "") {
+                        chartObj.errMsg = ""
+                        return chartObj
+                    }
+                    chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
                 } else {
                     chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
                 }
@@ -466,14 +471,14 @@ module.exports = {
                                 mark: "area",
                                 transform: [],
                                 encoding: {
-                                    x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
+                                    x: { timeUnit: "yearmonth", field: extractedHeaders[2] },
                                     y: {
                                         aggregate: "sum",
-                                        field: extractedHeaders[0],
+                                        field: extractedHeaders[1],
                                         axis: null,
                                         stack: "normalize"
                                     },
-                                    color: { field: extractedHeaders[2] }
+                                    color: { field: extractedHeaders[0] }
                                 },
                                 data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                             }
@@ -482,7 +487,14 @@ module.exports = {
                     } else {
                         chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
                     }
-                }  else {
+                } else if (extractedHeaders.length < 3) {
+                    command = findMissing(extractedHeaders, data, 3, headerFreq, command, "NQT")
+                    if (command == "") {
+                        chartObj.errMsg = ""
+                        return chartObj
+                    }
+                    chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
+                } else {
                     chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
                 }
                 break;
@@ -514,9 +526,9 @@ module.exports = {
                     } else {
                         chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
                     }
-                } else if(extractedHeaders.length < 3){
+                } else if (extractedHeaders.length < 3) {
                     command = findMissing(extractedHeaders, data, 3, headerFreq, command, "NQT")
-                    if(command == ""){
+                    if (command == "") {
                         chartObj.errMsg = ""
                         return chartObj
                     }
@@ -555,9 +567,9 @@ module.exports = {
                     } else {
                         chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
                     }
-                } else if(extractedHeaders.length < 3){
+                } else if (extractedHeaders.length < 3) {
                     command = findMissing(extractedHeaders, data, 3, headerFreq, command, "NQT")
-                    if(command == ""){
+                    if (command == "") {
                         chartObj.errMsg = ""
                         return chartObj
                     }
