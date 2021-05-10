@@ -3,7 +3,7 @@ const createVector = require('./createVector')
 nlp.extend(require('compromise-numbers'))
 nlp.extend(require('compromise-dates'))
 var thesaurus = require("thesaurus");
-
+const findType = require('./findType')
 
 module.exports = (command, attributes, data) => {
     let doc = nlp(command)
@@ -36,17 +36,6 @@ module.exports = (command, attributes, data) => {
     return {generalizedCommand, synonymCommand}
 }
 
-
-function findType(header, data) {
-    if (data[0][header].includes('/') || data[0][header].includes('-') ||
-        data[0][header].includes(':')) {
-        return "temporal"
-    } else if (isNaN(data[0][header])) {
-        return "nominal"
-    } else {
-        return "quantitative"
-    }
-}
 
 let featureMatrix = [];
 

@@ -1,4 +1,5 @@
 const nlp = require('compromise')
+const findType = require('./findType')
 
 module.exports = (headers, data) => {
     let featureMatrix = [];
@@ -17,15 +18,4 @@ module.exports = (headers, data) => {
         }
     }
     return featureMatrix
-}
-
-function findType(header, data) {
-    if (data[0][header].includes('/') || data[0][header].includes('-') ||
-        data[0][header].includes(':')) {
-        return "temporal"
-    } else if (isNaN(data[0][header])) {
-        return "nominal"
-    } else {
-        return "quantitative"
-    }
 }

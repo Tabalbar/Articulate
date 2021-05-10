@@ -1,4 +1,5 @@
 const nlp = require('compromise')
+const findType = require('./findType')
 
 //returns two vectors
 //1 for the attribute headers and 1 for the filtered headers
@@ -46,13 +47,3 @@ module.exports = (transcript, headerMatrix, data) => {
 }
 
 
-function findType(header, data) {
-    if (data[0][header].includes('/') || data[0][header].includes('-') ||
-        data[0][header].includes(':')) {
-        return "temporal"
-    } else if (isNaN(data[0][header])) {
-        return "nominal"
-    } else {
-        return "quantitative"
-    }
-}

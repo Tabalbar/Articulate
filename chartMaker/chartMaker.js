@@ -1,10 +1,13 @@
 
 const nlp = require('compromise')
 const chartMakerWithAnswer = require('./chartMakerWithAnswer')
+const findType = require('./findType')
+const findMissing = require('./findMissing').findMissing
+
 module.exports = {
     chartMaker: function chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq) {
         let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers, command)
-        let extractedHeaders = extractHeaders(command, headers, filteredHeaders, data)
+        let extractedHeaders = extractHeaders(command, headers, data)
         let hasTime = checkIfHasTime(extractedHeaders, data)
 
         let chartObj = {
@@ -72,6 +75,9 @@ module.exports = {
                             }
 
                         }
+                    } else if(extractedHeaders.length < 3){
+                        command = findMissing(extractedHeaders, data, 3, headerFreq, command, "NQT")
+                        chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
                     } else {
                         chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
 
@@ -256,6 +262,10 @@ module.exports = {
                     }
                 } else {
                     command = findMissing(extractedHeaders, data, 2, headerFreq, command, "QQQ")
+                    if(command == ""){
+                        chartObj.errMsg = ""
+                        return chartObj
+                    }
                     chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
                 }
                 if (extractedHeaders.length === 3) {
@@ -278,6 +288,10 @@ module.exports = {
                     }
                 } else {
                     command = findMissing(extractedHeaders, data, 3, headerFreq, command, "QQQ")
+                    if(command == ""){
+                        chartObj.errMsg = ""
+                        return chartObj
+                    }
                     chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
                 }
                 break;
@@ -301,6 +315,10 @@ module.exports = {
                     }
                 } else {
                     command = findMissing(extractedHeaders, data, 2, headerFreq, command, "NQT")
+                    if(command == ""){
+                        chartObj.errMsg = ""
+                        return chartObj
+                    }
                     chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
                 }
                 break;
@@ -354,6 +372,13 @@ module.exports = {
                         }
 
                     }
+                } else if(extractedHeaders.length < 2){
+                    command = findMissing(extractedHeaders, data, 2, headerFreq, command, "QQQ")
+                    if(command == ""){
+                        chartObj.errMsg = ""
+                        return chartObj
+                    }
+                    chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
                 } else {
                     chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
                 }
@@ -385,6 +410,13 @@ module.exports = {
                         }
 
                     }
+                } else if(extractedHeaders.length < 2){
+                    command = findMissing(extractedHeaders, data, 2, headerFreq, command, "QQQ")
+                    if(command == ""){
+                        chartObj.errMsg = ""
+                        return chartObj
+                    }
+                    chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
                 } else {
                     chartObj.errMsg = "Could not create graph. Expected 2 headers. Got " + extractedHeaders.length
                 }
@@ -450,7 +482,7 @@ module.exports = {
                     } else {
                         chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
                     }
-                } else {
+                }  else {
                     chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
                 }
                 break;
@@ -468,12 +500,12 @@ module.exports = {
                                 height: 200,
                                 transform: [],
                                 encoding: {
-                                    x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
+                                    x: { timeUnit: "yearmonth", field: extractedHeaders[2] },
                                     y: {
                                         aggregate: "sum",
-                                        field: extractedHeaders[0]
+                                        field: extractedHeaders[1]
                                     },
-                                    color: { field: extractedHeaders[2] }
+                                    color: { field: extractedHeaders[0] }
                                 },
                                 data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                             }
@@ -482,6 +514,13 @@ module.exports = {
                     } else {
                         chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
                     }
+                } else if(extractedHeaders.length < 3){
+                    command = findMissing(extractedHeaders, data, 3, headerFreq, command, "NQT")
+                    if(command == ""){
+                        chartObj.errMsg = ""
+                        return chartObj
+                    }
+                    chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
                 } else {
                     chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
                 }
@@ -500,14 +539,14 @@ module.exports = {
                                 height: 200,
                                 transform: [],
                                 encoding: {
-                                    x: { timeUnit: "yearmonth", field: extractedHeaders[1] },
+                                    x: { timeUnit: "yearmonth", field: extractedHeaders[2] },
                                     y: {
                                         aggregate: "sum",
-                                        field: extractedHeaders[0],
+                                        field: extractedHeaders[1],
                                         axis: null,
                                         stack: "normalize"
                                     },
-                                    color: { field: extractedHeaders[2] }
+                                    color: { field: extractedHeaders[0] }
                                 },
                                 data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                             }
@@ -516,6 +555,13 @@ module.exports = {
                     } else {
                         chartObj.errMsg = "Could not create graph. Expected dates attribute" + extractedHeaders.length
                     }
+                } else if(extractedHeaders.length < 3){
+                    command = findMissing(extractedHeaders, data, 3, headerFreq, command, "NQT")
+                    if(command == ""){
+                        chartObj.errMsg = ""
+                        return chartObj
+                    }
+                    chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
                 } else {
                     chartObj.errMsg = "Could not create graph. Expected 3 headers. Got " + extractedHeaders.length
                 }
@@ -631,179 +677,7 @@ function checkIfHasTime(extractedHeaders, data) {
     return false;
 }
 
-function switchHeaders(extractedHeaders, targetIndex, sourceIndex) {
-    let tmpHeader = extractedHeaders[targetIndex]
-    extractedHeaders[targetIndex] = extractedHeaders[sourceIndex]
-    extractedHeaders[sourceIndex] = tmpHeader
-    return extractedHeaders
-}
 
-function findMissing(extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence) {
-
-    let missing = reorder(extractedHeaders, targetHeaderLength, data, sequence)
-    console.log(missing)
-    if (missing.n) {
-        command = findInferHeader(command, headerFreq, 'nominal', extractedHeaders)
-        return findMissing(extractedHeaders, data, targetHeaderLength, headerFreq)
-    }
-    if (missing.q) {
-        command = findInferHeader(command, headerFreq, 'quantitative', extractedHeaders)
-        return findMissing(extractedHeaders, data, targetHeaderLength, headerFreq)
-    }
-    if (missing.t) {
-        command = findInferHeader(command, headerFreq, 'temporal', extractedHeaders)
-        return findMissing(extractedHeaders, data, targetHeaderLength, headerFreq)
-    }
-
-    return extractedHeaders
-}
-
-function findInferHeader(command, headerFreq, type, extractedHeaders) {
-    let headerToAdd = null
-    if (headerFreq[type].length < 1) {
-        //todo error message
-    } else {
-        headerToAdd = headerFreq[type][0].header
-    }
-    for (let i = 1; i < headerFreq[type].length; i++) {
-        if (headerFreq[type][0].count < headerFreq[type][i].count) {
-            headerToAdd = headerFreq[type][i].header
-        }
-    }
-    extractedHeaders.push(headerToAdd)
-    command += " " + headerToAdd
-    return command
-}
-
-function reorder(extractedHeaders, targetHeaderLength, data, sequence) {
-    let missing = {
-        n: true,
-        q: true,
-        t: true,
-        q2: true,
-        q3: true
-    }
-    switch (sequence) {
-        case "NQT":
-            missing = {
-                n: true,
-                q: true,
-                t: true,
-                q2: false,
-                q3: false
-            }
-            //For length 1
-            if (targetHeaderLength == 1) {
-                missing.t = false
-                missing.q = false
-                if (findType(extractedHeaders[0], data) == 'nominal') {
-                    missing.n = false
-                    return extractedHeaders
-                }
-            }
-
-            //For length 2
-            if (targetHeaderLength == 2) {
-                missing.t = false
-                for (let i = 0; i < extractedHeaders.length; i++) {
-                    if (findType(extractedHeaders[i], data) == 'nominal') {
-                        extractedHeaders = switchHeaders(extractedHeaders, 0, i)
-                        missing.n = false
-                        break
-                    }
-                }
-                for (let i = 0; i < extractedHeaders.length; i++) {
-                    if (findType(extractedHeaders[i], data) == 'quantitative') {
-                        extractedHeaders = switchHeaders(extractedHeaders, 1, i)
-                        missing.q = false
-                        break
-                    }
-                }
-            }
-
-            //for length 3
-            if (targetHeaderLength == 3) {
-                for (let i = 0; i < extractedHeaders.length; i++) {
-                    if (findType(extractedHeaders[i], data) == 'nominal') {
-                        extractedHeaders = switchHeaders(extractedHeaders, 0, i)
-                        missing.n = false
-                        break
-                    }
-                }
-                for (let i = 0; i < extractedHeaders.length; i++) {
-                    if (findType(extractedHeaders[i], data) == 'quantitative') {
-                        extractedHeaders = switchHeaders(extractedHeaders, 1, i)
-                        missing.q = false
-                        break
-                    }
-                }
-                for (let i = 0; i < extractedHeaders.length; i++) {
-                    if (findType(extractedHeaders[i], data) == 'temporal') {
-                        extractedHeaders = switchHeaders(extractedHeaders, 2, i)
-                        missing.t = false
-                        break
-                    }
-                }
-            }
-
-            return missing
-            break;
-        case "QQQ":
-            missing = {
-                n: false,
-                q: true,
-                t: false,
-                q2: true,
-                q3: true
-            }
-            //For length 2
-            if (targetHeaderLength == 2) {
-                missing.q3 = false
-                for (let i = 0; i < extractedHeaders.length; i++) {
-                    if (findType(extractedHeaders[i], data) == 'quantitative') {
-                        extractedHeaders = switchHeaders(extractedHeaders, 0, i)
-                        missing.q = false
-                        break
-                    }
-                }
-                for (let i = 0; i < extractedHeaders.length; i++) {
-                    if (findType(extractedHeaders[i], data) == 'quantitative') {
-                        extractedHeaders = switchHeaders(extractedHeaders, 1, i)
-                        missing.q2 = false
-                        break
-                    }
-                }
-            }
-
-            //for length 3
-            if (targetHeaderLength == 3) {
-                for (let i = 0; i < extractedHeaders.length; i++) {
-                    if (findType(extractedHeaders[i], data) == 'quantitative') {
-                        extractedHeaders = switchHeaders(extractedHeaders, 0, i)
-                        missing.q = false
-                        break
-                    }
-                }
-                for (let i = 0; i < extractedHeaders.length; i++) {
-                    if (findType(extractedHeaders[i], data) == 'quantitative') {
-                        extractedHeaders = switchHeaders(extractedHeaders, 1, i)
-                        missing.q2 = false
-                        break
-                    }
-                }
-                for (let i = 0; i < extractedHeaders.length; i++) {
-                    if (findType(extractedHeaders[i], data) == 'quantitative') {
-                        extractedHeaders = switchHeaders(extractedHeaders, 2, i)
-                        missing.q3 = false
-                        break
-                    }
-                }
-            }
-            return missing
-        default:
-            break;
-    }
-}
 
 function reorderForParallel(extractedHeaders, data) {
     let folds = []
@@ -854,14 +728,14 @@ function reorderForCandleStick(extractedHeaders, data) {
 
 function reorderForLineArea(extractedHeaders, data) {
     for (let i = 0; i < extractedHeaders.length; i++) {
-        if (findType(extractedHeaders[i], data) === "quantitative") {
+        if (findType(extractedHeaders[i], data) === "nominal") {
             let tmpHeader = extractedHeaders[0]
             extractedHeaders[0] = extractedHeaders[i]
             extractedHeaders[i] = tmpHeader;
         }
     }
     for (let i = 0; i < extractedHeaders.length; i++) {
-        if (findType(extractedHeaders[i], data) === "temporal") {
+        if (findType(extractedHeaders[i], data) === "quantitative") {
             let tmpHeader = extractedHeaders[1]
             extractedHeaders[1] = extractedHeaders[i]
             extractedHeaders[i] = tmpHeader;
@@ -985,21 +859,7 @@ function checkTimeAndReorderComposition(extractedHeaders, data) {
     return false
 }
 
-function findType(header, data) {
-    let lowerCaseHeader = header.toLowerCase()
-    if (lowerCaseHeader.includes('date')
-        || lowerCaseHeader.includes('year') || lowerCaseHeader.includes('month')
-        || lowerCaseHeader.includes('day') || lowerCaseHeader.includes('months')
-        || lowerCaseHeader.includes('dates')) {
-        return "temporal"
-    } else if (isNaN(data[1][header])) {
-        return "nominal"
-    } else {
-        return "quantitative"
-    }
-}
-
-function extractHeaders(command, headers, filteredHeaders, data) {
+function extractHeaders(command, headers, data) {
 
     let doc = nlp(command)
     let extractedHeaders = []
