@@ -8,6 +8,7 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 import UseVoice from './UseVoice';
 import DraggableGraph from './DraggableGraph';
 import InputBar from './InputBar';
+import StreamGraph from './StreamGraph'
 
 function App() {
 
@@ -141,7 +142,6 @@ function App() {
     tmpText += "Returned " + count + " chart(s)"
     UseVoice(tmpText)
   }
-
   const createChartWithVoice = async (transcript) => {
     await fetch('http://localhost:5000/addHeaders', {
       method: 'POST',
@@ -196,13 +196,15 @@ function App() {
     setSelected(prev=>!prev)
   }
 
-
   return (
     <>
       <br />
+      <StreamGraph
+        overHearingData={overHearingData}
+        attributes={attributes}
+      />
       <Grid centered={true}>
       <Grid.Row>
-          {/* <MaterialTable columns={dataHeaders} data={data} title='' /> */}
         </Grid.Row>
         <Dictaphone
           createChartWithVoice={createChartWithVoice}

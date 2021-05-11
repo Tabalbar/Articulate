@@ -3,6 +3,7 @@ const nlp = require('compromise')
 const chartMakerWithAnswer = require('./chartMakerWithAnswer')
 const findType = require('./findType')
 const findMissing = require('./findMissing').findMissing
+const title = require('./specifications/title')
 
 module.exports = {
     chartMaker: function chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq) {
@@ -14,6 +15,7 @@ module.exports = {
             charts: null,
             errMsg: ''
         };
+        
         console.log(intent)
         switch (intent) {
             case "bar":
@@ -171,6 +173,13 @@ module.exports = {
                             }
 
                         }
+                    } else if (extractedHeaders.length < 1) {
+                        command = findMissing(extractedHeaders, data, 1, headerFreq, command, "NQT")
+                        if (command == "") {
+                            chartObj.errMsg = ""
+                            return chartObj
+                        }
+                        chartObj = module.exports.chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq)
                     } else {
                         chartObj.errMsg = "Could not create graph. Got " + extractedHeaders.length + " headers"
                     }
