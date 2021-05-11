@@ -34,91 +34,51 @@
           "useStemDict": true
         },
         "stemDict": {
-          "a,bar,graph,me,of,show": {
+          "and,comparison,i,nomin,of,quantit,see,the,to,want": {
             "intent": "bar",
             "domain": "default"
           },
-          "a,histogram,me,of,quantit,show": {
+          "a,and,comparison,me,nomin,of,quantit,show": {
             "intent": "bar",
             "domain": "default"
           },
-          "a,and,bar,graph,me,nomin,of,quantit,show": {
+          "distribut,me,nomin,of,show,the": {
             "intent": "bar",
             "domain": "default"
           },
-          "a,and,graph,me,nomin,of,quantit,show": {
+          "and,data,for,me,nomin,quantit,show,the": {
             "intent": "bar",
             "domain": "default"
           },
-          "and,me,nomin,quantit,show": {
-            "intent": "bar",
-            "domain": "default"
-          },
-          "a,graph,line,me,of,show": {
+          "comparison,i,of,over,quantit,see,the,time,to,want": {
             "intent": "line",
             "domain": "default"
           },
-          "a,can,chart,i,line,of,quantit,see": {
+          "comparison,me,of,over,quantit,show,tempor,the": {
             "intent": "line",
             "domain": "default"
           },
-          "ditribut,me,of,quantit,show,the": {
+          "and,me,nomin,of,over,quantit,show,temor,the,year": {
             "intent": "line",
             "domain": "default"
           },
-          "ditribut,is,of,quantit,the,what": {
-            "intent": "line",
-            "domain": "default"
-          },
-          "for,me,month,of,quantit,show,tempor,the": {
-            "intent": "line",
-            "domain": "default"
-          },
-          "and,me,of,quantit,show,tempor,the,year": {
-            "intent": "line",
-            "domain": "default"
-          },
-          "and,me,nomin,over,quantit,show,time": {
-            "intent": "line",
-            "domain": "default"
-          },
-          "and,me,nomin,of,quantit,show,tempor,the,year": {
-            "intent": "line",
-            "domain": "default"
-          },
-          "and,me,nomin,over,quantit,show,tempor,time": {
-            "intent": "line",
-            "domain": "default"
-          },
-          "a,me,of,plot,scatter,show": {
+          "and,me,of,quantit,relationship,show,the": {
             "intent": "scatter",
             "domain": "default"
           },
-          "a,and,me,of,plot,quantit,scatter,show": {
+          "by,i,quantit,see,to,want": {
             "intent": "scatter",
             "domain": "default"
           },
-          "a,me,of,plot,quantit,scatter,show": {
+          "by,me,quantiat,quantit,show": {
             "intent": "scatter",
             "domain": "default"
           },
-          "and,do,how,i,quantit,repres": {
-            "intent": "scatter",
-            "domain": "default"
-          },
-          "and,by,me,quantit,show,size": {
-            "intent": "scatter",
-            "domain": "default"
-          },
-          "is,of,quantiat,quantit,the,what": {
-            "intent": "scatter",
-            "domain": "default"
-          },
-          "a,chart,me,of,pie,show": {
+          "composit,me,of,quantit,show,the": {
             "intent": "pie",
             "domain": "default"
           },
-          "a,and,chart,me,nomin,of,pie,quantit,show": {
+          "and,i,nomin,quantit,see,the,to,want": {
             "intent": "pie",
             "domain": "default"
           },
@@ -126,23 +86,15 @@
             "intent": "pie",
             "domain": "default"
           },
-          "and,is,nomin,of,percentag,quantit,the,what": {
-            "intent": "pie",
-            "domain": "default"
-          },
-          "doe,nomin,of,percent,quantit,what": {
-            "intent": "pie",
-            "domain": "default"
-          },
-          "a,margin,me,of,show": {
+          "a,can,heat,map,margin,me,show,you": {
             "intent": "marginalHistogram",
             "domain": "default"
           },
-          "a,and,margin,me,of,quantit,show": {
+          "and,distribut,i,of,quantit,see,the,to,want": {
             "intent": "marginalHistogram",
             "domain": "default"
           },
-          "a,and,bar,chart,heat,map,me,of,quantit,show,with": {
+          "a,bar,extra,graph,me,on,show,side,the,with": {
             "intent": "marginalHistogram",
             "domain": "default"
           },
@@ -154,19 +106,23 @@
             "intent": "heatmap",
             "domain": "default"
           },
-          "2d,a,and,histogram,me,of,quantit,show": {
+          "and,distribut,me,of,quantit,show,the": {
             "intent": "heatmap",
             "domain": "default"
           },
-          "a,area,chart,me,of,show": {
+          "2d,a,heatmap,me,show": {
+            "intent": "heatmap",
+            "domain": "default"
+          },
+          "and,area,curv,for,me,quantit,show,temor,tempor,the,under": {
             "intent": "lineArea",
             "domain": "default"
           },
-          "a,and,area,chart,me,nomin,of,quantit,show,tempor": {
+          "and,me,nomin,over,quantit,show,the,time": {
             "intent": "lineArea",
             "domain": "default"
           },
-          "a,and,chart,me,nomin,quantit,show,tempor,where": {
+          "a,and,graph,me,nomin,normal,over,quantit,show,time,with": {
             "intent": "normalizedLineArea",
             "domain": "default"
           },
@@ -194,7 +150,7 @@
             "intent": "candleStick",
             "domain": "default"
           },
-          "coordniat,for,me,parallel,show": {
+          "and,by,differ,i,nomin,of,quantit,see,the,to,want": {
             "intent": "parallelCoordinates",
             "domain": "default"
           }
@@ -216,132 +172,62 @@
         "sentences": [
           {
             "domain": "default",
-            "utterance": "show me a bar graph of ",
+            "utterance": "I want to see the comparison of nominal and quantitative",
             "intent": "bar"
           },
           {
             "domain": "default",
-            "utterance": "show me a histogram of quantitative",
+            "utterance": "show me a a comparison of nominal and quantitative",
             "intent": "bar"
           },
           {
             "domain": "default",
-            "utterance": "show me a bar graph of nominal and quantitative",
+            "utterance": "show me the distribution of nominal",
             "intent": "bar"
           },
           {
             "domain": "default",
-            "utterance": "show me a bar graph of nominal nominal nominal and quantitative",
+            "utterance": "show me the data for nominal nominal and quantitative",
             "intent": "bar"
           },
           {
             "domain": "default",
-            "utterance": "show me a bar graph of quantitative nominal nominal and nominal",
-            "intent": "bar"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me a graph of nominal nominal and quantitative",
-            "intent": "bar"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me quantitative and nominal",
-            "intent": "bar"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me quantitative nominal and nominal",
-            "intent": "bar"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me quantitative nominal nominal and nominal",
-            "intent": "bar"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me a line graph of ",
+            "utterance": "I want to see the comparison of quantitative over time",
             "intent": "line"
           },
           {
             "domain": "default",
-            "utterance": "can i see a line chart of quantitative ",
+            "utterance": "show me the comparison of quantitative over temporal",
             "intent": "line"
           },
           {
             "domain": "default",
-            "utterance": "show me the ditribution of quantitative",
+            "utterance": "Show me the temoral over the years of nominal and quantitative",
             "intent": "line"
           },
           {
             "domain": "default",
-            "utterance": "what is the ditribution of quantitative",
-            "intent": "line"
-          },
-          {
-            "domain": "default",
-            "utterance": "for the months of temporal show me quantitative",
-            "intent": "line"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me the years of temporal and quantitative",
-            "intent": "line"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me quantitative and nominal over time",
-            "intent": "line"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me the years of temporal nominal and quantitative",
-            "intent": "line"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me quantitative nominal and temporal over time",
-            "intent": "line"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me a scatter plot of ",
+            "utterance": "Show me the relationship of quantitative and quantitative",
             "intent": "scatter"
           },
           {
             "domain": "default",
-            "utterance": "show me a scatter plot of quantitative and quantitative",
+            "utterance": "I want to see quantitative by quantitative",
             "intent": "scatter"
           },
           {
             "domain": "default",
-            "utterance": "show me a scatter plot of quantitative quantitative quantitative",
+            "utterance": "show me quantiative by quantitative",
             "intent": "scatter"
           },
           {
             "domain": "default",
-            "utterance": "how do i represent quantitative quantitative and quantitative",
-            "intent": "scatter"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me quantitative and quantitative sized by quantitative",
-            "intent": "scatter"
-          },
-          {
-            "domain": "default",
-            "utterance": "what is the quantiative of quantitative",
-            "intent": "scatter"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me a pie chart of ",
+            "utterance": "show me the composition of quantitative",
             "intent": "pie"
           },
           {
             "domain": "default",
-            "utterance": "show me a pie chart of quantitative and nominal",
+            "utterance": "I want to see the quantitative and nominal",
             "intent": "pie"
           },
           {
@@ -351,27 +237,17 @@
           },
           {
             "domain": "default",
-            "utterance": "what is the percentage of nominal and quantitative",
-            "intent": "pie"
-          },
-          {
-            "domain": "default",
-            "utterance": "what percent of nominal does quantitative",
-            "intent": "pie"
-          },
-          {
-            "domain": "default",
-            "utterance": "show me a marginal of",
+            "utterance": "can you show me a marginal heat map",
             "intent": "marginalHistogram"
           },
           {
             "domain": "default",
-            "utterance": "show me a marginal of quantitative and quantitative",
+            "utterance": "I want to see the distribution of quantitative and quantitative",
             "intent": "marginalHistogram"
           },
           {
             "domain": "default",
-            "utterance": "show me a heat map of quantitative and quantitative with bar charts",
+            "utterance": "show me a graph with extra bars on the side",
             "intent": "marginalHistogram"
           },
           {
@@ -386,27 +262,27 @@
           },
           {
             "domain": "default",
-            "utterance": "show me a heat map of quantitative and quantitative",
+            "utterance": "show me the distribution of quantitative and quantitative",
             "intent": "heatmap"
           },
           {
             "domain": "default",
-            "utterance": "show me a 2D histogram of quantitative and quantitative",
+            "utterance": "show me a 2D heatmap",
             "intent": "heatmap"
           },
           {
             "domain": "default",
-            "utterance": "show me a area chart of ",
+            "utterance": "Show me the area under the curve for temporal quantitative and temoral",
             "intent": "lineArea"
           },
           {
             "domain": "default",
-            "utterance": "show me a area chart of temporal quantitative and nominal",
+            "utterance": "show me the quantitative and nominal over time",
             "intent": "lineArea"
           },
           {
             "domain": "default",
-            "utterance": "show me a chart where temporal quantitative and nominal",
+            "utterance": "show me a normalized graph with quantitative and nominal over time",
             "intent": "normalizedLineArea"
           },
           {
@@ -441,7 +317,7 @@
           },
           {
             "domain": "default",
-            "utterance": "show me parallel coordniates for",
+            "utterance": "I want to see the difference of nominal by quantitative quantitative and quantitative",
             "intent": "parallelCoordinates"
           }
         ],
@@ -459,58 +335,54 @@
               "log": true
             },
             "features": {
+              "i": 1,
+              "want": 1,
+              "to": 1,
+              "see": 1,
+              "the": 1,
+              "comparison": 1,
+              "of": 1,
+              "nomin": 1,
+              "and": 1,
+              "quantit": 1,
               "show": 1,
               "me": 1,
               "a": 1,
-              "bar": 1,
-              "graph": 1,
-              "of": 1,
-              "histogram": 1,
-              "quantit": 1,
-              "nomin": 1,
-              "and": 1,
-              "line": 1,
-              "can": 1,
-              "i": 1,
-              "see": 1,
-              "chart": 1,
-              "the": 1,
-              "ditribut": 1,
-              "what": 1,
-              "is": 1,
+              "distribut": 1,
+              "data": 1,
               "for": 1,
-              "month": 1,
-              "tempor": 1,
-              "year": 1,
               "over": 1,
               "time": 1,
-              "scatter": 1,
-              "plot": 1,
-              "how": 1,
-              "do": 1,
-              "repres": 1,
-              "size": 1,
+              "tempor": 1,
+              "temor": 1,
+              "year": 1,
+              "relationship": 1,
               "by": 1,
               "quantiat": 1,
-              "pie": 1,
+              "composit": 1,
               "percentag": 1,
-              "percent": 1,
-              "doe": 1,
+              "can": 1,
+              "you": 1,
               "margin": 1,
               "heat": 1,
               "map": 1,
+              "graph": 1,
               "with": 1,
+              "extra": 1,
+              "bar": 1,
               "on": 1,
               "side": 1,
+              "chart": 1,
               "2d": 1,
+              "heatmap": 1,
               "area": 1,
-              "where": 1,
+              "under": 1,
+              "curv": 1,
               "normal": 1,
               "stack": 1,
               "stock": 1,
               "trend": 1,
-              "parallel": 1,
-              "coordniat": 1
+              "differ": 1
             },
             "intents": {
               "bar": 1,
@@ -528,95 +400,97 @@
             },
             "intentFeatures": {
               "bar": {
+                "i": 1,
+                "want": 1,
+                "to": 1,
+                "see": 1,
+                "the": 1,
+                "comparison": 1,
+                "of": 1,
+                "nomin": 1,
+                "and": 1,
+                "quantit": 1,
                 "show": 1,
                 "me": 1,
                 "a": 1,
-                "bar": 1,
-                "graph": 1,
-                "of": 1,
-                "histogram": 1,
-                "quantit": 1,
-                "nomin": 1,
-                "and": 1
+                "distribut": 1,
+                "data": 1,
+                "for": 1
               },
               "line": {
+                "i": 1,
+                "want": 1,
+                "to": 1,
+                "see": 1,
+                "the": 1,
+                "comparison": 1,
+                "of": 1,
+                "quantit": 1,
+                "over": 1,
+                "time": 1,
                 "show": 1,
                 "me": 1,
-                "a": 1,
-                "line": 1,
-                "graph": 1,
-                "of": 1,
-                "can": 1,
-                "i": 1,
-                "see": 1,
-                "chart": 1,
-                "quantit": 1,
-                "the": 1,
-                "ditribut": 1,
-                "what": 1,
-                "is": 1,
-                "for": 1,
-                "month": 1,
                 "tempor": 1,
+                "temor": 1,
                 "year": 1,
-                "and": 1,
                 "nomin": 1,
-                "over": 1,
-                "time": 1
+                "and": 1
               },
               "scatter": {
                 "show": 1,
                 "me": 1,
-                "a": 1,
-                "scatter": 1,
-                "plot": 1,
+                "the": 1,
+                "relationship": 1,
                 "of": 1,
                 "quantit": 1,
                 "and": 1,
-                "how": 1,
-                "do": 1,
                 "i": 1,
-                "repres": 1,
-                "size": 1,
+                "want": 1,
+                "to": 1,
+                "see": 1,
                 "by": 1,
-                "what": 1,
-                "is": 1,
-                "the": 1,
                 "quantiat": 1
               },
               "pie": {
                 "show": 1,
                 "me": 1,
-                "a": 1,
-                "pie": 1,
-                "chart": 1,
+                "the": 1,
+                "composit": 1,
                 "of": 1,
                 "quantit": 1,
+                "i": 1,
+                "want": 1,
+                "to": 1,
+                "see": 1,
                 "and": 1,
                 "nomin": 1,
-                "the": 1,
-                "percentag": 1,
-                "what": 1,
-                "is": 1,
-                "percent": 1,
-                "doe": 1
+                "percentag": 1
               },
               "marginalHistogram": {
+                "can": 1,
+                "you": 1,
                 "show": 1,
                 "me": 1,
                 "a": 1,
                 "margin": 1,
+                "heat": 1,
+                "map": 1,
+                "i": 1,
+                "want": 1,
+                "to": 1,
+                "see": 1,
+                "the": 1,
+                "distribut": 1,
                 "of": 1,
                 "quantit": 1,
                 "and": 1,
-                "heat": 1,
-                "map": 1,
+                "graph": 1,
                 "with": 1,
+                "extra": 1,
                 "bar": 1,
-                "chart": 1,
                 "on": 1,
-                "the": 1,
-                "side": 1
+                "side": 1,
+                "chart": 1
               },
               "heatmap": {
                 "show": 1,
@@ -627,33 +501,41 @@
                 "of": 1,
                 "quantit": 1,
                 "and": 1,
+                "the": 1,
+                "distribut": 1,
                 "2d": 1,
-                "histogram": 1
+                "heatmap": 1
               },
               "lineArea": {
                 "show": 1,
                 "me": 1,
-                "a": 1,
+                "the": 1,
                 "area": 1,
-                "chart": 1,
-                "of": 1,
+                "under": 1,
+                "curv": 1,
+                "for": 1,
                 "tempor": 1,
                 "quantit": 1,
                 "and": 1,
-                "nomin": 1
+                "temor": 1,
+                "nomin": 1,
+                "over": 1,
+                "time": 1
               },
               "normalizedLineArea": {
                 "show": 1,
                 "me": 1,
                 "a": 1,
-                "chart": 1,
-                "where": 1,
-                "tempor": 1,
+                "normal": 1,
+                "graph": 1,
+                "with": 1,
                 "quantit": 1,
                 "and": 1,
                 "nomin": 1,
-                "normal": 1,
-                "of": 1
+                "over": 1,
+                "time": 1,
+                "of": 1,
+                "tempor": 1
               },
               "stackedBar": {
                 "show": 1,
@@ -688,14 +570,115 @@
                 "trend": 1
               },
               "parallelCoordinates": {
-                "show": 1,
-                "me": 1,
-                "parallel": 1,
-                "coordniat": 1,
-                "for": 1
+                "i": 1,
+                "want": 1,
+                "to": 1,
+                "see": 1,
+                "the": 1,
+                "differ": 1,
+                "of": 1,
+                "nomin": 1,
+                "by": 1,
+                "quantit": 1,
+                "and": 1
               }
             },
             "featuresToIntent": {
+              "i": [
+                "bar",
+                "line",
+                "scatter",
+                "pie",
+                "marginalHistogram",
+                "parallelCoordinates"
+              ],
+              "want": [
+                "bar",
+                "line",
+                "scatter",
+                "pie",
+                "marginalHistogram",
+                "parallelCoordinates"
+              ],
+              "to": [
+                "bar",
+                "line",
+                "scatter",
+                "pie",
+                "marginalHistogram",
+                "parallelCoordinates"
+              ],
+              "see": [
+                "bar",
+                "line",
+                "scatter",
+                "pie",
+                "marginalHistogram",
+                "parallelCoordinates"
+              ],
+              "the": [
+                "bar",
+                "line",
+                "scatter",
+                "pie",
+                "marginalHistogram",
+                "heatmap",
+                "lineArea",
+                "candleStick",
+                "parallelCoordinates"
+              ],
+              "comparison": [
+                "bar",
+                "line"
+              ],
+              "of": [
+                "bar",
+                "line",
+                "scatter",
+                "pie",
+                "marginalHistogram",
+                "heatmap",
+                "normalizedLineArea",
+                "stackedBar",
+                "normalizedStackedBar",
+                "parallelCoordinates"
+              ],
+              "nomin": [
+                "bar",
+                "line",
+                "pie",
+                "lineArea",
+                "normalizedLineArea",
+                "stackedBar",
+                "normalizedStackedBar",
+                "parallelCoordinates"
+              ],
+              "and": [
+                "bar",
+                "line",
+                "scatter",
+                "pie",
+                "marginalHistogram",
+                "heatmap",
+                "lineArea",
+                "normalizedLineArea",
+                "stackedBar",
+                "normalizedStackedBar",
+                "parallelCoordinates"
+              ],
+              "quantit": [
+                "bar",
+                "line",
+                "scatter",
+                "pie",
+                "marginalHistogram",
+                "heatmap",
+                "lineArea",
+                "normalizedLineArea",
+                "stackedBar",
+                "normalizedStackedBar",
+                "parallelCoordinates"
+              ],
               "show": [
                 "bar",
                 "line",
@@ -707,8 +690,7 @@
                 "normalizedLineArea",
                 "stackedBar",
                 "normalizedStackedBar",
-                "candleStick",
-                "parallelCoordinates"
+                "candleStick"
               ],
               "me": [
                 "bar",
@@ -721,126 +703,37 @@
                 "normalizedLineArea",
                 "stackedBar",
                 "normalizedStackedBar",
-                "candleStick",
-                "parallelCoordinates"
+                "candleStick"
               ],
               "a": [
                 "bar",
-                "line",
-                "scatter",
-                "pie",
                 "marginalHistogram",
                 "heatmap",
-                "lineArea",
                 "normalizedLineArea",
                 "stackedBar",
                 "normalizedStackedBar"
               ],
-              "bar": [
+              "distribut": [
                 "bar",
                 "marginalHistogram",
-                "normalizedStackedBar"
-              ],
-              "graph": [
-                "bar",
-                "line"
-              ],
-              "of": [
-                "bar",
-                "line",
-                "scatter",
-                "pie",
-                "marginalHistogram",
-                "heatmap",
-                "lineArea",
-                "normalizedLineArea",
-                "stackedBar",
-                "normalizedStackedBar"
-              ],
-              "histogram": [
-                "bar",
                 "heatmap"
               ],
-              "quantit": [
-                "bar",
-                "line",
-                "scatter",
-                "pie",
-                "marginalHistogram",
-                "heatmap",
-                "lineArea",
-                "normalizedLineArea",
-                "stackedBar",
-                "normalizedStackedBar"
-              ],
-              "nomin": [
-                "bar",
-                "line",
-                "pie",
-                "lineArea",
-                "normalizedLineArea",
-                "stackedBar",
-                "normalizedStackedBar"
-              ],
-              "and": [
-                "bar",
-                "line",
-                "scatter",
-                "pie",
-                "marginalHistogram",
-                "heatmap",
-                "lineArea",
-                "normalizedLineArea",
-                "stackedBar",
-                "normalizedStackedBar"
-              ],
-              "line": [
-                "line"
-              ],
-              "can": [
-                "line"
-              ],
-              "i": [
-                "line",
-                "scatter"
-              ],
-              "see": [
-                "line"
-              ],
-              "chart": [
-                "line",
-                "pie",
-                "marginalHistogram",
-                "lineArea",
-                "normalizedLineArea",
-                "normalizedStackedBar"
-              ],
-              "the": [
-                "line",
-                "scatter",
-                "pie",
-                "marginalHistogram",
-                "candleStick"
-              ],
-              "ditribut": [
-                "line"
-              ],
-              "what": [
-                "line",
-                "scatter",
-                "pie"
-              ],
-              "is": [
-                "line",
-                "scatter",
-                "pie"
+              "data": [
+                "bar"
               ],
               "for": [
-                "line",
-                "parallelCoordinates"
+                "bar",
+                "lineArea"
               ],
-              "month": [
-                "line"
+              "over": [
+                "line",
+                "lineArea",
+                "normalizedLineArea"
+              ],
+              "time": [
+                "line",
+                "lineArea",
+                "normalizedLineArea"
               ],
               "tempor": [
                 "line",
@@ -849,50 +742,34 @@
                 "stackedBar",
                 "normalizedStackedBar"
               ],
+              "temor": [
+                "line",
+                "lineArea"
+              ],
               "year": [
                 "line"
               ],
-              "over": [
-                "line"
-              ],
-              "time": [
-                "line"
-              ],
-              "scatter": [
-                "scatter"
-              ],
-              "plot": [
-                "scatter"
-              ],
-              "how": [
-                "scatter"
-              ],
-              "do": [
-                "scatter"
-              ],
-              "repres": [
-                "scatter"
-              ],
-              "size": [
+              "relationship": [
                 "scatter"
               ],
               "by": [
-                "scatter"
+                "scatter",
+                "parallelCoordinates"
               ],
               "quantiat": [
                 "scatter"
               ],
-              "pie": [
+              "composit": [
                 "pie"
               ],
               "percentag": [
                 "pie"
               ],
-              "percent": [
-                "pie"
+              "can": [
+                "marginalHistogram"
               ],
-              "doe": [
-                "pie"
+              "you": [
+                "marginalHistogram"
               ],
               "margin": [
                 "marginalHistogram"
@@ -905,8 +782,20 @@
                 "marginalHistogram",
                 "heatmap"
               ],
+              "graph": [
+                "marginalHistogram",
+                "normalizedLineArea"
+              ],
               "with": [
+                "marginalHistogram",
+                "normalizedLineArea"
+              ],
+              "extra": [
                 "marginalHistogram"
+              ],
+              "bar": [
+                "marginalHistogram",
+                "normalizedStackedBar"
               ],
               "on": [
                 "marginalHistogram"
@@ -914,14 +803,24 @@
               "side": [
                 "marginalHistogram"
               ],
+              "chart": [
+                "marginalHistogram",
+                "normalizedStackedBar"
+              ],
               "2d": [
+                "heatmap"
+              ],
+              "heatmap": [
                 "heatmap"
               ],
               "area": [
                 "lineArea"
               ],
-              "where": [
-                "normalizedLineArea"
+              "under": [
+                "lineArea"
+              ],
+              "curv": [
+                "lineArea"
               ],
               "normal": [
                 "normalizedLineArea",
@@ -937,10 +836,7 @@
               "trend": [
                 "candleStick"
               ],
-              "parallel": [
-                "parallelCoordinates"
-              ],
-              "coordniat": [
+              "differ": [
                 "parallelCoordinates"
               ]
             },
@@ -957,58 +853,54 @@
                 "log": true
               },
               "features": [
+                "i",
+                "want",
+                "to",
+                "see",
+                "the",
+                "comparison",
+                "of",
+                "nomin",
+                "and",
+                "quantit",
                 "show",
                 "me",
                 "a",
-                "bar",
-                "graph",
-                "of",
-                "histogram",
-                "quantit",
-                "nomin",
-                "and",
-                "line",
-                "can",
-                "i",
-                "see",
-                "chart",
-                "the",
-                "ditribut",
-                "what",
-                "is",
+                "distribut",
+                "data",
                 "for",
-                "month",
-                "tempor",
-                "year",
                 "over",
                 "time",
-                "scatter",
-                "plot",
-                "how",
-                "do",
-                "repres",
-                "size",
+                "tempor",
+                "temor",
+                "year",
+                "relationship",
                 "by",
                 "quantiat",
-                "pie",
+                "composit",
                 "percentag",
-                "percent",
-                "doe",
+                "can",
+                "you",
                 "margin",
                 "heat",
                 "map",
+                "graph",
                 "with",
+                "extra",
+                "bar",
                 "on",
                 "side",
+                "chart",
                 "2d",
+                "heatmap",
                 "area",
-                "where",
+                "under",
+                "curv",
                 "normal",
                 "stack",
                 "stock",
                 "trend",
-                "parallel",
-                "coordniat"
+                "differ"
               ],
               "intents": [
                 "bar",
@@ -1026,664 +918,616 @@
               ],
               "perceptrons": [
                 [
-                  5.569186210632324,
-                  5.569186210632324,
-                  -4.176806926727295,
-                  0.9246500134468079,
-                  8.283700942993164,
-                  -4.508652687072754,
-                  8.053960800170898,
-                  2.3566582202911377,
-                  6.328689098358154,
-                  -6.894731521606445,
-                  -11.709508895874023,
-                  -0.5134114623069763,
-                  -1.1651921272277832,
-                  -0.5134114623069763,
-                  -6.099184036254883,
-                  -8.548150062561035,
-                  -1.7228001356124878,
-                  -2.054126501083374,
-                  -0.09409940242767334,
-                  -4.471043109893799,
-                  -0.40914013981819153,
-                  -5.299487113952637,
-                  -1.8474277257919312,
-                  -7.0953521728515625,
-                  -7.0953521728515625,
-                  -3.0621800422668457,
-                  -3.0621800422668457,
-                  -0.42897650599479675,
-                  -0.42897650599479675,
-                  -0.42897650599479675,
-                  -3.9168930053710938,
-                  -3.9168930053710938,
+                  -0.5320919752120972,
+                  -0.5320919752120972,
+                  -0.5320919752120972,
+                  -0.5320919752120972,
+                  0.14962409436702728,
+                  11.117820739746094,
+                  2.497720718383789,
+                  8.511723518371582,
+                  -1.1243613958358765,
+                  -4.750354290008545,
+                  -0.3739946186542511,
+                  -0.3739946186542511,
+                  -0.6943475008010864,
+                  4.306906223297119,
+                  6.259607791900635,
+                  6.259607791900635,
+                  -4.979511737823486,
+                  -1.520678162574768,
+                  -3.9488296508789062,
+                  -2.085419178009033,
+                  -2.085419178009033,
+                  -1.443076491355896,
+                  -1.7253844738006592,
+                  -0.5500009655952454,
+                  -0.4147161841392517,
+                  -4.357271671295166,
+                  -0.6110331416130066,
+                  -0.6110331416130066,
+                  -0.6110331416130066,
+                  -0.897129476070404,
+                  -0.897129476070404,
+                  -0.5181548595428467,
+                  -0.5181548595428467,
+                  -0.2638808786869049,
+                  -0.2638808786869049,
+                  -0.2638808786869049,
+                  -0.2638808786869049,
                   0,
-                  -2.788067102432251,
-                  -2.4360105991363525,
-                  -1.8659274578094482,
-                  -1.8659274578094482,
-                  -3.5589468479156494,
-                  -0.7382485866546631,
-                  -0.7382485866546631,
-                  -0.7382485866546631,
+                  -0.5875589847564697,
+                  -0.5875589847564697,
                   0,
                   0,
-                  -7.293034553527832,
                   0,
-                  -0.9377739429473877,
-                  -1.210775375366211,
-                  -7.997657299041748,
-                  -1.8502578735351562,
-                  -1.8502578735351562,
-                  -3.8690907955169678,
-                  -3.8690907955169678,
-                  1.1477349788150462
+                  -1.9600706100463867,
+                  -1.3633098602294922,
+                  0,
+                  0,
+                  -1.0284708738327026,
+                  -0.45519251085981494
                 ],
                 [
-                  0.2939348518848419,
-                  0.2939348518848419,
-                  -4.886180400848389,
-                  -2.7243919372558594,
-                  4.362824440002441,
-                  1.3294507265090942,
-                  -0.6150627732276917,
-                  1.0730072259902954,
-                  -0.5188418030738831,
-                  -2.2531230449676514,
-                  12.360949516296387,
-                  2.436370611190796,
-                  0.9882485270500183,
-                  2.436370611190796,
-                  -1.8852225542068481,
-                  4.1017913818359375,
-                  6.995178699493408,
-                  -0.37186557054519653,
-                  0.6059888601303101,
-                  2.142353057861328,
-                  3.714289903640747,
-                  0.8234254717826843,
-                  8.36427116394043,
-                  7.229129314422607,
-                  7.229129314422607,
-                  -4.05164098739624,
-                  -4.05164098739624,
-                  -1.3009569644927979,
-                  -1.3009569644927979,
-                  -1.3009569644927979,
-                  -1.9482834339141846,
-                  -1.9482834339141846,
-                  -7.133917808532715,
-                  -2.8043971061706543,
-                  -4.779068946838379,
-                  -0.9759055376052856,
-                  -0.9759055376052856,
-                  -0.9203975200653076,
-                  -0.44880709052085876,
-                  -0.44880709052085876,
-                  -0.44880709052085876,
-                  -0.44880709052085876,
-                  -0.44880709052085876,
-                  -0.1135454922914505,
-                  -0.8580912351608276,
-                  -0.014947188086807728,
-                  -0.9460263848304749,
-                  -0.6181642413139343,
-                  -2.574174642562866,
-                  -2.574174642562866,
-                  -1.5782424211502075,
-                  -1.5782424211502075,
-                  0.4519626961044884
+                  -0.2465529441833496,
+                  -0.2465529441833496,
+                  -0.2465529441833496,
+                  -0.2465529441833496,
+                  0.3526575565338135,
+                  3.5347728729248047,
+                  4.145439624786377,
+                  -1.591426134109497,
+                  -3.957674503326416,
+                  -0.8584930896759033,
+                  -1.0170010328292847,
+                  -1.0170010328292847,
+                  -0.7087539434432983,
+                  -0.8169733881950378,
+                  0,
+                  -0.3984229564666748,
+                  8.17231273651123,
+                  0.5513546466827393,
+                  1.6092712879180908,
+                  5.118930339813232,
+                  5.565192222595215,
+                  -1.0775011777877808,
+                  -0.8651386499404907,
+                  -0.35647153854370117,
+                  -1.6920570135116577,
+                  -0.7305712103843689,
+                  -0.02648095414042473,
+                  -0.02648095414042473,
+                  -0.02648095414042473,
+                  -0.088572658598423,
+                  -0.088572658598423,
+                  -0.38083919882774353,
+                  -0.4513729214668274,
+                  -0.022536560893058777,
+                  -0.2164260447025299,
+                  -0.08117692172527313,
+                  -0.08117692172527313,
+                  -0.17152898013591766,
+                  0,
+                  0,
+                  -0.3984229564666748,
+                  -0.3984229564666748,
+                  -0.3984229564666748,
+                  -0.52669757604599,
+                  -0.11012724041938782,
+                  0,
+                  0,
+                  0,
+                  -0.6316811784540871
                 ],
                 [
-                  -0.03558671846985817,
-                  -0.03558671846985817,
-                  -1.801430583000183,
-                  -0.2896222770214081,
+                  0.7192164659500122,
+                  0.7192164659500122,
+                  0.7192164659500122,
+                  0.7192164659500122,
+                  -3.321795701980591,
+                  -1.0581538677215576,
+                  -1.9110594987869263,
+                  -5.190727710723877,
+                  0.06994903087615967,
+                  4.469140529632568,
+                  1.450468897819519,
+                  1.450468897819519,
+                  -3.3026397228240967,
+                  -3.3096764087677,
                   0,
-                  -1.609121561050415,
-                  -0.9963739514350891,
-                  0.22153523564338684,
-                  -4.856579303741455,
-                  -0.10584705322980881,
-                  -0.2054501622915268,
-                  -0.2054501622915268,
-                  2.717867851257324,
-                  -0.2054501622915268,
-                  -3.530224561691284,
-                  -0.7353705763816833,
-                  -5.504488468170166,
-                  2.288414478302002,
-                  2.8072807788848877,
-                  -0.9507151246070862,
-                  -0.1922614425420761,
-                  -0.6499629616737366,
-                  -0.42860791087150574,
+                  -0.8327335715293884,
+                  -1.1208181381225586,
+                  -0.8800036311149597,
+                  -1.0733104944229126,
+                  -0.8327335715293884,
                   0,
+                  10.657999038696289,
+                  5.37611198425293,
+                  0.6640912890434265,
+                  -3.2883265018463135,
+                  -0.24589988589286804,
+                  -0.3446715474128723,
+                  -0.3446715474128723,
+                  -0.3446715474128723,
+                  -1.679533839225769,
+                  -1.679533839225769,
+                  -0.07831975817680359,
+                  -0.07831975817680359,
+                  -0.01783733442425728,
+                  -0.01783733442425728,
+                  -0.01783733442425728,
+                  -0.01783733442425728,
                   0,
-                  7.570533275604248,
-                  7.570533275604248,
-                  2.98654842376709,
-                  2.98654842376709,
-                  2.98654842376709,
-                  5.864877223968506,
-                  5.864877223968506,
-                  8.814448356628418,
-                  -2.6318624019622803,
-                  -2.3993961811065674,
-                  -0.40582409501075745,
-                  -0.40582409501075745,
-                  -2.5670740604400635,
-                  -1.5446363687515259,
-                  -1.5446363687515259,
-                  -0.2896222770214081,
-                  0,
-                  0,
-                  -0.634091317653656,
-                  0,
-                  0,
-                  0,
-                  -0.6087901592254639,
-                  -0.8370803594589233,
-                  -0.8370803594589233,
-                  -0.730532705783844,
-                  -0.730532705783844,
-                  2.4860094965201327
+                  -0.6067144274711609,
+                  -0.6067144274711609,
+                  -0.8327335715293884,
+                  -0.8327335715293884,
+                  -0.8327335715293884,
+                  -0.044874757528305054,
+                  -0.8883490562438965,
+                  -0.34286561608314514,
+                  -0.34286561608314514,
+                  -3.3757736682891846,
+                  1.0804927274085447
                 ],
                 [
-                  -0.6491419076919556,
-                  -0.6491419076919556,
-                  -2.3988277912139893,
-                  -2.2666916847229004,
-                  -2.0835955142974854,
-                  4.516425609588623,
-                  -0.32554033398628235,
-                  -3.1677167415618896,
-                  4.811779022216797,
-                  -1.5698875188827515,
-                  -0.7607187032699585,
-                  -0.7607187032699585,
-                  -0.7607187032699585,
-                  -0.7607187032699585,
-                  3.4185497760772705,
-                  2.276423454284668,
-                  -2.192601203918457,
-                  1.138970136642456,
-                  -2.424257755279541,
+                  0.7663161158561707,
+                  0.7663161158561707,
+                  0.7663161158561707,
+                  0.7663161158561707,
+                  4.772555828094482,
+                  -9.08753776550293,
+                  -4.0289306640625,
+                  4.3467583656311035,
+                  -2.825164794921875,
+                  3.9699347019195557,
+                  -0.1591596156358719,
+                  -0.1591596156358719,
+                  -2.1730682849884033,
+                  -5.124075889587402,
+                  -4.592764377593994,
+                  -5.338232517242432,
+                  -5.127362251281738,
+                  -5.03285026550293,
+                  -1.6105409860610962,
+                  -0.8383424282073975,
+                  -0.09287728369235992,
+                  -1.6563262939453125,
+                  -6.780489921569824,
+                  0,
+                  9.470669746398926,
+                  8.154582977294922,
+                  -0.09017882496118546,
+                  -0.09017882496118546,
+                  -0.09017882496118546,
+                  -0.7221827507019043,
+                  -0.7221827507019043,
+                  -0.4007824957370758,
+                  -0.8311272263526917,
+                  -0.2144143134355545,
+                  -0.5872448682785034,
+                  -0.5872448682785034,
+                  -0.5872448682785034,
+                  -0.2247580736875534,
                   0,
                   0,
-                  -4.567056179046631,
-                  -1.3408533334732056,
-                  -0.09534230828285217,
-                  -0.09534230828285217,
-                  -0.3337157070636749,
-                  -0.3337157070636749,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  -2.1891558170318604,
-                  10.14478874206543,
-                  8.846725463867188,
-                  3.5629851818084717,
-                  3.5629851818084717,
-                  -1.6758252382278442,
-                  -1.3346606492996216,
-                  -1.3346606492996216,
-                  -1.0373437404632568,
-                  -0.31745633482933044,
-                  -0.31745633482933044,
-                  -0.32554033398628235,
-                  -4.087281227111816,
-                  -0.20562760531902313,
-                  -1.0672773122787476,
-                  -0.7600259184837341,
-                  -0.41411855816841125,
-                  -0.41411855816841125,
-                  0,
-                  0,
-                  -0.14456420320944985
+                  -0.6159270405769348,
+                  -0.6159270405769348,
+                  -0.6159270405769348,
+                  -0.6441216468811035,
+                  -0.34960731863975525,
+                  -2.3645763397216797,
+                  -2.3645763397216797,
+                  -4.1017255783081055,
+                  0.30739901470122827
                 ],
                 [
-                  -0.05813342332839966,
-                  -0.05813342332839966,
-                  0.15690064430236816,
-                  3.3570806980133057,
-                  -3.364995241165161,
-                  0.3955637216567993,
-                  -1.8978371620178223,
-                  -0.38567015528678894,
-                  -2.1017909049987793,
-                  0.45511072874069214,
-                  -0.4956358075141907,
-                  -0.4956358075141907,
-                  -0.6088364124298096,
-                  -0.4956358075141907,
-                  1.457342267036438,
-                  -0.3705911338329315,
-                  -0.2572226822376251,
-                  -0.12981285154819489,
-                  -0.12981285154819489,
-                  -0.04858485609292984,
+                  2.1355419158935547,
+                  2.1355419158935547,
+                  2.1355419158935547,
+                  2.1355419158935547,
+                  2.4103846549987793,
+                  -2.815213441848755,
+                  1.1392062902450562,
+                  -5.98714017868042,
+                  -0.09054220467805862,
+                  -4.476369380950928,
+                  -2.786738395690918,
+                  -2.786738395690918,
+                  2.8741648197174072,
+                  6.978858470916748,
                   0,
-                  -1.3985228538513184,
-                  -0.014720473438501358,
+                  -0.324771523475647,
+                  -2.227644920349121,
+                  -2.227644920349121,
+                  -0.324771523475647,
+                  -0.324771523475647,
                   0,
                   0,
-                  -0.504438042640686,
-                  -0.504438042640686,
-                  -0.09812463074922562,
-                  -0.09812463074922562,
-                  -0.09812463074922562,
-                  -0.25696608424186707,
-                  -0.25696608424186707,
-                  -0.030768848955631256,
-                  -1.462051510810852,
+                  -3.7051756381988525,
                   0,
                   0,
                   0,
-                  14.223508834838867,
-                  -0.09485664963722229,
-                  -0.09485664963722229,
-                  9.561062812805176,
-                  0.19144009053707123,
-                  0.19144009053707123,
-                  -1.8978371620178223,
-                  -2.66474986076355,
-                  -0.5349345803260803,
-                  -2.784524440765381,
-                  -2.784524440765381,
-                  -0.20486006140708923,
-                  -0.20486006140708923,
-                  -0.04858485609292984,
-                  -0.04858485609292984,
-                  -0.41530154755858395
+                  3.9231886863708496,
+                  3.9231886863708496,
+                  3.9231886863708496,
+                  2.7651400566101074,
+                  2.7651400566101074,
+                  1.3291875123977661,
+                  2.988823413848877,
+                  1.60398268699646,
+                  2.438816547393799,
+                  3.2636189460754395,
+                  3.2636189460754395,
+                  0.8338484168052673,
+                  -0.3362170159816742,
+                  -0.3362170159816742,
+                  -0.324771523475647,
+                  -0.324771523475647,
+                  -0.324771523475647,
+                  -1.0666956901550293,
+                  -0.8168092370033264,
+                  -0.19704334437847137,
+                  -0.19704334437847137,
+                  -0.8825549483299255,
+                  -0.32497123535688294
                 ],
                 [
-                  -1.2644370794296265,
-                  -1.2644370794296265,
-                  0.08911629766225815,
-                  -4.407922267913818,
-                  -1.0267454385757446,
-                  0.5978233814239502,
-                  3.4298160076141357,
-                  -0.32492220401763916,
-                  -3.8413450717926025,
-                  5.523526668548584,
-                  -0.013992407359182835,
+                  -2.9120290279388428,
+                  -2.9120290279388428,
+                  -2.9120290279388428,
+                  -2.9120290279388428,
+                  -3.2378532886505127,
+                  -2.4120614528656006,
+                  1.596269130706787,
+                  -8.088037490844727,
+                  4.329872131347656,
+                  1.5143964290618896,
+                  1.1696405410766602,
+                  1.1696405410766602,
+                  1.1082134246826172,
+                  8.39184284210205,
                   0,
-                  -0.9842936396598816,
+                  -0.7204340696334839,
+                  -1.4111897945404053,
+                  -1.3547595739364624,
+                  -2.254457712173462,
+                  -0.7204340696334839,
                   0,
-                  -6.344305515289307,
-                  -1.1225860118865967,
-                  -0.46560919284820557,
-                  -0.2404523640871048,
-                  -0.2404523640871048,
-                  -0.06523232161998749,
+                  -5.52492618560791,
+                  -1.4642720222473145,
+                  -1.4642720222473145,
+                  -1.303012490272522,
                   0,
-                  -3.253422975540161,
-                  -0.0716547816991806,
+                  -2.475557804107666,
+                  -2.475557804107666,
+                  -2.475557804107666,
+                  2.1850852966308594,
+                  2.1850852966308594,
+                  -0.3854142427444458,
+                  -2.298035144805908,
                   0,
+                  -2.6104748249053955,
+                  -1.842577576637268,
+                  -1.842577576637268,
+                  -2.6104748249053955,
+                  5.849181652069092,
+                  5.849181652069092,
+                  -0.7204340696334839,
+                  -0.7204340696334839,
+                  -0.7204340696334839,
+                  -2.1292130947113037,
+                  -3.1076467037200928,
+                  -0.9467850923538208,
+                  -0.9467850923538208,
                   0,
-                  -1.4855464696884155,
-                  -1.4855464696884155,
-                  -0.9842936396598816,
-                  -0.9842936396598816,
-                  -0.9842936396598816,
-                  -0.7041416168212891,
-                  -0.7041416168212891,
-                  -0.01159433089196682,
-                  0,
-                  0,
-                  0,
-                  0,
-                  -2.10453462600708,
-                  6.095272541046143,
-                  6.095272541046143,
-                  -3.5725207328796387,
-                  -0.3462199568748474,
-                  -0.3462199568748474,
-                  8.759246826171875,
-                  -1.6778206825256348,
-                  -0.4250131845474243,
-                  -0.74117511510849,
-                  -0.7155976295471191,
-                  -0.07480116933584213,
-                  -0.07480116933584213,
-                  -0.06523232161998749,
-                  -0.06523232161998749,
-                  -1.2611211059114065
+                  -0.8702965072289771
                 ],
                 [
-                  -0.30851438641548157,
-                  -0.30851438641548157,
-                  -0.526987612247467,
-                  -1.5908793210983276,
-                  -0.7667006254196167,
-                  1.5764808654785156,
-                  -0.34164291620254517,
-                  -1.3829318284988403,
-                  0.3812180459499359,
-                  0.08579768240451813,
-                  -1.0760948657989502,
-                  -0.7954955697059631,
-                  -0.7954955697059631,
-                  -0.7954955697059631,
-                  3.5084598064422607,
-                  -0.5288282632827759,
-                  -0.07579300552606583,
-                  -0.04323452338576317,
-                  -0.016003986820578575,
-                  -0.17985281348228455,
-                  -0.0511917881667614,
-                  0.9166372418403625,
-                  -0.1971367597579956,
+                  -1.2344824075698853,
+                  -1.2344824075698853,
+                  -1.2344824075698853,
+                  -1.2344824075698853,
+                  2.6659109592437744,
+                  -1.7125848531723022,
+                  -5.8241472244262695,
+                  -0.8405497074127197,
+                  2.28912091255188,
+                  0.6835132241249084,
+                  0.17182569205760956,
+                  0.17182569205760956,
+                  -3.660472869873047,
+                  -0.22159136831760406,
+                  -3.7012739181518555,
+                  -0.9014502167701721,
+                  3.2148804664611816,
+                  6.445147514343262,
+                  0.9360787272453308,
+                  0.4042796194553375,
+                  -2.395571231842041,
                   0,
-                  0,
-                  -0.28073835372924805,
-                  -0.28073835372924805,
+                  -0.4239324629306793,
+                  -0.06801038980484009,
                   0,
                   0,
                   0,
                   0,
                   0,
                   0,
-                  -3.329651117324829,
                   0,
-                  -0.018720127642154694,
-                  -0.018720127642154694,
+                  -2.4510905742645264,
+                  -2.4510905742645264,
                   0,
-                  -0.19706690311431885,
-                  -0.19706690311431885,
-                  -0.19706690311431885,
+                  -0.012080585584044456,
                   0,
                   0,
+                  -0.012080585584044456,
                   0,
-                  10.954948425292969,
-                  -2.0484564304351807,
-                  -2.20802903175354,
-                  -2.1914539337158203,
-                  -0.11661312729120255,
-                  -0.11661312729120255,
-                  -0.09349561482667923,
-                  -0.09349561482667923,
-                  -0.6107437672276156
+                  0,
+                  2.8003530502319336,
+                  2.8003530502319336,
+                  2.8003530502319336,
+                  -3.0364110469818115,
+                  -0.5474481582641602,
+                  -1.2380014657974243,
+                  -1.2380014657974243,
+                  -0.2726886570453644,
+                  -0.5314676134730183
                 ],
                 [
-                  -0.7074342966079712,
-                  -0.7074342966079712,
-                  4.752906322479248,
-                  -4.836092948913574,
-                  -1.7016024589538574,
-                  -3.037818431854248,
-                  -0.6538856625556946,
-                  -0.36941927671432495,
-                  0.9891467690467834,
-                  0.656592845916748,
-                  -0.25669729709625244,
-                  -0.25669729709625244,
-                  -0.2802281677722931,
-                  -0.25669729709625244,
-                  -2.0980353355407715,
-                  -1.0062909126281738,
+                  -0.3703436553478241,
+                  -0.3703436553478241,
+                  -0.3703436553478241,
+                  -0.3703436553478241,
+                  -2.802757740020752,
+                  -2.4598162174224854,
+                  -0.0016287515172734857,
+                  1.1444765329360962,
+                  0.6234771609306335,
+                  0.6220102906227112,
+                  -0.5309250950813293,
+                  -0.5309250950813293,
+                  1.6204890012741089,
                   0,
-                  -0.014726538211107254,
-                  -0.014726538211107254,
-                  -0.07637318968772888,
-                  -0.024691440165042877,
-                  5.2411322593688965,
-                  -0.8754133582115173,
-                  -2.2868881225585938,
-                  -2.2868881225585938,
-                  -0.03020372986793518,
-                  -0.03020372986793518,
-                  -0.015413124114274979,
-                  -0.015413124114274979,
-                  -0.015413124114274979,
+                  -0.38930413126945496,
+                  -0.5025997161865234,
+                  0.3042343258857727,
+                  0.6103368401527405,
+                  4.065288543701172,
+                  -0.3442639410495758,
+                  -0.25921937823295593,
+                  0,
+                  -0.31915315985679626,
+                  -0.0008523209835402668,
                   0,
                   0,
-                  0,
-                  -0.25334611535072327,
-                  -0.014726538211107254,
-                  0,
-                  0,
-                  -0.058570683002471924,
-                  -0.029296109452843666,
-                  -0.029296109452843666,
-                  0,
-                  0,
-                  0,
-                  0,
-                  -4.190768241882324,
-                  7.057075500488281,
-                  7.996685028076172,
-                  -7.351388454437256,
-                  -0.04836704209446907,
-                  -0.04836704209446907,
-                  -0.034505896270275116,
-                  -0.034505896270275116,
-                  -0.5287740986047609
+                  -0.13174764811992645,
+                  -0.13174764811992645,
+                  -0.13174764811992645,
+                  -0.6591616272926331,
+                  -0.6591616272926331,
+                  1.6026362180709839,
+                  1.6026362180709839,
+                  -0.1642702966928482,
+                  -3.976194143295288,
+                  -0.1642702966928482,
+                  -0.1642702966928482,
+                  -3.750101089477539,
+                  -0.06350331008434296,
+                  -0.06350331008434296,
+                  -0.03816194832324982,
+                  -0.03816194832324982,
+                  -0.03816194832324982,
+                  7.712143898010254,
+                  -6.515146255493164,
+                  -0.08264981210231781,
+                  -0.08264981210231781,
+                  -0.26095977425575256,
+                  -0.47912764032014404
                 ],
                 [
-                  0.1174025610089302,
-                  0.1174025610089302,
-                  3.4579806327819824,
-                  -4.974201202392578,
-                  -2.0660018920898438,
-                  -2.1270790100097656,
-                  -1.3370850086212158,
-                  -1.315208911895752,
-                  0.4698318541049957,
-                  0.1190013661980629,
-                  -0.2923940420150757,
+                  -0.21366669237613678,
+                  -0.21366669237613678,
+                  -0.21366669237613678,
+                  -0.21366669237613678,
+                  -1.6331123113632202,
+                  -2.3938779830932617,
+                  -1.2266067266464233,
+                  0.025197917595505714,
+                  -0.47017961740493774,
+                  -1.0029640197753906,
+                  0.9668028950691223,
+                  0.9668028950691223,
+                  2.805121421813965,
+                  -0.09904678165912628,
+                  -0.19932512938976288,
+                  -0.5508468151092529,
+                  -0.0033375127241015434,
                   0,
-                  -0.008054926991462708,
-                  0,
-                  -5.0585432052612305,
-                  -0.7449105978012085,
-                  0,
-                  -0.008554843254387379,
-                  -0.008554843254387379,
-                  -0.4655858874320984,
-                  -0.037267737090587616,
-                  2.853102207183838,
-                  -0.3083834648132324,
-                  -1.2031877040863037,
-                  -1.2031877040863037,
-                  -0.9760478734970093,
-                  -0.9760478734970093,
-                  -0.008054926991462708,
-                  -0.008054926991462708,
-                  -0.008054926991462708,
+                  2.6607837677001953,
+                  -0.31536781787872314,
                   0,
                   0,
+                  -0.7357107400894165,
+                  -0.5270510911941528,
                   0,
                   0,
-                  -0.008554843254387379,
-                  0,
-                  0,
-                  -1.6171972751617432,
-                  -0.20719021558761597,
-                  -0.20719021558761597,
+                  -0.894411027431488,
+                  -0.894411027431488,
+                  -0.894411027431488,
+                  -1.1963404417037964,
+                  -1.1963404417037964,
                   0,
                   0,
                   0,
+                  -4.620438098907471,
                   0,
                   0,
-                  -0.8058469891548157,
-                  -4.252691745758057,
-                  10.548171043395996,
-                  -0.33597031235694885,
-                  -0.33597031235694885,
-                  -0.4079640507698059,
-                  -0.4079640507698059,
-                  0.044917721802630484
+                  -4.620438098907471,
+                  -2.535386562347412,
+                  -2.535386562347412,
+                  -0.31536781787872314,
+                  -0.31536781787872314,
+                  -0.31536781787872314,
+                  -5.038496017456055,
+                  9.231034278869629,
+                  -0.5814628005027771,
+                  -0.5814628005027771,
+                  -0.10433299094438553,
+                  0.3220468109227628
                 ],
                 [
-                  -1.663455605506897,
-                  -1.663455605506897,
-                  -1.3216923475265503,
-                  4.208639144897461,
-                  -2.2278103828430176,
-                  0.044714830815792084,
-                  -0.5022990107536316,
-                  -1.5862886905670166,
-                  0.1832948923110962,
-                  -0.4435371160507202,
-                  -0.3848422169685364,
-                  -0.3848422169685364,
-                  -0.38913267850875854,
-                  -0.3848422169685364,
-                  4.566093444824219,
-                  -0.4619874954223633,
-                  0,
-                  -0.0037331299390643835,
-                  -0.0037331299390643835,
-                  -0.28316012024879456,
-                  -0.020773133262991905,
-                  1.8444914817810059,
-                  -0.09483644366264343,
-                  -0.048172205686569214,
-                  -0.048172205686569214,
-                  -0.005978529807180166,
-                  -0.005978529807180166,
-                  -0.001586259575560689,
-                  -0.001586259575560689,
-                  -0.001586259575560689,
+                  -0.2974012792110443,
+                  -0.2974012792110443,
+                  -0.2974012792110443,
+                  -0.2974012792110443,
+                  -2.0973258018493652,
+                  -0.9938024878501892,
+                  0.7175009846687317,
+                  -0.2487984299659729,
+                  -0.5209783911705017,
+                  -0.7904847860336304,
+                  -1.4464571475982666,
+                  -1.4464571475982666,
+                  -0.45369869470596313,
+                  -0.1954915076494217,
+                  -0.11386755108833313,
+                  -0.11386755108833313,
+                  -0.3328336477279663,
+                  -0.11538723111152649,
+                  1.4783649444580078,
+                  -0.030444294214248657,
+                  -0.030444294214248657,
+                  -0.01490670908242464,
+                  -0.2639714181423187,
+                  -0.05384780839085579,
                   0,
                   0,
+                  -0.14691300690174103,
+                  -0.14691300690174103,
+                  -0.14691300690174103,
+                  -0.7532914280891418,
+                  -0.7532914280891418,
+                  -0.3260238468647003,
+                  -0.9108491539955139,
+                  -0.12703795731067657,
+                  5.147977828979492,
+                  -0.7219991087913513,
+                  -0.7219991087913513,
+                  5.381620407104492,
+                  -0.09803412109613419,
+                  -0.09803412109613419,
                   0,
-                  -0.6763735413551331,
-                  -0.0037331299390643835,
                   0,
                   0,
-                  0,
-                  -0.5043633580207825,
-                  -0.5043633580207825,
-                  -0.5043633580207825,
-                  -0.04838954284787178,
-                  -0.04838954284787178,
-                  0,
-                  -0.43409913778305054,
-                  -0.19541911780834198,
-                  5.682422161102295,
-                  5.508961200714111,
-                  -0.16461673378944397,
-                  -0.16461673378944397,
-                  -0.20683440566062927,
-                  -0.20683440566062927,
-                  -1.0754287612903894
+                  3.697890043258667,
+                  3.690671920776367,
+                  -0.13584980368614197,
+                  -0.13584980368614197,
+                  -0.12007063627243042,
+                  -0.9598148019356607
                 ],
                 [
-                  0.7978343963623047,
-                  0.7978343963623047,
-                  -1.3099737167358398,
-                  -0.3057008385658264,
-                  -0.394003689289093,
-                  -2.050060749053955,
-                  -0.14274372160434723,
-                  -2.1611459255218506,
-                  -0.5469269752502441,
-                  -0.7163861989974976,
-                  -0.03848946467041969,
+                  -0.10977833718061447,
+                  -0.10977833718061447,
+                  -0.10977833718061447,
+                  -0.10977833718061447,
+                  2.1168694496154785,
+                  -0.4686477482318878,
+                  -1.9900490045547485,
+                  -1.4381563663482666,
+                  -0.9262357950210571,
+                  -1.9126369953155518,
+                  0.8788585066795349,
+                  0.8788585066795349,
+                  -1.6819552183151245,
+                  -0.8091922998428345,
+                  -0.3071579933166504,
+                  -0.47258493304252625,
+                  -0.3198084533214569,
                   0,
+                  -0.4701017737388611,
+                  -0.14475442469120026,
+                  -0.009277606382966042,
+                  -0.13861574232578278,
+                  -0.326738178730011,
+                  -0.23706352710723877,
+                  -0.3719547986984253,
                   0,
+                  -0.22854526340961456,
+                  -0.22854526340961456,
+                  -0.22854526340961456,
+                  -0.22854526340961456,
+                  -0.22854526340961456,
+                  -0.48720088601112366,
+                  -0.48720088601112366,
+                  -0.48720088601112366,
+                  -0.48720088601112366,
+                  -0.48720088601112366,
+                  -0.48720088601112366,
                   0,
+                  -0.3292391300201416,
+                  -0.3292391300201416,
+                  -0.12690165638923645,
+                  -0.12690165638923645,
+                  -0.12690165638923645,
                   0,
-                  3.147496461868286,
-                  -0.9351738691329956,
-                  -0.004008738324046135,
-                  -0.004008738324046135,
-                  -0.9209394454956055,
-                  -0.27191731333732605,
-                  -0.4602188766002655,
-                  -0.1541355699300766,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  -0.01055479608476162,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  -0.6827765703201294,
-                  4.573493003845215,
-                  4.573493003845215,
-                  -0.6117784976959229,
-                  -0.6117784976959229,
-                  0.3955630166818323
+                  -0.4333619773387909,
+                  5.0276923179626465,
+                  5.0276923179626465,
+                  -0.046923115849494934,
+                  0.3557432548405538
                 ],
                 [
-                  0.8925209641456604,
-                  0.8925209641456604,
-                  -1.528484582901001,
-                  -0.3109287619590759,
-                  -0.4366030991077423,
-                  -1.5615012645721436,
-                  -0.15634669363498688,
-                  -1.7043964862823486,
-                  -0.6138235330581665,
-                  -0.7180342674255371,
-                  -0.05700961872935295,
+                  -0.37523630261421204,
+                  -0.37523630261421204,
+                  -0.37523630261421204,
+                  -0.37523630261421204,
+                  0.9327400326728821,
+                  -2.7149806022644043,
+                  2.6971588134765625,
+                  1.797531008720398,
+                  1.6283905506134033,
+                  -1.7772661447525024,
+                  -1.7865540981292725,
+                  -1.7865540981292725,
+                  -0.17536528408527374,
+                  -0.8980501890182495,
+                  -0.20752586424350739,
+                  -0.20752586424350739,
+                  -0.7764649987220764,
+                  -0.43648847937583923,
+                  0,
+                  -0.23287075757980347,
+                  -0.23287075757980347,
+                  -0.031153257936239243,
+                  4.363144874572754,
                   0,
                   0,
-                  0,
-                  -0.030027681961655617,
-                  -1.2764559984207153,
-                  -0.05526385083794594,
-                  0,
-                  0,
-                  3.5622851848602295,
-                  -0.6670685410499573,
-                  -0.6670685410499573,
-                  0,
-                  -0.003362852381542325,
-                  -0.003362852381542325,
-                  -0.06371486186981201,
-                  -0.06371486186981201,
-                  0,
-                  0,
-                  0,
-                  -0.0704462006688118,
-                  -0.0704462006688118,
-                  0,
-                  -0.02219940908253193,
-                  0,
-                  0,
-                  0,
-                  -0.010500025935471058,
+                  -0.6224568486213684,
                   0,
                   0,
                   0,
                   0,
                   0,
                   0,
-                  -0.0012780138058587909,
                   0,
                   0,
-                  -0.7104873657226562,
-                  -0.5108556151390076,
-                  -0.5108556151390076,
-                  4.246063232421875,
-                  4.246063232421875,
-                  0.4462606777451698
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  7.223819732666016,
+                  -1.0809342805317919
                 ]
               ]
             }
@@ -1695,107 +1539,51 @@
     "extraSentences": [
       [
         "en",
-        "show me a bar graph of "
+        "I want to see the comparison of nominal and quantitative"
       ],
       [
         "en",
-        "show me a histogram of quantitative"
+        "show me a a comparison of nominal and quantitative"
       ],
       [
         "en",
-        "show me a bar graph of nominal and quantitative"
+        "show me the distribution of nominal"
       ],
       [
         "en",
-        "show me a bar graph of nominal nominal nominal and quantitative"
+        "show me the data for nominal nominal and quantitative"
       ],
       [
         "en",
-        "show me a bar graph of quantitative nominal nominal and nominal"
+        "I want to see the comparison of quantitative over time"
       ],
       [
         "en",
-        "show me a graph of nominal nominal and quantitative"
+        "show me the comparison of quantitative over temporal"
       ],
       [
         "en",
-        "show me quantitative and nominal"
+        "Show me the temoral over the years of nominal and quantitative"
       ],
       [
         "en",
-        "show me quantitative nominal and nominal"
+        "Show me the relationship of quantitative and quantitative"
       ],
       [
         "en",
-        "show me quantitative nominal nominal and nominal"
+        "I want to see quantitative by quantitative"
       ],
       [
         "en",
-        "show me a line graph of "
+        "show me quantiative by quantitative"
       ],
       [
         "en",
-        "can i see a line chart of quantitative "
+        "show me the composition of quantitative"
       ],
       [
         "en",
-        "show me the ditribution of quantitative"
-      ],
-      [
-        "en",
-        "what is the ditribution of quantitative"
-      ],
-      [
-        "en",
-        "for the months of temporal show me quantitative"
-      ],
-      [
-        "en",
-        "show me the years of temporal and quantitative"
-      ],
-      [
-        "en",
-        "show me quantitative and nominal over time"
-      ],
-      [
-        "en",
-        "show me the years of temporal nominal and quantitative"
-      ],
-      [
-        "en",
-        "show me quantitative nominal and temporal over time"
-      ],
-      [
-        "en",
-        "show me a scatter plot of "
-      ],
-      [
-        "en",
-        "show me a scatter plot of quantitative and quantitative"
-      ],
-      [
-        "en",
-        "show me a scatter plot of quantitative quantitative quantitative"
-      ],
-      [
-        "en",
-        "how do i represent quantitative quantitative and quantitative"
-      ],
-      [
-        "en",
-        "show me quantitative and quantitative sized by quantitative"
-      ],
-      [
-        "en",
-        "what is the quantiative of quantitative"
-      ],
-      [
-        "en",
-        "show me a pie chart of "
-      ],
-      [
-        "en",
-        "show me a pie chart of quantitative and nominal"
+        "I want to see the quantitative and nominal"
       ],
       [
         "en",
@@ -1803,23 +1591,15 @@
       ],
       [
         "en",
-        "what is the percentage of nominal and quantitative"
+        "can you show me a marginal heat map"
       ],
       [
         "en",
-        "what percent of nominal does quantitative"
+        "I want to see the distribution of quantitative and quantitative"
       ],
       [
         "en",
-        "show me a marginal of"
-      ],
-      [
-        "en",
-        "show me a marginal of quantitative and quantitative"
-      ],
-      [
-        "en",
-        "show me a heat map of quantitative and quantitative with bar charts"
+        "show me a graph with extra bars on the side"
       ],
       [
         "en",
@@ -1831,23 +1611,23 @@
       ],
       [
         "en",
-        "show me a heat map of quantitative and quantitative"
+        "show me the distribution of quantitative and quantitative"
       ],
       [
         "en",
-        "show me a 2D histogram of quantitative and quantitative"
+        "show me a 2D heatmap"
       ],
       [
         "en",
-        "show me a area chart of "
+        "Show me the area under the curve for temporal quantitative and temoral"
       ],
       [
         "en",
-        "show me a area chart of temporal quantitative and nominal"
+        "show me the quantitative and nominal over time"
       ],
       [
         "en",
-        "show me a chart where temporal quantitative and nominal"
+        "show me a normalized graph with quantitative and nominal over time"
       ],
       [
         "en",
@@ -1875,7 +1655,7 @@
       ],
       [
         "en",
-        "show me parallel coordniates for"
+        "I want to see the difference of nominal by quantitative quantitative and quantitative"
       ]
     ]
   },

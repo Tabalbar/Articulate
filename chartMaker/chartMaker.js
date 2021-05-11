@@ -124,6 +124,8 @@ module.exports = {
                             }
                         }
                     } else if (extractedHeaders.length === 3) {
+                        console.log('here')
+                        console.log(extractedHeaders)
                         chartObj.charts = {
                             data: { table: data },
                             spec: {
@@ -138,19 +140,19 @@ module.exports = {
                                         field: extractedHeaders[1], type: "nominal", spacing: 0
                                     },
                                     y: {
-                                        field: extractedHeaders[0],
+                                        field: extractedHeaders[2],
                                         type: "quantitative",
-                                        title: extractedHeaders[0],
+                                        title: extractedHeaders[2],
                                         exis: { grid: false }
                                     },
                                     x: {
-                                        field: extractedHeaders[2],
+                                        field: extractedHeaders[0],
                                         type: "nominal",
                                         axis: { title: "" }
                                     },
                                     color: {
-                                        field: extractedHeaders[2],
-                                        scale: { range: createRandomColors(extractedHeaders[2], data) }
+                                        field: extractedHeaders[0],
+                                        scale: { range: createRandomColors(extractedHeaders[0], data) }
                                     }
                                 },
                                 data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array

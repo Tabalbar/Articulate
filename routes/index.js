@@ -5,59 +5,43 @@ const { NlpManager } = require('node-nlp');
 const manager = new NlpManager({ languages: ['en'], forceNER: true });
 
 
-manager.addDocument('en', 'show me a bar graph of ', 'bar');
-manager.addDocument('en', 'show me a histogram of quantitative', 'bar');
-manager.addDocument('en', 'show me a bar graph of nominal and quantitative', 'bar');
-manager.addDocument('en', 'show me a bar graph of nominal nominal nominal and quantitative', 'bar');
-manager.addDocument('en', 'show me a bar graph of quantitative nominal nominal and nominal', 'bar');
-manager.addDocument('en', 'show me a graph of nominal nominal and quantitative', 'bar');
-manager.addDocument('en', 'show me quantitative and nominal', 'bar');
-manager.addDocument('en', 'show me quantitative nominal and nominal', 'bar');
-manager.addDocument('en', 'show me quantitative nominal nominal and nominal', 'bar');
+manager.addDocument('en', 'I want to see the comparison of nominal and quantitative', 'bar');
+manager.addDocument('en', 'show me a a comparison of nominal and quantitative', 'bar');
+manager.addDocument('en', 'show me the distribution of nominal', 'bar');
+manager.addDocument('en', 'show me the data for nominal nominal and quantitative', 'bar');
 manager.addAnswer('en', 'bar', 'bar');
 
-manager.addDocument('en', 'show me a line graph of ', 'line');
-manager.addDocument('en', 'can i see a line chart of quantitative ', 'line');
-manager.addDocument('en', 'show me the ditribution of quantitative', 'line');
-manager.addDocument('en', 'what is the ditribution of quantitative', 'line');
-manager.addDocument('en', 'for the months of temporal show me quantitative', 'line');
-manager.addDocument('en', 'show me the years of temporal and quantitative', 'line');
-manager.addDocument('en', 'show me quantitative and nominal over time', 'line');
-manager.addDocument('en', 'show me the years of temporal nominal and quantitative', 'line');
-manager.addDocument('en', 'show me quantitative nominal and temporal over time', 'line');
+manager.addDocument('en', 'I want to see the comparison of quantitative over time', 'line');
+manager.addDocument('en', 'show me the comparison of quantitative over temporal', 'line');
+manager.addDocument('en', 'Show me the temoral over the years of nominal and quantitative', 'line');
 manager.addAnswer('en', 'line', 'line');
 
-manager.addDocument('en', 'show me a scatter plot of ', 'scatter');
-manager.addDocument('en', 'show me a scatter plot of quantitative and quantitative', 'scatter');
-manager.addDocument('en', 'show me a scatter plot of quantitative quantitative quantitative', 'scatter');
-manager.addDocument('en', 'how do i represent quantitative quantitative and quantitative', 'scatter');
-manager.addDocument('en', 'show me quantitative and quantitative sized by quantitative', 'scatter');
-manager.addDocument('en', 'what is the quantiative of quantitative', 'scatter');
+manager.addDocument('en', 'Show me the relationship of quantitative and quantitative', 'scatter');
+manager.addDocument('en', 'I want to see quantitative by quantitative', 'scatter');
+manager.addDocument('en', 'show me quantiative by quantitative', 'scatter');
 manager.addAnswer('en', 'scatter', 'scatter');
 
-manager.addDocument('en', 'show me a pie chart of ', 'pie');
-manager.addDocument('en', 'show me a pie chart of quantitative and nominal', 'pie');
+manager.addDocument('en', 'show me the composition of quantitative', 'pie');
+manager.addDocument('en', 'I want to see the quantitative and nominal', 'pie');
 manager.addDocument('en', 'show me the percentage of quantitative and nominal', 'pie');
-manager.addDocument('en', 'what is the percentage of nominal and quantitative', 'pie');
-manager.addDocument('en', 'what percent of nominal does quantitative', 'pie');
 manager.addAnswer('en', 'pie', 'pie');
 
-manager.addDocument('en', 'show me a marginal of', 'marginalHistogram');
-manager.addDocument('en', 'show me a marginal of quantitative and quantitative', 'marginalHistogram');
-manager.addDocument('en', 'show me a heat map of quantitative and quantitative with bar charts', 'marginalHistogram');
+manager.addDocument('en', 'can you show me a marginal heat map', 'marginalHistogram');
+manager.addDocument('en', 'I want to see the distribution of quantitative and quantitative', 'marginalHistogram');
+manager.addDocument('en', 'show me a graph with extra bars on the side', 'marginalHistogram');
 manager.addDocument('en', 'show me a heat map of quantitative and quantitative with bar charts on the side', 'marginalHistogram');
 manager.addAnswer('en', 'marginalHistogram', 'marginalHistogram');
 
 manager.addDocument('en', 'show me a heat map of quantitative and quantitative', 'heatmap');
-manager.addDocument('en', 'show me a heat map of quantitative and quantitative', 'heatmap');
-manager.addDocument('en', 'show me a 2D histogram of quantitative and quantitative', 'heatmap');
+manager.addDocument('en', 'show me the distribution of quantitative and quantitative', 'heatmap');
+manager.addDocument('en', 'show me a 2D heatmap', 'heatmap');
 manager.addAnswer('en', 'heatmap', 'heatmap');
 
-manager.addDocument('en', 'show me a area chart of ', 'lineArea');
-manager.addDocument('en', 'show me a area chart of temporal quantitative and nominal', 'lineArea');
+manager.addDocument('en', 'Show me the area under the curve for temporal quantitative and temoral', 'lineArea');
+manager.addDocument('en', 'show me the quantitative and nominal over time', 'lineArea');
 manager.addAnswer('en', 'lineArea', 'lineArea');
 
-manager.addDocument('en', 'show me a chart where temporal quantitative and nominal', 'normalizedLineArea');
+manager.addDocument('en', 'show me a normalized graph with quantitative and nominal over time', 'normalizedLineArea');
 manager.addDocument('en', 'show me a normalized of temporal quantitative and nominal ', 'normalizedLineArea');
 manager.addAnswer('en', 'normalizedLineArea', 'normalizedLineArea');
 
@@ -72,7 +56,7 @@ manager.addAnswer('en', 'normalizedStackedBar', 'normalizedStackedBar');
 manager.addDocument('en', 'show me the stock trend', 'candleStick');
 manager.addAnswer('en', 'candleStick', 'candleStick');
 
-manager.addDocument('en', 'show me parallel coordniates for', 'parallelCoordinates');
+manager.addDocument('en', 'I want to see the difference of nominal by quantitative quantitative and quantitative', 'parallelCoordinates');
 manager.addAnswer('en', 'parallelCoordinates', 'parallelCoordinates');
 
 // Train and save the model.

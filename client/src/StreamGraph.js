@@ -61,9 +61,7 @@ const StreamGraph = ({
                 }
             }
         }
-        console.log(wordCount)
         let tmpStreamData = [...streamData, wordCount]
-        console.log(tmpStreamData.flat())
         if (tmpStreamData.length > 100) {
             let numDelete = tmpStreamData.length - 100
             tmpStreamData.splice(0, numDelete)
