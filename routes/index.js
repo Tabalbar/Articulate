@@ -89,6 +89,7 @@ const normalizeCommand = require('../chartMaker/normalizeCommand')
 const generalizeCommand = require('../chartMaker/generalizeCommand')
 const iterateGraph = require('../chartMaker/iterateGraph')
 const countVector = require('../chartMaker/countVector')
+const ExplicitChart = require('../chartMaker/specifications/ExplicitChart')
 
 // const findommands = require('../chartMaker/findCommands')
 const nlp = require('compromise')
@@ -106,11 +107,12 @@ router.post('/', async (req, res, next) => {
   const command = req.body.command
   const normalizedCommand = normalizeCommand(command)
   const { generalizedCommand, synonymCommand } = generalizeCommand(normalizedCommand, attributes, data)
+
+  const explicitChart = ExplicitChart(normalizedCommand)
   const response = await manager.process('en', generalizedCommand)
   const headerMatrix = createVector(attributes, data)
 
   const {headerFreq, filterFreq} = countVector(transcript, headerMatrix, data)
-
 
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
@@ -130,13 +132,19 @@ router.post('/', async (req, res, next) => {
   //   errMsg: 'no command found'
   // }
   let chartObj = []
-  for(let i = 0; i < response.classifications.length; i++) {
-    if(response.classifications[i].score > .1) {
-
-      chartObj.push(chartMaker.chartMaker(response.classifications[i].intent, synonymCommand, attributes, data, headerMatrix, command, headerFreq))
-
+  if(explicitChart) {
+    console.log(explicitChart, 'dfj j')
+    chartObj.push(chartMaker.chartMaker(explicitChart, synonymCommand, attributes, data, headerMatrix, command, headerFreq))
+  } else {
+    for(let i = 0; i < response.classifications.length; i++) {
+      if(response.classifications[i].score > .1) {
+  
+        chartObj.push(chartMaker.chartMaker(response.classifications[i].intent, synonymCommand, attributes, data, headerMatrix, command, headerFreq))
+  
+      }
     }
   }
+
   // if (req.body.prevChart && response) {
   //   chartObj = iterateGraph(response.answer, synonymCommand, attributes, data, headerMatrix, command)
   // } else if (response) {

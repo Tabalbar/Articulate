@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import 'semantic-ui-css/semantic.min.css'
-import { Button, Form, Grid, Input, Header, Checkbox } from 'semantic-ui-react'
+import { Button, Form, Grid, Input, Header, Checkbox, Container } from 'semantic-ui-react'
 import { VegaLite } from 'react-vega'
 import MaterialTable from 'material-table'
 import XLSX from 'xlsx'
@@ -112,13 +112,13 @@ function App() {
       }
     });
     let prevChart = false
-    if(selected===true){
-      prevChart = charts[charts.length-1]
+    if (selected === true) {
+      prevChart = charts[charts.length - 1]
     }
 
     const response = await fetch('http://localhost:5000/', {
       method: 'POST',
-      body: JSON.stringify({ command: command, attributes: attributes, dataHead: dataHead, prevChart: prevChart, overHearingData: overHearingData  }),
+      body: JSON.stringify({ command: command, attributes: attributes, dataHead: dataHead, prevChart: prevChart, overHearingData: overHearingData }),
       headers: {
         'Content-Type': 'application/json',
       }
@@ -129,12 +129,12 @@ function App() {
     const { chartObj } = JSON.parse(body)
     let count = 0;
     let tmpText = ""
-    for(let i = 0; i < chartObj.length; i++) {
+    for (let i = 0; i < chartObj.length; i++) {
       if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
         setCharts(prev => [chartObj[i].charts, ...prev])
         count++
-      } else {  
-        setErrMsg(prev => prev +  chartObj[i].errMsg + "\n")
+      } else {
+        setErrMsg(prev => prev + chartObj[i].errMsg + "\n")
         tmpText += chartObj[i].errMsg
       }
     }
@@ -152,8 +152,8 @@ function App() {
       }
     });
     let prevChart = false
-    if(selected===true){
-      prevChart = charts[charts.length-1]
+    if (selected === true) {
+      prevChart = charts[charts.length - 1]
     }
 
     const response = await fetch('http://localhost:5000/', {
@@ -169,18 +169,18 @@ function App() {
     const { chartObj } = JSON.parse(body)
     let count = 0;
     let tmpText = ""
-    for(let i = 0; i < chartObj.length; i++) {
+    for (let i = 0; i < chartObj.length; i++) {
       if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
         setCharts(prev => [chartObj[i].charts, ...prev])
         count++
-      } else {  
-        setErrMsg(prev => prev +  chartObj[i].errMsg + "\n")
+      } else {
+        setErrMsg(prev => prev + chartObj[i].errMsg + "\n")
         tmpText += chartObj[i].errMsg
       }
     }
     setErrMsg(prev => prev + "Returned " + count + " charts")
     tmpText += "Returned " + count + " chart(s)"
-    
+
     let utterance = UseVoice(tmpText)
     return utterance
   }
@@ -193,7 +193,7 @@ function App() {
   }
 
   const handleSelect = (e) => {
-    setSelected(prev=>!prev)
+    setSelected(prev => !prev)
   }
 
   return (
@@ -204,7 +204,7 @@ function App() {
         attributes={attributes}
       />
       <Grid centered={true}>
-      <Grid.Row>
+        <Grid.Row>
         </Grid.Row>
         <Dictaphone
           createChartWithVoice={createChartWithVoice}
@@ -222,32 +222,32 @@ function App() {
 
       </Grid>
 
-    <InputBar
-      createCharts={createCharts}
-      handleChange={handleChange}
-      dataHeaders={dataHeaders}
-      data={data}
-      clearGraphs={clearGraphs}
-    />
-    <div style={{position: "absolute"}}>
-      {
-            charts.length ?
-              charts.map((element, index) => {
-                return (
-                  <>
-                      <DraggableGraph
-                        spec={element.spec}
-                        data={data}
+      <InputBar
+        createCharts={createCharts}
+        handleChange={handleChange}
+        dataHeaders={dataHeaders}
+        data={data}
+        clearGraphs={clearGraphs}
+      />
+      <div style={{ position: "absolute" }}>
+        {
+          charts.length ?
+            charts.map((element, index) => {
+              return (
+                <>
+                  <DraggableGraph
+                    spec={element.spec}
+                    data={data}
 
-                        
-                      />
-                  </>
-                )
-              })
-              :
-              null
-          }
-</div>
+
+                  />
+                </>
+              )
+            })
+            :
+            null
+        }
+      </div>
     </>
   );
 }
@@ -267,7 +267,7 @@ const Dictaphone = ({
       callback: (command) => {
         console.log('listening')
         let utterance = createChartWithVoice(command, transcript)
-        utterance.onend = function(event) {
+        utterance.onend = function (event) {
           console.log('Utterance has finished being spoken after ' + event.elapsedTime + ' milliseconds.');
           setListening(true)
         }
@@ -277,7 +277,7 @@ const Dictaphone = ({
       command: "computer",
       callback: () => {
         let utterance = UseVoice("At your service")
-        utterance.onend = function(event) {
+        utterance.onend = function (event) {
 
           console.log('Utterance has finished being spoken after ' + event.elapsedTime + ' milliseconds.');
           setTimeout(() => {
@@ -293,7 +293,7 @@ const Dictaphone = ({
       command: "computer are you there?",
       callback: () => {
         let utterance = UseVoice("Yes, how can i help you?")
-        utterance.onend = function(event) {
+        utterance.onend = function (event) {
           console.log('Utterance has finished being spoken after ' + event.elapsedTime + ' milliseconds.');
           setListening(true)
         }
@@ -304,7 +304,7 @@ const Dictaphone = ({
 
 
   useEffect(() => {
-    if(listening) {
+    if (listening) {
       const timer = setTimeout(() => {
         setListening(false)
         console.log('not listening')
@@ -333,11 +333,11 @@ const Dictaphone = ({
   //   ]
   // }
 
-  const { transcript, resetTranscript } = useSpeechRecognition({ commands})
+  const { transcript, resetTranscript } = useSpeechRecognition({ commands })
 
   useEffect(() => {
     setOverHearingData(transcript)
-  },[transcript])
+  }, [transcript])
 
   if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
     return null
@@ -349,11 +349,13 @@ const Dictaphone = ({
   return (
     <div>
       <button onClick={SpeechRecognition.startListening}>Start</button>
-      <button onClick={()=>{
+      <button onClick={() => {
         SpeechRecognition.stopListening();
         createChartWithVoice(transcript);
-        }}>Create Visualization</button>
-      <p>{transcript}</p>
+      }}>Create Visualization</button>
+      <Container>
+        <p>{transcript}</p>
+      </Container>
     </div>
   )
 }
