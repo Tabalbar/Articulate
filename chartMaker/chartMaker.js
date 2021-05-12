@@ -23,6 +23,7 @@ module.exports = {
                     height: 0,
                     mark: "",
                     transform: [],
+                    concat: [],
                     encoding: {
                         column: {},
                         y: {},
@@ -38,8 +39,8 @@ module.exports = {
         let sizeGraph = 'medium'
         chartObj = title(chartObj, actualCommand)
         chartObj = size(chartObj, sizeGraph)
-        chartObj = mark(chartObj, intent)
-        chartObj = encoding(chartObj, intent, extractedHeaders, data)
+        chartObj, layerMark = mark(chartObj, intent, extractedHeaders)
+        chartObj = encoding(chartObj, intent, extractedHeaders, data, headerFreq, layerMark)
         console.log(intent)
 
         return chartObj

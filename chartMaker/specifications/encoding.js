@@ -1,10 +1,18 @@
 const findType = require("../findType")
 
-module.exports = (chartObj, intent, extractedHeaders, data) => {
+module.exports = (chartObj, intent, extractedHeaders, data, layerMark) => {
     let numHeaders = extractedHeaders.length
+    if (numHeaders > 3) {
+        numHeaders = 4
+    }
     console.log(numHeaders)
     switch (numHeaders) {
         case 1:
+            if(intent == "pie") {
+                chartObj.charts.spec.encoding.theta = { aggregate: "count" }
+                chartObj.charts.spec.encoding.color = { field: extractedHeaders[0], type: findType(extractedHeaders[0], data) }
+                return chartObj
+            }
             chartObj.charts.spec.encoding.x = {
                 field: extractedHeaders[0],
                 type: findType(extractedHeaders[0], data)
@@ -16,17 +24,16 @@ module.exports = (chartObj, intent, extractedHeaders, data) => {
         case 2:
             extractedHeaders = findQuantitative(extractedHeaders, data)
             chartObj.charts.spec.encoding.x = {
-                // bin: true,
                 field: extractedHeaders[0],
                 type: findType(extractedHeaders[0], data)
             }
             chartObj.charts.spec.encoding.y = {
-                // bin: true,
                 field: extractedHeaders[1],
                 type: findType(extractedHeaders[1], data)
             }
+            
             // chartObj.charts.spec.encoding.color = { aggregate: "count", type: "quantitative" }
-            if(intent == "heatmap"){
+            if (intent == "heatmap") {
                 chartObj.charts.spec.encoding.x.bin = true
                 chartObj.charts.spec.encoding.y.bin = true
                 chartObj.charts.spec.encoding.color = { aggregate: "count", type: "quantitative" }
@@ -52,10 +59,21 @@ module.exports = (chartObj, intent, extractedHeaders, data) => {
                 field: extractedHeaders[0],
                 type: findType(extractedHeaders[0], data)
             }
+            if (intent == "heatmap") {
+                chartObj.charts.spec.encoding.x.bin = true
+                chartObj.charts.spec.encoding.y.bin = true
+                chartObj.charts.spec.encoding.color = { aggregate: "count", type: "quantitative" }
+            }
             return chartObj
-        default: 
-        chartObj.errMsg = "Error"
-        return chartObj
+        case 4:
+            chartObj.charts.spec.columns = extractedHeaders.length-1
+            chartObj.charts.spec.concat = createLayers(extractedHeaders, data)
+            delete chartObj.charts.spec.encoding
+            console.log(chartObj)
+            return chartObj
+        default:
+            chartObj.errMsg = "Error"
+            return chartObj
     }
 }
 function switchHeaders(extractedHeaders, targetIndex, sourceIndex) {
@@ -71,4 +89,49 @@ function findQuantitative(extractedHeaders, data) {
             return switchHeaders(extractedHeaders, 1, i)
         }
     }
+    return extractedHeaders
+}
+
+function createLayers(extractedHeaders, data) {
+    let layers = [];
+    for (let i = 0; i < extractedHeaders.length; i++) {
+        if (findType(extractedHeaders[i], data) === "quantitative") {
+            let tmpHeader = extractedHeaders[0];
+            extractedHeaders[0] = extractedHeaders[i];
+            extractedHeaders[i] = tmpHeader;
+            break;
+
+        }
+    }
+    for (let i = 1; i < extractedHeaders.length; i++) {
+        if (layerMark === "rect") {
+            layers.push({
+                layer: [
+                    {
+                        mark: layerMark,
+                        encoding: {
+                            x: { field: extractedHeaders[i], type: findType(extractedHeaders[i], data), bin: true },
+                            y: { field: extractedHeaders[0], type: findType(extractedHeaders[0], data), bin: true },
+                            color: { aggregate: "count", type: "quantitative" }
+
+                        }
+                    }
+                ]
+            })
+        } else {
+            layers.push({
+                layer: [
+                    {
+                        mark: layerMark,
+                        encoding: {
+                            x: { field: extractedHeaders[i], type: findType(extractedHeaders[i], data) },
+                            y: { field: extractedHeaders[0], type: findType(extractedHeaders[0], data) }
+
+                        }
+                    }
+                ]
+            })
+        }
+    }
+    return layers
 }
