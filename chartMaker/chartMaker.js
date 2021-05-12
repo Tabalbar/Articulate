@@ -4,6 +4,9 @@ const chartMakerWithAnswer = require('./chartMakerWithAnswer')
 const findType = require('./findType')
 const findMissing = require('./findMissing').findMissing
 const title = require('./specifications/title')
+const size = require('./specifications/size')
+const mark = require('./specifications/mark')
+const encoding = require('./specifications/encoding')
 
 module.exports = {
     chartMaker: function chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq) {
@@ -15,18 +18,31 @@ module.exports = {
             charts: {
                 data: {table: data},
                 spec: {
+                    title: "",
+                    width: 0,
+                    height: 0,
+                    mark: "",
+                    transform: [],
                     encoding: {
                         column: {},
                         y: {},
                         x: {},
                         color:{}
-                    }
+                    },
+                    data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
+
                 }
             },
             errMsg: ''
         };
-        console.log(title(chartObj, actualCommand), 'fnd')
+        let sizeGraph = 'medium'
+        chartObj = title(chartObj, actualCommand)
+        chartObj = size(chartObj, sizeGraph)
+        chartObj = mark(chartObj, intent)
+        chartObj = encoding(chartObj, intent, extractedHeaders, data)
         console.log(intent)
+
+        return chartObj
         switch (intent) {
             case "bar":
                 if (hasTime) {
@@ -49,7 +65,7 @@ module.exports = {
                                         field: extractedHeaders[2],
                                         type: "quantitative",
                                         title: extractedHeaders[2],
-                                        exis: { grid: false }
+                                        axis: { grid: false }
                                     },
                                     x: {
                                         tickCount: 12,
@@ -423,12 +439,13 @@ module.exports = {
                 if (extractedHeaders.length == 3) {
                     hasTime = checkTimeAndReorder(extractedHeaders, data)
                     reorderForLineArea(extractedHeaders, data)
+                    console.log(extractedHeaders)
+
                     if (hasTime) {
                         chartObj.charts = {
                             data: { table: data },
                             spec: {
                                 title: actualCommand,
-                                mark: "rect",
                                 width: 600,
                                 height: 200,
                                 mark: "area",
@@ -465,7 +482,6 @@ module.exports = {
                             data: { table: data },
                             spec: {
                                 title: actualCommand,
-                                mark: "rect",
                                 width: 600,
                                 height: 200,
                                 mark: "area",
