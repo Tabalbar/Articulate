@@ -8,6 +8,7 @@ const manager = new NlpManager({ languages: ['en'], forceNER: true });
 manager.addDocument('en', 'I want to see the comparison of nominal and quantitative', 'bar');
 manager.addDocument('en', 'show me a a comparison of nominal and quantitative', 'bar');
 manager.addDocument('en', 'show me the distribution of nominal', 'bar');
+manager.addDocument('en', 'show me a graph with nominal nominal and quantitative', 'bar');
 manager.addDocument('en', 'show me the data for nominal nominal and quantitative', 'bar');
 manager.addAnswer('en', 'bar', 'bar');
 
@@ -32,7 +33,6 @@ manager.addDocument('en', 'show me a graph with extra bars on the side', 'margin
 manager.addDocument('en', 'show me a heat map of quantitative and quantitative with bar charts on the side', 'marginalHistogram');
 manager.addAnswer('en', 'marginalHistogram', 'marginalHistogram');
 
-manager.addDocument('en', 'show me a heat map of quantitative and quantitative', 'heatmap');
 manager.addDocument('en', 'show me the distribution of quantitative and quantitative', 'heatmap');
 manager.addDocument('en', 'show me a 2D heatmap', 'heatmap');
 manager.addAnswer('en', 'heatmap', 'heatmap');
@@ -41,17 +41,16 @@ manager.addDocument('en', 'Show me the area under the curve for temporal quantit
 manager.addDocument('en', 'show me the quantitative and nominal over time', 'lineArea');
 manager.addAnswer('en', 'lineArea', 'lineArea');
 
-manager.addDocument('en', 'show me a normalized graph with quantitative and nominal over time', 'normalizedLineArea');
-manager.addDocument('en', 'show me a normalized of temporal quantitative and nominal ', 'normalizedLineArea');
-manager.addAnswer('en', 'normalizedLineArea', 'normalizedLineArea');
+// manager.addDocument('en', 'show me a normalized graph with quantitative and nominal over time', 'normalizedLineArea');
+// manager.addDocument('en', 'show me a normalized of temporal quantitative and nominal ', 'normalizedLineArea');
+// manager.addAnswer('en', 'normalizedLineArea', 'normalizedLineArea');
 
-manager.addDocument('en', 'show me a stacked ', 'stackedBar');
-manager.addDocument('en', 'show me a stacked of temporal quantitative and nominal', 'stackedBar');
-manager.addAnswer('en', 'stackedBar', 'stackedBar');
+// manager.addDocument('en', 'show me a stacked bar', 'stackedBar');
+// manager.addAnswer('en', 'stackedBar', 'stackedBar');
 
-manager.addDocument('en', 'show me a normalized stacked bar chart of ', 'normalizedStackedBar');
-manager.addDocument('en', 'show me a normalized stacked bar chart of temporal quantitative and nominal', 'normalizedStackedBar');
-manager.addAnswer('en', 'normalizedStackedBar', 'normalizedStackedBar');
+// manager.addDocument('en', 'show me a normalized stacked bar chart of ', 'normalizedStackedBar');
+// manager.addDocument('en', 'show me a normalized stacked bar chart of temporal quantitative and nominal', 'normalizedStackedBar');
+// manager.addAnswer('en', 'normalizedStackedBar', 'normalizedStackedBar');
 
 manager.addDocument('en', 'show me the stock trend', 'candleStick');
 manager.addAnswer('en', 'candleStick', 'candleStick');
@@ -97,7 +96,7 @@ router.post('/', async (req, res, next) => {
   const headerMatrix = createVector(attributes, data)
 
   const {headerFreq, filterFreq} = countVector(transcript, headerMatrix, data)
-
+  console.log(generalizedCommand)
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
     // add methods to run after the tagger

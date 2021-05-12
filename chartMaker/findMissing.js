@@ -3,7 +3,7 @@ const findType = require('./findType')
 
 module.exports = {
     findMissing: function (extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence) {
-        if(command == "") {
+        if (command == "") {
             return ""
         }
         let missing = reorder(extractedHeaders, targetHeaderLength, data, sequence)
@@ -43,25 +43,24 @@ function switchHeaders(extractedHeaders, targetIndex, sourceIndex) {
 
 function findInferHeader(command, headerFreq, type, extractedHeaders) {
     let headerIndex = 0;
-    if(headerFreq[type].length == 0) {
+    if (headerFreq[type].length == 0) {
         return ""
     }
     let headerToAdd = headerFreq[type][headerIndex].header
-    
+
     for (let i = 1; i < headerFreq[type].length; i++) {
         if (headerFreq[type][headerIndex].count < headerFreq[type][i].count) {
             headerToAdd = headerFreq[type][i].header
             headerIndex = i
         }
     }
-    for(let i = 0; i < extractedHeaders.length; i++) {
-        if(extractedHeaders[i] == headerFreq[type][headerIndex].header) {
+    for (let i = 0; i < extractedHeaders.length; i++) {
+        if (extractedHeaders[i] == headerFreq[type][headerIndex].header) {
             headerFreq[type].splice(headerIndex, 1)
 
             return findInferHeader(command, headerFreq, type, extractedHeaders)
         }
-     }
-    console.log(headerFreq,  headerFreq[type][headerIndex].header, headerToAdd)
+    }
     extractedHeaders.push(headerToAdd)
 
 
@@ -189,6 +188,64 @@ function reorder(extractedHeaders, targetHeaderLength, data, sequence) {
                     if (findType(extractedHeaders[i], data) == 'quantitative') {
                         extractedHeaders = switchHeaders(extractedHeaders, 2, i)
                         missing.q3 = false
+                        break
+                    }
+                }
+            }
+            return missing
+        case "NQN":
+            missing = {
+                n: true,
+                q: true,
+                t: false,
+                q2: false,
+                q3: false,
+            }
+
+            //For length 1
+            if (targetHeaderLength == 1) {
+                missing.q = false
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'nominal') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 0, i)
+                        missing.n = false
+                        break
+                    }
+                }
+            }
+
+            //For length 2
+            if (targetHeaderLength == 2) {
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'nominal') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 0, i)
+                        missing.n = false
+                        break
+                    }
+                }
+                for (let i = 1; i < extractedHeaders.length; i++) {
+                    console.log(extractedHeaders)
+                    if (findType(extractedHeaders[i], data) == 'quantitative') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 1, i)
+                        missing.q = false
+                        break
+                    }
+                }
+            }
+
+            //for length 3
+            if (targetHeaderLength >= 3) {
+                for (let i = 0; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'quantitative') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 0, i)
+                        missing.n = false
+                        break
+                    }
+                }
+                for (let i = 1; i < extractedHeaders.length; i++) {
+                    if (findType(extractedHeaders[i], data) == 'quantitative') {
+                        extractedHeaders = switchHeaders(extractedHeaders, 1, i)
+                        missing.q = false
                         break
                     }
                 }

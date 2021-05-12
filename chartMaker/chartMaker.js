@@ -12,16 +12,27 @@ module.exports = {
         let hasTime = checkIfHasTime(extractedHeaders, data)
 
         let chartObj = {
-            charts: null,
+            charts: {
+                data: {table: data},
+                spec: {
+                    encoding: {
+                        column: {},
+                        y: {},
+                        x: {},
+                        color:{}
+                    }
+                }
+            },
             errMsg: ''
         };
-        
+        console.log(title(chartObj, actualCommand), 'fnd')
         console.log(intent)
         switch (intent) {
             case "bar":
                 if (hasTime) {
+                    console.log(extractedHeaders)
                     if (extractedHeaders.length === 3) {
-
+                        console.log(extractedHeaders)
                         chartObj.charts = {
                             data: { table: data },
                             spec: {
@@ -32,44 +43,22 @@ module.exports = {
                                 transform: [],
                                 encoding: {
                                     column: {
-                                        field: extractedHeaders[0], type: "nominal", spacing: 10
+                                        field: extractedHeaders[1], type: "nominal", spacing: 10
                                     },
                                     y: {
-                                        field: extractedHeaders[1],
+                                        field: extractedHeaders[2],
                                         type: "quantitative",
-                                        title: extractedHeaders[1],
+                                        title: extractedHeaders[2],
                                         exis: { grid: false }
                                     },
                                     x: {
                                         tickCount: 12,
-                                        field: extractedHeaders[2],
-                                        type: "temporal",
-                                        axis: {
-                                            tickCount: 12,
-                                            labelAlign: "left",
-                                            labelExpr: "[timeFormat(datum.value, '%b'), timeFormat(datum.value, '%m') == '01' ? timeFormat(datum.value, '%Y') : '']",
-                                            labelOffset: 4,
-                                            labelPadding: -24,
-                                            tickSize: 30,
-                                            gridDash: {
-                                                condition: {
-                                                    test: { field: "value", timeUnit: "month", "equal": 1 },
-                                                    value: []
-                                                },
-                                                value: [5, 5]
-                                            },
-                                            tickDash: {
-                                                condition: {
-                                                    test: { field: "value", timeUnit: "month", "equal": 1 },
-                                                    value: []
-                                                },
-                                                value: [5, 5]
-                                            }
-                                        }
+                                        field: extractedHeaders[0],
+                                        type: "temporal"
                                     },
                                     color: {
-                                        field: extractedHeaders[1],
-                                        scale: { range: createRandomColors(extractedHeaders[1], data) }
+                                        field: extractedHeaders[2],
+                                        scale: { range: createRandomColors(extractedHeaders[2], data) }
                                     }
                                 },
                                 data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
@@ -176,7 +165,7 @@ module.exports = {
 
                         }
                     } else if (extractedHeaders.length < 1) {
-                        command = findMissing(extractedHeaders, data, 1, headerFreq, command, "NQT")
+                        command = findMissing(extractedHeaders, data, 1, headerFreq, command, "NQN")
                         if (command == "") {
                             chartObj.errMsg = ""
                             return chartObj

@@ -56,7 +56,7 @@ const StreamGraph = ({
 
         for (let i = 0; i < nouns.length; i++) {
             for (let j = 0; j < wordCount.length; j++) {
-                if (wordCount[j].header.includes(nouns[i])) {
+                if (wordCount[j].header.toLowerCase().includes(nouns[i])) {
                     wordCount[j].count += 1
                 }
             }
@@ -66,7 +66,7 @@ const StreamGraph = ({
             let numDelete = tmpStreamData.length - 100
             tmpStreamData.splice(0, numDelete)
         }
-
+        console.log(tmpStreamData)
 
         setStreamData(tmpStreamData.flat())
 

@@ -21,7 +21,6 @@ module.exports = (transcript, headerMatrix, data) => {
             filters.push(headerMatrix[i][j])
         }
     }
-    transcript = "what students get high math scores how many students are there math is a very important subject I wonder what math is for students computer show me a graph of what students eat"
     let doc = nlp(transcript)   
 
     doc.toLowerCase()
@@ -34,15 +33,16 @@ module.exports = (transcript, headerMatrix, data) => {
 
     for(let i = 0; i < nouns.length; i ++) {
         for(let j = 0; j < wordCount.length; j++) {
-            if(wordCount[j].header.includes(nouns[i])){
+            if(wordCount[j].header.toLowerCase().includes(nouns[i])){
                 wordCount[j].count +=1
             }
         }
     }
-
     for(let i = 0; i < wordCount.length; i++) {
         headerFreq[findType(wordCount[i].header, data)].push(wordCount[i])
     }
+    console.log(headerFreq)
+
     return {headerFreq, filterFreq}
 }
 
