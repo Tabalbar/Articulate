@@ -1,18 +1,25 @@
 const findType = require("../findType")
+const heatmap = require("../specialGraphs/heatmap")
+const pie = require('../specialGraphs/pie')
+const marginalHistogram = require('../specialGraphs/marginalHistogram')
 
-module.exports = (chartObj, intent, extractedHeaders, data, layerMark) => {
+module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command) => {
     let numHeaders = extractedHeaders.length
     if (numHeaders > 3) {
         numHeaders = 4
     }
-    console.log(numHeaders)
+    if (intent == "pie") {
+        return pie(chartObj, extractedHeaders, data)
+    }
+    if (intent == "heatmap") {
+        return heatmap(chartObj, extractedHeaders, data, headerFreq, command)
+    }
+    if(intent == "marginalHistogram") {
+        return marginalHistogram(chartObj, extractedHeaders, data, headerFreq, command)
+    }
     switch (numHeaders) {
         case 1:
-            if(intent == "pie") {
-                chartObj.charts.spec.encoding.theta = { aggregate: "count" }
-                chartObj.charts.spec.encoding.color = { field: extractedHeaders[0], type: findType(extractedHeaders[0], data) }
-                return chartObj
-            }
+
             chartObj.charts.spec.encoding.x = {
                 field: extractedHeaders[0],
                 type: findType(extractedHeaders[0], data)
@@ -30,13 +37,6 @@ module.exports = (chartObj, intent, extractedHeaders, data, layerMark) => {
             chartObj.charts.spec.encoding.y = {
                 field: extractedHeaders[1],
                 type: findType(extractedHeaders[1], data)
-            }
-            
-            // chartObj.charts.spec.encoding.color = { aggregate: "count", type: "quantitative" }
-            if (intent == "heatmap") {
-                chartObj.charts.spec.encoding.x.bin = true
-                chartObj.charts.spec.encoding.y.bin = true
-                chartObj.charts.spec.encoding.color = { aggregate: "count", type: "quantitative" }
             }
             return chartObj
 
@@ -59,17 +59,11 @@ module.exports = (chartObj, intent, extractedHeaders, data, layerMark) => {
                 field: extractedHeaders[0],
                 type: findType(extractedHeaders[0], data)
             }
-            if (intent == "heatmap") {
-                chartObj.charts.spec.encoding.x.bin = true
-                chartObj.charts.spec.encoding.y.bin = true
-                chartObj.charts.spec.encoding.color = { aggregate: "count", type: "quantitative" }
-            }
             return chartObj
         case 4:
-            chartObj.charts.spec.columns = extractedHeaders.length-1
+            chartObj.charts.spec.columns = extractedHeaders.length - 1
             chartObj.charts.spec.concat = createLayers(extractedHeaders, data)
             delete chartObj.charts.spec.encoding
-            console.log(chartObj)
             return chartObj
         default:
             chartObj.errMsg = "Error"
@@ -104,34 +98,18 @@ function createLayers(extractedHeaders, data) {
         }
     }
     for (let i = 1; i < extractedHeaders.length; i++) {
-        if (layerMark === "rect") {
-            layers.push({
-                layer: [
-                    {
-                        mark: layerMark,
-                        encoding: {
-                            x: { field: extractedHeaders[i], type: findType(extractedHeaders[i], data), bin: true },
-                            y: { field: extractedHeaders[0], type: findType(extractedHeaders[0], data), bin: true },
-                            color: { aggregate: "count", type: "quantitative" }
+        layers.push({
+            layer: [
+                {
+                    mark: layerMark,
+                    encoding: {
+                        x: { field: extractedHeaders[i], type: findType(extractedHeaders[i], data) },
+                        y: { field: extractedHeaders[0], type: findType(extractedHeaders[0], data) }
 
-                        }
                     }
-                ]
-            })
-        } else {
-            layers.push({
-                layer: [
-                    {
-                        mark: layerMark,
-                        encoding: {
-                            x: { field: extractedHeaders[i], type: findType(extractedHeaders[i], data) },
-                            y: { field: extractedHeaders[0], type: findType(extractedHeaders[0], data) }
-
-                        }
-                    }
-                ]
-            })
-        }
+                }
+            ]
+        })
     }
     return layers
 }

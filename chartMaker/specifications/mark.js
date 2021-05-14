@@ -10,14 +10,13 @@ module.exports = (chartObj, intent, extractedHeaders) => {
                 layerMark = "line"
                 return chartObj, layerMark
             case "scatter":
-                layerMark = "scatter"
+                layerMark = "point"
                 return chartObj, layerMark
             case "pie":
                 layerMark = "arc"
                 return chartObj, layerMark
-            // case "marginalHistogram":
-            //     chartObj.charts.spec.mark = "pie"
-            //     return chartObj
+            case "marginalHistogram":
+                return chartObj
             case "heatmap":
                 layerMark = "rect"
                 return chartObj, layerMark
@@ -33,9 +32,9 @@ module.exports = (chartObj, intent, extractedHeaders) => {
             // case "candleStick":
             //     chartObj.charts.spec.mark = "bar"
             //     return chartObj
-            // case "parallelCoordinates":
-            //     chartObj.charts.spec.mark = "bar"
-            //     return chartObj
+            case "parallelCoordinates":
+                chartObj.charts.spec.mark = "line"
+                return chartObj
     
     
         }
@@ -48,14 +47,14 @@ module.exports = (chartObj, intent, extractedHeaders) => {
             chartObj.charts.spec.mark = "line"
             return chartObj
         case "scatter":
-            chartObj.charts.spec.mark = "scatter"
+            chartObj.charts.spec.mark = "point"
             return chartObj
         case "pie":
             chartObj.charts.spec.mark = "arc"
             return chartObj
-        // case "marginalHistogram":
-        //     chartObj.charts.spec.mark = "pie"
-        //     return chartObj
+        case "marginalHistogram":
+            delete chartObj.charts.spec.mark
+            return chartObj
         case "heatmap":
             chartObj.charts.spec.mark = "rect"
             return chartObj
@@ -71,9 +70,9 @@ module.exports = (chartObj, intent, extractedHeaders) => {
         // case "candleStick":
         //     chartObj.charts.spec.mark = "bar"
         //     return chartObj
-        // case "parallelCoordinates":
-        //     chartObj.charts.spec.mark = "bar"
-        //     return chartObj
+        case "parallelCoordinates":
+            chartObj.charts.spec.mark = "line"
+            return chartObj
 
 
     }

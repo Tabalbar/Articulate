@@ -8,26 +8,26 @@ module.exports = {
         }
         let missing = reorder(extractedHeaders, targetHeaderLength, data, sequence)
         if (missing.n) {
-            command = findInferHeader(command, headerFreq, 'nominal', extractedHeaders)
+            extractedHeaders = findInferHeader(command, headerFreq, 'nominal', extractedHeaders)
             return module.exports.findMissing(extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence)
         }
         if (missing.q) {
-            command = findInferHeader(command, headerFreq, 'quantitative', extractedHeaders)
+            extractedHeaders = findInferHeader(command, headerFreq, 'quantitative', extractedHeaders)
             return module.exports.findMissing(extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence)
         }
         if (missing.t) {
-            command = findInferHeader(command, headerFreq, 'temporal', extractedHeaders)
+            extractedHeaders = findInferHeader(command, headerFreq, 'temporal', extractedHeaders)
             return module.exports.findMissing(extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence)
         }
         if (missing.q2) {
-            command = findInferHeader(command, headerFreq, 'quantitative', extractedHeaders)
+            extractedHeaders = findInferHeader(command, headerFreq, 'quantitative', extractedHeaders)
             return module.exports.findMissing(extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence)
         }
         if (missing.q3) {
-            command = findInferHeader(command, headerFreq, 'quantitative', extractedHeaders)
+            extractedHeaders = findInferHeader(command, headerFreq, 'quantitative', extractedHeaders)
             return module.exports.findMissing(extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence)
         }
-        return command
+        return extractedHeaders
     }
 }
 
@@ -65,7 +65,7 @@ function findInferHeader(command, headerFreq, type, extractedHeaders) {
 
 
     command += " " + headerToAdd
-    return command
+    return extractedHeaders
 }
 
 function reorder(extractedHeaders, targetHeaderLength, data, sequence) {
@@ -159,7 +159,6 @@ function reorder(extractedHeaders, targetHeaderLength, data, sequence) {
                     }
                 }
                 for (let i = 1; i < extractedHeaders.length; i++) {
-                    console.log(extractedHeaders)
                     if (findType(extractedHeaders[i], data) == 'quantitative') {
                         extractedHeaders = switchHeaders(extractedHeaders, 1, i)
                         missing.q2 = false
@@ -224,7 +223,6 @@ function reorder(extractedHeaders, targetHeaderLength, data, sequence) {
                     }
                 }
                 for (let i = 1; i < extractedHeaders.length; i++) {
-                    console.log(extractedHeaders)
                     if (findType(extractedHeaders[i], data) == 'quantitative') {
                         extractedHeaders = switchHeaders(extractedHeaders, 1, i)
                         missing.q = false

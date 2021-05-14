@@ -95,7 +95,7 @@ router.post('/', async (req, res, next) => {
   const response = await manager.process('en', generalizedCommand)
   const headerMatrix = createVector(attributes, data)
 
-  const {headerFreq, filterFreq} = countVector(transcript, headerMatrix, data)
+  const { headerFreq, filterFreq } = countVector(transcript, headerMatrix, data)
   console.log(generalizedCommand)
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
@@ -115,15 +115,16 @@ router.post('/', async (req, res, next) => {
   //   errMsg: 'no command found'
   // }
   let chartObj = []
-  if(explicitChart) {
-    console.log(explicitChart, 'dfj j')
-    chartObj.push(chartMaker.chartMaker(explicitChart, synonymCommand, attributes, data, headerMatrix, command, headerFreq))
+  if (explicitChart) {
+    let chart = chartMaker.chartMaker(explicitChart, synonymCommand, attributes, data, headerMatrix, command, headerFreq)
+    chartObj.push( chart)
+    console.log(chart)
   } else {
-    for(let i = 0; i < response.classifications.length; i++) {
-      if(response.classifications[i].score > .1) {
-  
+    for (let i = 0; i < response.classifications.length; i++) {
+      if (response.classifications[i].score > .1) {
+
         chartObj.push(chartMaker.chartMaker(response.classifications[i].intent, synonymCommand, attributes, data, headerMatrix, command, headerFreq))
-  
+
       }
     }
   }

@@ -34,15 +34,15 @@ module.exports = {
 
                 }
             },
+            extraCharts: [],
             errMsg: ''
         };
         let sizeGraph = 'medium'
         chartObj = title(chartObj, actualCommand)
         chartObj = size(chartObj, sizeGraph)
         chartObj, layerMark = mark(chartObj, intent, extractedHeaders)
-        chartObj = encoding(chartObj, intent, extractedHeaders, data, headerFreq, layerMark)
-        console.log(intent)
-
+        chartObj = encoding(chartObj, intent, extractedHeaders, data, headerFreq, command)
+        
         return chartObj
         switch (intent) {
             case "bar":
