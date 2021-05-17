@@ -16,6 +16,7 @@ module.exports = (extractedHeaders, filteredHeaders, data) => {
         }
     }
     let chartObj = {
+        plotly: true,
         data: [{
             r: extractedHeaders[1],
             theta: extractedHeaders[0],

@@ -30,12 +30,12 @@ module.exports = (headers, data) => {
             for(let i = 0; i < words.length; i++){
                 let doc = nlp(words[i])
                 if(doc.has('#Noun')){
-                    synonyms.push(thesaurus.find(words[i]))
                     synonyms.push(words[i])
-                    console.log(words[i])
-                } else if(i == 0) {
                     synonyms.push(thesaurus.find(words[i]))
+                
+                } else if(i == 0) {                    
                     synonyms.push(words[i])
+                    synonyms.push(thesaurus.find(words[i]))
                 }
             }
 
@@ -57,14 +57,12 @@ module.exports = (headers, data) => {
         }
     }
     for(let i = 0; i < synonymMatrix.length; i++) {
-        console.log('old length', synonymMatrix[i].length)
         if(synonymMatrix[i].length > 19) {
-            const numDelete = synonymMatrix[i].length - 20
             synonymMatrix[i] = synonymMatrix[i].splice(0, 20)
-            console.log('new length', synonymMatrix[i].length)
 
         }
         
     }
+    console.log(synonymMatrix)
     return {featureMatrix, synonymMatrix}
 }

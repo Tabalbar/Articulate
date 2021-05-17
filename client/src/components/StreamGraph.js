@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { VegaLite } from 'react-vega'
 import nlp from 'compromise'
-import { Form } from 'semantic-ui-react'
 
 const StreamGraph = ({
     overHearingData,
@@ -64,7 +63,6 @@ const StreamGraph = ({
             }
             for (let i = 0; i < featureAttributes.length; i++) {
                 for (let j = 0; j < featureAttributes[i].length; j++) {
-                    console.log(lastTerm)
                     if (lastTerm.toLowerCase() == featureAttributes[i][j].toLowerCase()) {
                         tmpStreamData.push({
                             header: featureAttributes[i][0],
@@ -76,12 +74,12 @@ const StreamGraph = ({
                 }
             }
         }
+        console.log(streamData)
         setStreamData(tmpStreamData.flat())
     }, [overHearingData])
 
     return (
         <>
-
             <VegaLite spec={specification} data={{ table: streamData }} />
         </>
     )

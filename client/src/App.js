@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import 'semantic-ui-css/semantic.min.css'
-import { Button, Form, Grid, Input, Header, Checkbox, Container } from 'semantic-ui-react'
+import { Button, Form, Grid, Input, Header } from 'semantic-ui-react'
 import { VegaLite } from 'react-vega'
 import MaterialTable from 'material-table'
 import XLSX from 'xlsx'
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import UseVoice from './UseVoice';
-import DraggableGraph from './DraggableGraph';
-import InputBar from './InputBar';
-import StreamGraph from './StreamGraph'
-import { noCharts } from './AssistantReplies'
-import WordCloud from './WordCloud'
-import Plot from 'react-plotly.js';
+import DraggableGraph from './components/DraggableGraph';
+import InputBar from './components/InputBar';
+import StreamGraph from './components/StreamGraph'
+import { noCharts } from './assistantOptions/AssistantReplies'
+import WordCloud from './components/WordCloud'
+import Dictaphone from './components/Dictaphone'
+import DraggablePlotly from './components/DraggablePlotly'
 
 function App() {
   //data used for charts and table
@@ -22,7 +22,6 @@ function App() {
   const [dataHead, setDataHead] = useState([])
   const [attributes, setAttributes] = useState([])
   const [errMsg, setErrMsg] = useState('')
-  const [selected, setSelected] = useState(false)
   const [prevChart, setPrevChart] = useState([])
 
   const [overHearingData, setOverHearingData] = useState('')
@@ -30,6 +29,7 @@ function App() {
   const [featureAttributes, setFeatureAttributes] = useState([])
 
   const [overHearingText, setOverHearingText] = useState("")
+  const [plotlyCharts, setPlotlyCharts] = useState([])
 
   const processData = async (data) => {
     const dataStringLines = data.split(/\r\n|\n/);
@@ -135,29 +135,36 @@ function App() {
     const body = await response.text();
     setErrMsg("")
     const { chartObj } = JSON.parse(body)
-    let count = 0;
+    let numChartReturned = 0;
     let tmpText = ""
     setPrevChart(chartObj)
 
     for (let i = 0; i < chartObj.length; i++) {
       if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
         setCharts(prev => [chartObj[i].charts, ...prev])
-        count++
+        numChartReturned++
+      } else if (chartObj[i].plotly) {
+        setPlotlyCharts(prev => [chartObj[i], ...prev])
+        numChartReturned++
       } else {
         setErrMsg(prev => prev + chartObj[i].errMsg + "\n")
         tmpText += chartObj[i].errMsg
       }
+
     }
     if (chartObj.length == 0) {
       tmpText = noCharts[Math.floor(Math.random() * 3)]
       setErrMsg(tmpText)
     } else {
-      setErrMsg(prev => prev + "Returned " + count + " charts")
-      tmpText += "Returned " + count + " chart(s)"
+      setErrMsg(prev => prev + "Returned " + numChartReturned + " charts")
+      tmpText += "Returned " + numChartReturned + " chart(s)"
     }
 
     UseVoice(tmpText)
   }
+  console.log(plotlyCharts)
+  console.log(charts)
+
 
   const createChartWithVoice = async (transcript) => {
 
@@ -181,13 +188,16 @@ function App() {
     const body = await response.text();
     setErrMsg("")
     const { chartObj } = JSON.parse(body)
-    let count = 0;
+    let numChartReturned = 0;
     let tmpText = ""
     setPrevChart(chartObj)
     for (let i = 0; i < chartObj.length; i++) {
       if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
         setCharts(prev => [chartObj[i].charts, ...prev])
-        count++
+        numChartReturned++
+      } else if (chartObj[i].plotly) {
+        setPlotlyCharts(prev => [chartObj[i], ...prev])
+        numChartReturned++
       } else {
         setErrMsg(prev => prev + chartObj[i].errMsg + "\n")
         tmpText += chartObj[i].errMsg
@@ -197,22 +207,17 @@ function App() {
       tmpText = noCharts[Math.floor(Math.random() * 3)]
       setErrMsg(tmpText)
     } else {
-      setErrMsg(prev => prev + "Returned " + count + " charts")
-      tmpText += "Returned " + count + " chart(s)"
+      setErrMsg(prev => prev + "Returned " + numChartReturned + " charts")
+      tmpText += "Returned " + numChartReturned + " chart(s)"
     }
     let utterance = UseVoice(tmpText)
     return utterance
   }
 
-
   const clearGraphs = () => {
     setCharts([])
+    setPlotlyCharts([])
     setErrMsg("")
-    setSelected(false);
-  }
-
-  const handleSelect = (e) => {
-    setSelected(prev => !prev)
   }
 
   return (
@@ -252,22 +257,7 @@ function App() {
         <Form onSubmit={() => setOverHearingData(overHearingText)}>
           <input type="text" onChange={(e) => setOverHearingText(e.target.value)}></input>
         </Form>
-        <Plot
-        data={[
-          {
-            r: [1, 2, 3],
-            theta: ['A', 'B', 'C'],
-            type: 'scatterpolar',
-            fill: 'toself'
-          },
-        ]}
-        layout={ {width: 400, height: 400, polar: {
-          radialaxis: {
-            visible: true,
-            range: [0,10]
-          }
-        }} }
-      />
+
       </Grid>
 
       <InputBar
@@ -296,114 +286,27 @@ function App() {
             null
         }
       </div>
+      <div style={{ position: "absolute" }}>
+        {
+          plotlyCharts.length ?
+          plotlyCharts.map((element, index) => {
+              return (
+                <>
+                  <DraggablePlotly
+                    chart={element}
+                    data={data}
+                  />
+                </>
+              )
+            })
+            :
+            null
+        }
+      </div>
+      
     </>
   );
 }
 
 export default App;
 
-const Dictaphone = ({
-  createChartWithVoice,
-  setOverHearingData
-}) => {
-
-  const [listening, setListening] = useState(false)
-
-  let commands = [
-    {
-      command: "computer *",
-      callback: (command) => {
-        console.log('listening')
-        let utterance = createChartWithVoice(command, transcript)
-        utterance.onend = function (event) {
-          console.log('Utterance has finished being spoken after ' + event.elapsedTime + ' milliseconds.');
-          setListening(true)
-        }
-      }
-    },
-    {
-      command: "computer",
-      callback: () => {
-        let utterance = UseVoice("At your service")
-        utterance.onend = function (event) {
-
-          console.log('Utterance has finished being spoken after ' + event.elapsedTime + ' milliseconds.');
-          setTimeout(() => {
-            setListening(true)
-            console.log('listening')
-          }, 2500)
-
-
-        }
-      }
-    },
-    {
-      command: "computer are you there?",
-      callback: () => {
-        let utterance = UseVoice("Yes, how can i help you?")
-        utterance.onend = function (event) {
-          console.log('Utterance has finished being spoken after ' + event.elapsedTime + ' milliseconds.');
-          setListening(true)
-        }
-      }
-    }
-  ]
-
-
-
-  useEffect(() => {
-    if (listening) {
-      const timer = setTimeout(() => {
-        setListening(false)
-        console.log('not listening')
-      }, 10000)
-      return () => {
-        clearTimeout(timer)
-      }
-    }
-
-  }, [listening])
-
-  // if(listening) {
-  //   // console.log('listening')
-  //   commands = [
-  //     {
-  //       command: "*",
-  //       callback: (command) => {
-  //         let commandUtterance = createChartWithVoice(command)
-  //         console.log(command)
-  //         setListening(true)
-  //         commandUtterance.onend = function(event) {
-  //           console.log('Utterance has finished being spoken after ' + event.elapsedTime + ' milliseconds.');
-  //         }
-  //       }
-  //     }
-  //   ]
-  // }
-
-  const { transcript, resetTranscript } = useSpeechRecognition({ commands })
-
-  useEffect(() => {
-    setOverHearingData(transcript)
-  }, [transcript])
-
-  if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
-    return null
-  } else {
-    SpeechRecognition.startListening({ continuous: true })
-
-  }
-
-  return (
-    <div>
-      <button onClick={SpeechRecognition.startListening}>Start</button>
-      <button onClick={() => {
-        SpeechRecognition.stopListening();
-        createChartWithVoice(transcript);
-      }}>Create Visualization</button>
-      <Container>
-        <p>{transcript}</p>
-      </Container>
-    </div>
-  )
-}

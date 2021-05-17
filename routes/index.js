@@ -122,13 +122,13 @@ router.post('/', async (req, res, next) => {
   } else {
     for (let i = 0; i < response.classifications.length; i++) {
       if (response.classifications[i].score > .1) {
-
+        console.log(response.classifications[i].intent)
         chartObj.push(chartMaker.chartMaker(response.classifications[i].intent, synonymCommand, attributes, data, headerMatrix, command, headerFreq))
 
       }
     }
   }
-
+  console.log(chartObj)
   res.send({ chartObj })
   res.status(201);
   res.json();

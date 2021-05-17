@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Draggable from 'react-draggable';
 import { VegaLite } from 'react-vega'
-import "./style.css"
+import "../style.css"
 import { Menu } from 'semantic-ui-react'
 
 class DraggableGraph extends React.Component {
@@ -34,7 +34,7 @@ class DraggableGraph extends React.Component {
                     onStart={this.handleStart}
                     onDrag={this.handleDrag}
                     onStop={this.handleStop}>
-                    <div className="Charts" onClick={this.handleClick} style={{zIndex: this.state.z_index, width: this.props.spec.width + 170, height: this.props.spec.height + 150 }}>
+                    <div className="Charts" onClick={this.handleClick} style={{zIndex: this.state.z_index, width: 500, height: 500}}>
                         <div className="handle">
                             <Menu size="mini" color="black" inverted >
                                 <Menu.Item

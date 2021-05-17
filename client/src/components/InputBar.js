@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import './style.css'
+import '../style.css'
 import { Grid, Form, Input, Button, Container, Icon } from 'semantic-ui-react'
 import MaterialTable from 'material-table'
 
