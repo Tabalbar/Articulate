@@ -45,8 +45,8 @@ manager.addAnswer('en', 'lineArea', 'lineArea');
 // manager.addDocument('en', 'show me a normalized of temporal quantitative and nominal ', 'normalizedLineArea');
 // manager.addAnswer('en', 'normalizedLineArea', 'normalizedLineArea');
 
-// manager.addDocument('en', 'show me a stacked bar', 'stackedBar');
-// manager.addAnswer('en', 'stackedBar', 'stackedBar');
+manager.addDocument('en', 'show me a stacked bar', 'stackedBar');
+manager.addAnswer('en', 'stackedBar', 'stackedBar');
 
 // manager.addDocument('en', 'show me a normalized stacked bar chart of ', 'normalizedStackedBar');
 // manager.addDocument('en', 'show me a normalized stacked bar chart of temporal quantitative and nominal', 'normalizedStackedBar');
@@ -58,8 +58,11 @@ manager.addAnswer('en', 'lineArea', 'lineArea');
 manager.addDocument('en', 'I want to see the difference of nominal by quantitative quantitative and quantitative', 'parallelCoordinates');
 manager.addAnswer('en', 'parallelCoordinates', 'parallelCoordinates');
 
-manager.addDocument('en', 'this but with ', 'filter');
-manager.addAnswer('en', 'filter', 'filter');
+manager.addDocument('en', 'show me a radar graph of temporal and quantitative', 'radar');
+manager.addAnswer('en', 'radar', 'radar');
+
+// manager.addDocument('en', 'this but with ', 'filter');
+// manager.addAnswer('en', 'filter', 'filter');
 
 // Train and save the model.
 (async () => {

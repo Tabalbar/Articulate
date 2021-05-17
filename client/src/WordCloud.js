@@ -24,7 +24,6 @@ function WordCloud({
         if (words.length > 0) {
             let doc = nlp(overHearingData)
             let nouns = doc.nouns().out('array')
-            console.log(nouns)
 
             setNounsLength(nouns.length)
             let tmpWords = words
@@ -32,14 +31,14 @@ function WordCloud({
                 let lastTerm = nouns[nouns.length - 1]
                 for (let i = 0; i < synonymAttributes.length; i++) {
                     for (let j = 0; j < synonymAttributes[i].length; j++) {
-                        if (lastTerm.toLowerCase().includes(synonymAttributes[i][j])) {
+                        if (lastTerm.toLowerCase() == synonymAttributes[i][j].toLowerCase()) {
                             tmpWords[i].value += 1
                         }
                     }
                 }
                 for (let i = 0; i < featureAttributes.length; i++) {
                     for (let j = 0; j < featureAttributes[i].length; j++) {
-                        if (lastTerm.toLowerCase().includes(featureAttributes[i][j])) {
+                        if (lastTerm.toLowerCase() == featureAttributes[i][j].toLowerCase()) {
                             tmpWords[i].value += 1
                         }
                     }
@@ -56,7 +55,7 @@ function WordCloud({
     }
     return (
         <>
-            <ReactWordCloud words={words} />
+            <ReactWordCloud words={words} options={options}/>
         </>
     )
 }

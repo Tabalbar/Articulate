@@ -11,9 +11,9 @@ import InputBar from './InputBar';
 import StreamGraph from './StreamGraph'
 import { noCharts } from './AssistantReplies'
 import WordCloud from './WordCloud'
+import Plot from 'react-plotly.js';
 
 function App() {
-  console.log(noCharts)
   //data used for charts and table
   const [data, setData] = useState([])
   const [dataHeaders, setDataHeaders] = useState([])
@@ -28,6 +28,8 @@ function App() {
   const [overHearingData, setOverHearingData] = useState('')
   const [synonymAttributes, setSynonymAttributes] = useState([])
   const [featureAttributes, setFeatureAttributes] = useState([])
+
+  const [overHearingText, setOverHearingText] = useState("")
 
   const processData = async (data) => {
     const dataStringLines = data.split(/\r\n|\n/);
@@ -238,6 +240,7 @@ function App() {
           createChartWithVoice={createChartWithVoice}
           setOverHearingData={setOverHearingData}
         />
+
         <Grid.Row>
 
           <Input type='file' onChange={loadData} />
@@ -246,8 +249,25 @@ function App() {
           <Header as="h3" color="blue">{errMsg}</Header>
         </Grid.Row>
         {/* <Checkbox label="Iterate on Graph" checked={selected} onChange={handleSelect}/> */}
-
-
+        <Form onSubmit={() => setOverHearingData(overHearingText)}>
+          <input type="text" onChange={(e) => setOverHearingText(e.target.value)}></input>
+        </Form>
+        <Plot
+        data={[
+          {
+            r: [1, 2, 3],
+            theta: ['A', 'B', 'C'],
+            type: 'scatterpolar',
+            fill: 'toself'
+          },
+        ]}
+        layout={ {width: 400, height: 400, polar: {
+          radialaxis: {
+            visible: true,
+            range: [0,10]
+          }
+        }} }
+      />
       </Grid>
 
       <InputBar

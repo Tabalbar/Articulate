@@ -1,8 +1,6 @@
 const nlp = require('compromise')
 const findType = require('./findType')
 
-//returns two vectors
-//1 for the attribute headers and 1 for the filtered headers
 module.exports = (transcript, headerMatrix, synonymAttributes, data) => {
     let headers = []
     let tmpSynonymAttributes = synonymAttributes
@@ -20,7 +18,6 @@ module.exports = (transcript, headerMatrix, synonymAttributes, data) => {
     }
     let wordCount = []
     let filterFreq = []
-    transcript = "what is the marning of composition when students get high composition scores what are the composition of the composition where the composition lands"
     let doc = nlp(transcript)   
 
     doc.toLowerCase()
@@ -31,8 +28,8 @@ module.exports = (transcript, headerMatrix, synonymAttributes, data) => {
         wordCount.push({header: synonymsAndFeatures[i][0], count: 0})
     }
 
-    if(nouns.length > 2) {
-        const numDelete = nouns.length-2
+    if(nouns.length > 20) {
+        const numDelete = nouns.length-20
         nouns.splice(0,numDelete)
     }
 

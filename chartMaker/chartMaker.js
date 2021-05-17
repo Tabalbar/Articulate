@@ -8,6 +8,7 @@ const size = require('./specifications/size')
 const mark = require('./specifications/mark')
 const encoding = require('./specifications/encoding')
 const transform = require('./specifications/transform')
+const plotlyPipeline = require('./plotly/plotlyPipeline')
 
 module.exports = {
     chartMaker: function chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq) {
@@ -16,8 +17,8 @@ module.exports = {
         let hasTime = checkIfHasTime(extractedHeaders, data)
 
         let chartObj = {
+            plotly: false,
             charts: {
-                data: {table: data},
                 spec: {
                     title: "",
                     width: 0,
@@ -39,7 +40,9 @@ module.exports = {
             errMsg: ''
         };
         let sizeGraph = 'medium'
-        console.log(intent)
+        if(intent == 'radar') {
+            return plotlyPipeline(extractedHeaders, filteredHeaders, data)
+        } 
         chartObj = title(chartObj, actualCommand)
         chartObj = size(chartObj, sizeGraph)
         chartObj, layerMark = mark(chartObj, intent, extractedHeaders)

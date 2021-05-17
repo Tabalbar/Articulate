@@ -11,11 +11,9 @@ const StreamGraph = ({
 }) => {
 
     const [streamData, setStreamData] = useState([])
-    const [update, setUpdate] = useState(false)
     const [nounsLength, setNounsLength] = useState(0)
 
-    const [overHearingText, setOverHearingText] = useState("")
-    const [overHearing, setOverHearing] = useState('')
+
 
     const specification = {
         width: 150,
@@ -55,7 +53,7 @@ const StreamGraph = ({
             let lastTerm = nouns[nouns.length - 1]
             for (let i = 0; i < synonymAttributes.length; i++) {
                 for (let j = 0; j < synonymAttributes[i].length; j++) {
-                    if (lastTerm.toLowerCase().includes(synonymAttributes[i][j])) {
+                    if (lastTerm.toLowerCase() == synonymAttributes[i][j].toLowerCase()) {
                         tmpStreamData.push({
                             header: synonymAttributes[i][0],
                             count: 1,
@@ -66,13 +64,13 @@ const StreamGraph = ({
             }
             for (let i = 0; i < featureAttributes.length; i++) {
                 for (let j = 0; j < featureAttributes[i].length; j++) {
-                    if (lastTerm.toLowerCase().includes(featureAttributes[i][j])) {
+                    console.log(lastTerm)
+                    if (lastTerm.toLowerCase() == featureAttributes[i][j].toLowerCase()) {
                         tmpStreamData.push({
                             header: featureAttributes[i][0],
                             count: 1,
                             date: new Date()
                         })
-                        console.log(lastTerm, featureAttributes[i][j])
 
                     }
                 }
@@ -83,9 +81,7 @@ const StreamGraph = ({
 
     return (
         <>
-            {/* <Form onSubmit={() => setOverHearing(overHearingText)}>
-                <input type="text" onChange={(e) => setOverHearingText(e.target.value)}></input>
-            </Form> */}
+
             <VegaLite spec={specification} data={{ table: streamData }} />
         </>
     )
