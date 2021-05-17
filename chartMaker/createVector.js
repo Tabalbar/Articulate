@@ -3,7 +3,6 @@ const findType = require('./findType')
 
 module.exports = (headers, data) => {
     let featureMatrix = [];
-
     for (let i = 0; i < headers.length; i++) {
         if (findType(headers[i], data) === "nominal") {
             var flags = [], output = [headers[i]], l = data.length, n;

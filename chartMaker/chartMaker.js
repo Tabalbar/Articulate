@@ -7,6 +7,7 @@ const title = require('./specifications/title')
 const size = require('./specifications/size')
 const mark = require('./specifications/mark')
 const encoding = require('./specifications/encoding')
+const transform = require('./specifications/transform')
 
 module.exports = {
     chartMaker: function chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq) {
@@ -38,11 +39,12 @@ module.exports = {
             errMsg: ''
         };
         let sizeGraph = 'medium'
+        console.log(intent)
         chartObj = title(chartObj, actualCommand)
         chartObj = size(chartObj, sizeGraph)
         chartObj, layerMark = mark(chartObj, intent, extractedHeaders)
         chartObj = encoding(chartObj, intent, extractedHeaders, data, headerFreq, command)
-        
+        chartObj = transform(data, filteredHeaders, chartObj)
         return chartObj
         switch (intent) {
             case "bar":

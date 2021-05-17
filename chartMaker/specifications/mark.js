@@ -62,7 +62,7 @@ module.exports = (chartObj, intent, extractedHeaders) => {
             chartObj.charts.spec.mark = "area"
             return chartObj
         case "stackedBar":
-            chartObj.charts.spec.mark = "bar"
+            chartObj.charts.spec.mark = { type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 }
             return chartObj
         case "normalizedStackedBar":
             chartObj.charts.spec.mark = "bar"

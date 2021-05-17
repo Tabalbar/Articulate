@@ -28,7 +28,7 @@ function InputBar(
                 </Container>
             </div>
             <div className="StickyButton">
-                <Grid centered="true">
+                <Grid centered={true}>
 
                     <Button size="tiny" color="teal" icon onClick={handleOpen}>
                         <Icon name="bars" />
@@ -38,7 +38,7 @@ function InputBar(
 
             <div className="StickyInput">
 
-                <Grid centered="true">
+                <Grid centered={true}>
                     <Grid.Row>
 
                     </Grid.Row>

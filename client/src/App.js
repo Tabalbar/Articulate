@@ -9,9 +9,11 @@ import UseVoice from './UseVoice';
 import DraggableGraph from './DraggableGraph';
 import InputBar from './InputBar';
 import StreamGraph from './StreamGraph'
+import { noCharts } from './AssistantReplies'
+import WordCloud from './WordCloud'
 
 function App() {
-
+  console.log(noCharts)
   //data used for charts and table
   const [data, setData] = useState([])
   const [dataHeaders, setDataHeaders] = useState([])
@@ -21,8 +23,11 @@ function App() {
   const [attributes, setAttributes] = useState([])
   const [errMsg, setErrMsg] = useState('')
   const [selected, setSelected] = useState(false)
+  const [prevChart, setPrevChart] = useState([])
 
   const [overHearingData, setOverHearingData] = useState('')
+  const [synonymAttributes, setSynonymAttributes] = useState([])
+  const [featureAttributes, setFeatureAttributes] = useState([])
 
   const processData = async (data) => {
     const dataStringLines = data.split(/\r\n|\n/);
@@ -68,11 +73,15 @@ function App() {
     const response = await fetch('http://localhost:5000/addHeaders', {
       method: 'POST',
 
-      body: JSON.stringify({ headers: headers }),
+      body: JSON.stringify({ headers: headers, data: tmpDataHead }),
       headers: {
         'Content-Type': 'application/json',
       }
     });
+    const body = await response.text()
+    const { synonymMatrix, featureMatrix } = JSON.parse(body)
+    setSynonymAttributes(synonymMatrix)
+    setFeatureAttributes(featureMatrix)
   }
 
   const loadData = (e) => {
@@ -103,22 +112,19 @@ function App() {
   }
 
   const createCharts = async () => {
-    await fetch('http://localhost:5000/addHeaders', {
-      method: 'POST',
-
-      body: JSON.stringify({ headers: attributes }),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-    let prevChart = false
-    if (selected === true) {
-      prevChart = charts[charts.length - 1]
-    }
 
     const response = await fetch('http://localhost:5000/', {
       method: 'POST',
-      body: JSON.stringify({ command: command, attributes: attributes, dataHead: dataHead, prevChart: prevChart, overHearingData: overHearingData }),
+      body: JSON.stringify(
+        {
+          command: command,
+          attributes: attributes,
+          dataHead: dataHead,
+          prevChart: prevChart,
+          overHearingData: overHearingData,
+          synonymAttributes: synonymAttributes,
+          featureAttributes: featureAttributes
+        }),
       headers: {
         'Content-Type': 'application/json',
       }
@@ -129,6 +135,8 @@ function App() {
     const { chartObj } = JSON.parse(body)
     let count = 0;
     let tmpText = ""
+    setPrevChart(chartObj)
+
     for (let i = 0; i < chartObj.length; i++) {
       if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
         setCharts(prev => [chartObj[i].charts, ...prev])
@@ -138,27 +146,31 @@ function App() {
         tmpText += chartObj[i].errMsg
       }
     }
-    setErrMsg(prev => prev + "Returned " + count + " charts")
-    tmpText += "Returned " + count + " chart(s)"
+    if (chartObj.length == 0) {
+      tmpText = noCharts[Math.floor(Math.random() * 3)]
+      setErrMsg(tmpText)
+    } else {
+      setErrMsg(prev => prev + "Returned " + count + " charts")
+      tmpText += "Returned " + count + " chart(s)"
+    }
+
     UseVoice(tmpText)
   }
-  const createChartWithVoice = async (transcript) => {
-    await fetch('http://localhost:5000/addHeaders', {
-      method: 'POST',
 
-      body: JSON.stringify({ headers: attributes }),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-    let prevChart = false
-    if (selected === true) {
-      prevChart = charts[charts.length - 1]
-    }
+  const createChartWithVoice = async (transcript) => {
 
     const response = await fetch('http://localhost:5000/', {
       method: 'POST',
-      body: JSON.stringify({ command: transcript, attributes: attributes, dataHead: dataHead, prevChart: prevChart, overHearingData: overHearingData }),
+      body: JSON.stringify(
+        {
+          command: transcript,
+          attributes: attributes,
+          dataHead: dataHead,
+          prevChart: prevChart,
+          overHearingData: overHearingData,
+          synonymAttributes: synonymAttributes,
+          featureAttributes: featureAttributes
+        }),
       headers: {
         'Content-Type': 'application/json',
       }
@@ -169,6 +181,7 @@ function App() {
     const { chartObj } = JSON.parse(body)
     let count = 0;
     let tmpText = ""
+    setPrevChart(chartObj)
     for (let i = 0; i < chartObj.length; i++) {
       if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
         setCharts(prev => [chartObj[i].charts, ...prev])
@@ -178,9 +191,13 @@ function App() {
         tmpText += chartObj[i].errMsg
       }
     }
-    setErrMsg(prev => prev + "Returned " + count + " charts")
-    tmpText += "Returned " + count + " chart(s)"
-
+    if (chartObj.length == 0) {
+      tmpText = noCharts[Math.floor(Math.random() * 3)]
+      setErrMsg(tmpText)
+    } else {
+      setErrMsg(prev => prev + "Returned " + count + " charts")
+      tmpText += "Returned " + count + " chart(s)"
+    }
     let utterance = UseVoice(tmpText)
     return utterance
   }
@@ -199,10 +216,21 @@ function App() {
   return (
     <>
       <br />
-      <StreamGraph
-        overHearingData={overHearingData}
-        attributes={attributes}
-      />
+      <div style={{ position: 'absolute' }}>
+
+        <StreamGraph
+          overHearingData={overHearingData}
+          attributes={attributes}
+          synonymAttributes={synonymAttributes}
+          featureAttributes={featureAttributes}
+        />
+        <WordCloud
+          overHearingData={overHearingData}
+          attributes={attributes}
+          synonymAttributes={synonymAttributes}
+          featureAttributes={featureAttributes}
+        />
+      </div>
       <Grid centered={true}>
         <Grid.Row>
         </Grid.Row>

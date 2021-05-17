@@ -52,11 +52,14 @@ manager.addAnswer('en', 'lineArea', 'lineArea');
 // manager.addDocument('en', 'show me a normalized stacked bar chart of temporal quantitative and nominal', 'normalizedStackedBar');
 // manager.addAnswer('en', 'normalizedStackedBar', 'normalizedStackedBar');
 
-manager.addDocument('en', 'show me the stock trend', 'candleStick');
-manager.addAnswer('en', 'candleStick', 'candleStick');
+// manager.addDocument('en', 'show me the stock trend', 'candleStick');
+// manager.addAnswer('en', 'candleStick', 'candleStick');
 
 manager.addDocument('en', 'I want to see the difference of nominal by quantitative quantitative and quantitative', 'parallelCoordinates');
 manager.addAnswer('en', 'parallelCoordinates', 'parallelCoordinates');
+
+manager.addDocument('en', 'this but with ', 'filter');
+manager.addAnswer('en', 'filter', 'filter');
 
 // Train and save the model.
 (async () => {
@@ -74,6 +77,7 @@ const iterateGraph = require('../chartMaker/iterateGraph')
 const countVector = require('../chartMaker/countVector')
 const ExplicitChart = require('../chartMaker/specifications/ExplicitChart')
 
+
 // const findommands = require('../chartMaker/findCommands')
 const nlp = require('compromise')
 
@@ -82,21 +86,19 @@ router.post('/', async (req, res, next) => {
   let specs = [];
   const data = req.body.dataHead;
   const attributes = req.body.attributes
-
-
   const transcript = req.body.overHearingData
+  const prevChart = req.body.prevChart
+  const synonymAttributes = req.body.synonymAttributes
+  const featureAttributes = req.body.featureAttributes
 
   let charts = []
   const command = req.body.command
   const normalizedCommand = normalizeCommand(command)
   const { generalizedCommand, synonymCommand } = generalizeCommand(normalizedCommand, attributes, data)
-
   const explicitChart = ExplicitChart(normalizedCommand)
   const response = await manager.process('en', generalizedCommand)
   const headerMatrix = createVector(attributes, data)
-
-  const { headerFreq, filterFreq } = countVector(transcript, headerMatrix, data)
-  console.log(generalizedCommand)
+  const { headerFreq } = countVector(transcript, featureAttributes, synonymAttributes, data)
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
     // add methods to run after the tagger
@@ -109,16 +111,11 @@ router.post('/', async (req, res, next) => {
       });
     })
   })
-
-  // let chartObj = {
-  //   charts: null,
-  //   errMsg: 'no command found'
-  // }
+  
   let chartObj = []
   if (explicitChart) {
     let chart = chartMaker.chartMaker(explicitChart, synonymCommand, attributes, data, headerMatrix, command, headerFreq)
-    chartObj.push( chart)
-    console.log(chart)
+    chartObj.push(chart)
   } else {
     for (let i = 0; i < response.classifications.length; i++) {
       if (response.classifications[i].score > .1) {
@@ -129,30 +126,30 @@ router.post('/', async (req, res, next) => {
     }
   }
 
-  // if (req.body.prevChart && response) {
-  //   chartObj = iterateGraph(response.answer, synonymCommand, attributes, data, headerMatrix, command)
-  // } else if (response) {
-  //   chartObj = chartMaker(response.answer, synonymCommand, attributes, data, headerMatrix, command)
-  // }
   res.send({ chartObj })
   res.status(201);
   res.json();
 
 });
 
+const createMatrixForAll = require('../chartMaker/createMatrixForAll')
 
 router.post('/addHeaders', async (req, res, next) => {
+  const headers = req.body.headers
+  const data = req.body.data
+
   nlp.extend((Doc, world) => {
-    const headers = req.body.headers
     // add methods to run after the tagger
+    const nlpHeaders = req.body.headers
+
     world.postProcess(doc => {
-      doc.match('light the lights').tag('#Verb . #Plural')
-      headers.forEach(header => {
+      nlpHeaders.forEach(header => {
         doc.match(header).tag('#Noun')
       });
     })
   })
-
+  const { featureMatrix, synonymMatrix } = createMatrixForAll(headers, data)
+  res.send({ synonymMatrix, featureMatrix })
   res.status(201);
   res.json();
 })

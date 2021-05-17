@@ -9,7 +9,7 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command)
         numHeaders = 4
     }
     if (intent == "pie") {
-        return pie(chartObj, extractedHeaders, data)
+        return pie(chartObj, extractedHeaders, data, headerFreq, command)
     }
     if (intent == "heatmap") {
         return heatmap(chartObj, extractedHeaders, data, headerFreq, command)
@@ -17,9 +17,9 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command)
     if(intent == "marginalHistogram") {
         return marginalHistogram(chartObj, extractedHeaders, data, headerFreq, command)
     }
+    console.log(extractedHeaders)
     switch (numHeaders) {
         case 1:
-
             chartObj.charts.spec.encoding.x = {
                 field: extractedHeaders[0],
                 type: findType(extractedHeaders[0], data)
@@ -39,8 +39,6 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command)
                 type: findType(extractedHeaders[1], data)
             }
             return chartObj
-
-
         case 3:
             extractedHeaders = findQuantitative(extractedHeaders, data)
             chartObj.charts.spec.encoding.columns = {
@@ -56,8 +54,8 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command)
                 type: findType(extractedHeaders[1], data)
             }
             chartObj.charts.spec.encoding.color = {
-                field: extractedHeaders[0],
-                type: findType(extractedHeaders[0], data)
+                field: extractedHeaders[2],
+                type: findType(extractedHeaders[2], data)
             }
             return chartObj
         case 4:
@@ -70,6 +68,7 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command)
             return chartObj
     }
 }
+
 function switchHeaders(extractedHeaders, targetIndex, sourceIndex) {
     let tmpHeader = extractedHeaders[targetIndex]
     extractedHeaders[targetIndex] = extractedHeaders[sourceIndex]
@@ -78,6 +77,11 @@ function switchHeaders(extractedHeaders, targetIndex, sourceIndex) {
 }
 
 function findQuantitative(extractedHeaders, data) {
+    for(let i = 0; i < extractedHeaders.length; i++) {
+        if(findType(extractedHeaders[i], data) == "temporal") {
+            extractedHeaders = switchHeaders(extractedHeaders, 0, i)
+        }
+    }
     for (let i = 0; i < extractedHeaders.length; i++) {
         if (findType(extractedHeaders[i], data) == "quantitative") {
             return switchHeaders(extractedHeaders, 1, i)

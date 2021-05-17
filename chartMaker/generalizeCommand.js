@@ -4,6 +4,7 @@ nlp.extend(require('compromise-numbers'))
 nlp.extend(require('compromise-dates'))
 var thesaurus = require("thesaurus");
 const findType = require('./findType')
+const createMatrixForAll = require('./createMatrixForAll')
 
 module.exports = (command, attributes, data) => {
     let doc = nlp(command)
@@ -37,71 +38,3 @@ module.exports = (command, attributes, data) => {
 }
 
 
-let featureMatrix = [];
-
-function createMatrixForAll(headers, data){
-    let featureMatrix = [];
-    let synonymMatrix = [];
-    for (let i = 0; i < headers.length; i++) {
-        synonyms = [headers[i]]
-        if (findType(headers[i], data) === "nominal") {
-            var flags = [], output = [headers[i]], l = data.length, n;
-            for (n = 0; n < l; n++) {
-                if (flags[data[n][headers[i]]]) continue;
-                flags[data[n][headers[i]]] = true;
-                output.push(data[n][headers[i]]);
-                output.push(thesaurus.find(data[n][headers[i]]))
-                output = output.flat()
-            }
-            featureMatrix.push(output)
-        } else {
-            var output = [headers[i]]
-            featureMatrix.push(output)
-        }
-
-        // console.log(headers[i].split(/\W/g))
-        if(headers[i].match(/\W/g)){
-            let words = headers[i].split(/\W/g)
-            for(let i = 0; i < words.length; i++){
-                let doc = nlp(words[i])
-                if(doc.has('#Noun')){
-                    synonyms.push(thesaurus.find(words[i]))
-                    synonyms.push(words[i])
-                }
-            }
-
-        }
-        synonyms.push(thesaurus.find(headers[i].toLowerCase()))
-        synonyms = synonyms.flat()
-
-        // for(let j = 1; j < synonyms.length; j++) {
-        //     console.log(synonyms[j], headers[i].toLowerCase())
-        //     if(synonyms[j] == headers[i].toLowerCase()) {
-        //         synonyms = synonyms.splice(j, 1)
-        //     }
-        // }
-        // console.log(synonyms)
-
-        synonymMatrix.push(synonyms)
-
-    }
-
-    for(let i = 0; i < synonymMatrix.length; i++) {
-        for(let j = 1; j < synonymMatrix[i].length; j++) {
-            for(let n = 0; n <  headers.length; n++) {
-                if(synonymMatrix[i][j] === headers[n].toLowerCase()) {
-                    // console.log(synonymMatrix[i][j], headers[n].toLowerCase())
-                    // console.log(synonymMatrix[i].splice(j, 1), i , j)
-
-                    synonymMatrix[i].splice(j, 1)
-                }
-            }
-        }
-    }
-    
-    // for(let i = 0; i < synonymMatrix.length; i++) {
-        
-    // }
-    // console.log(synonymMatrix)
-    return {featureMatrix, synonymMatrix}
-}

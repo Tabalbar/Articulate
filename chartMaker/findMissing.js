@@ -6,6 +6,7 @@ module.exports = {
         if (command == "") {
             return ""
         }
+        
         let missing = reorder(extractedHeaders, targetHeaderLength, data, sequence)
         if (missing.n) {
             extractedHeaders = findInferHeader(command, headerFreq, 'nominal', extractedHeaders)
@@ -89,7 +90,7 @@ function reorder(extractedHeaders, targetHeaderLength, data, sequence) {
             if (targetHeaderLength == 1) {
                 missing.t = false
                 missing.q = false
-                if (findType(extractedHeaders[0], data) == 'nominal') {
+                if (extractedHeaders.length > 0 && findType(extractedHeaders[0], data) == 'nominal') {
                     missing.n = false
                     return extractedHeaders
                 }
