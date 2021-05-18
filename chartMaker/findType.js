@@ -1,6 +1,7 @@
 module.exports = (header, data) => {
     let lowerCaseHeader = header.toLowerCase()
-    if (lowerCaseHeader.includes('date')
+    let dateVar = data[1][header]
+    if (!isNaN(dateVar) || lowerCaseHeader.includes('date')
         || lowerCaseHeader.includes('year') || lowerCaseHeader.includes('month')
         || lowerCaseHeader.includes('day') || lowerCaseHeader.includes('months')
         || lowerCaseHeader.includes('dates')) {

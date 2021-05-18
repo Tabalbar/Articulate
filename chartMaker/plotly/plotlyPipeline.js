@@ -1,6 +1,6 @@
 const findType = require('../findType')
 
-module.exports = (extractedHeaders, filteredHeaders, data) => {
+module.exports = (actualCommand, extractedHeaders, filteredHeaders, data) => {
     if(extractedHeaders.length !== 2) {
         let chartObj = {
             errmsg: 'error'
@@ -28,7 +28,8 @@ module.exports = (extractedHeaders, filteredHeaders, data) => {
                     visible: true,
                     range: [Math.min(extractedHeaders[1]), Math.max(extractedHeaders[1])]
                 }
-            }
+            },
+            title: {text: actualCommand}
         }
     }
     return chartObj

@@ -41,7 +41,7 @@ module.exports = {
         };
         let sizeGraph = 'medium'
         if(intent == 'radar') {
-            return plotlyPipeline(extractedHeaders, filteredHeaders, data)
+            return plotlyPipeline(actualCommand, extractedHeaders, filteredHeaders, data)
         } 
         chartObj = title(chartObj, actualCommand)
         chartObj = size(chartObj, sizeGraph)

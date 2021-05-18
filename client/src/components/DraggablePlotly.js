@@ -32,7 +32,6 @@ class DraggablePlotly extends React.Component {
     }
 
     render() {
-        console.log(this.props.chart.data[0].theta)
 
         return (
             <>
@@ -90,7 +89,14 @@ function extractData(data, extractedHeader) {
     let tmpData = []
 
     for(let i = 0; i < data.length; i ++) {
-        tmpData.push(data[i][extractedHeader])
+        let possibleDate = new Date(data[i][extractedHeader])
+
+        if(!isNaN(possibleDate)) {
+            tmpData.push(possibleDate)
+        } else {
+            tmpData.push(data[i][extractedHeader])
+        }
+
     }
     return tmpData
 }
