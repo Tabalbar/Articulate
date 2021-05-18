@@ -89,7 +89,7 @@ function extractData(data, extractedHeader) {
 
     for(let i = 0; i < data.length; i ++) {
         let possibleDate = new Date(data[i][extractedHeader])
-        if(i == 0) {
+        if(i == 0 && !isNaN(possibleDate)) {
             data.sort((a, b) => (new Date(a[extractedHeader]) > new Date(b[extractedHeader])) ? 1 : -1)
 
         }

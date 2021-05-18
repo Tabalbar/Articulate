@@ -63,6 +63,5 @@ module.exports = (headers, data) => {
         }
         
     }
-    console.log(synonymMatrix)
     return {featureMatrix, synonymMatrix}
 }

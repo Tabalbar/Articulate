@@ -14,7 +14,19 @@ module.exports = {
         let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers, command)
         let extractedHeaders = extractHeaders(command, headers, data)
         let hasTime = checkIfHasTime(extractedHeaders, data)
+        const headerKeys = Object.keys(headerFreq)
+        for(let i = 0; i < headerKeys.length; i++) {
+            console.log(headerFreq[headerKeys[i]])
+            for(let j = 0; j < headerFreq[headerKeys[i]].length; j++) {
+                if(headerFreq[headerKeys[i]][j].count >= 5){
+                    extractedHeaders.push(headerFreq[headerKeys[i]][j].header)
+                    console.log('here')
+                }
+            }
+        }
+        console.log(headerFreq)
 
+        console.log(extractedHeaders)
         let chartObj = {
             plotly: false,
             charts: {
