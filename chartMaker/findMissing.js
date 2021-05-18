@@ -4,7 +4,6 @@ const findType = require('./findType')
 module.exports = {
     findMissing: function (extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence) {
  
-        console.log('called')
         let missing = reorder(extractedHeaders, targetHeaderLength, data, sequence)
         console.log(missing)
         if (missing.n) {
