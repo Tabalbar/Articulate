@@ -1,6 +1,5 @@
 
 const nlp = require('compromise')
-const chartMakerWithAnswer = require('./chartMakerWithAnswer')
 const findType = require('./findType')
 const findMissing = require('./findMissing').findMissing
 const title = require('./specifications/title')
@@ -41,7 +40,7 @@ module.exports = {
         };
         let sizeGraph = 'medium'
         if(intent == 'radar') {
-            return plotlyPipeline(actualCommand, extractedHeaders, filteredHeaders, data)
+            return plotlyPipeline(actualCommand, extractedHeaders, filteredHeaders, data, headerFreq, command)
         } 
         chartObj = title(chartObj, actualCommand)
         chartObj = size(chartObj, sizeGraph)

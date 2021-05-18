@@ -26,7 +26,6 @@ class DraggablePlotly extends React.Component {
         let tmpState = this.state
         let tmpData = this.props.data
         tmpData.sort((a, b) => (Date.parse(a[this.props.chart.data[0].theta]) > Date.parse(b[this.props.chart.data[0].theta])) ? 1 : -1)
-        console.log(Date.parse(tmpData[0][this.props.chart.data[0].theta]))
         tmpState.data = tmpData
         this.setState({tmpState})
     }
@@ -59,8 +58,8 @@ class DraggablePlotly extends React.Component {
                         <Plot
                             data={[
                                 {
-                                    r: extractData(this.state.data, this.props.chart.data[0].r, false),
-                                    theta: extractData(this.state.data, this.props.chart.data[0].theta, true),
+                                    r: extractData(this.state.data, this.props.chart.data[0].r),
+                                    theta: extractData(this.state.data, this.props.chart.data[0].theta),
                                     type: 'scatterpolar',
                                     fill: 'toself'
                                 },
@@ -90,9 +89,16 @@ function extractData(data, extractedHeader) {
 
     for(let i = 0; i < data.length; i ++) {
         let possibleDate = new Date(data[i][extractedHeader])
+        if(i == 0) {
+            data.sort((a, b) => (new Date(a[extractedHeader]) > new Date(b[extractedHeader])) ? 1 : -1)
 
+        }
         if(!isNaN(possibleDate)) {
-            tmpData.push(possibleDate)
+            let date = possibleDate.toDateString().substring(4, 15)
+            console.log(date)
+
+            tmpData.push(date)
+            
         } else {
             tmpData.push(data[i][extractedHeader])
         }
@@ -107,5 +113,5 @@ function getMinAndMax(data, extractedHeader) {
     for(let i = 0; i < data.length; i ++) {
         tmpData.push(data[i][extractedHeader])
     }
-    return [Math.min(tmpData), Math.max(tmpData)]
+    return [Math.min(tmpData), Math.max(tmpData)+1]
 }
