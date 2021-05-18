@@ -17,7 +17,6 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command)
     if(intent == "marginalHistogram") {
         return marginalHistogram(chartObj, extractedHeaders, data, headerFreq, command)
     }
-    console.log(extractedHeaders)
     switch (numHeaders) {
         case 1:
             chartObj.charts.spec.encoding.x = {

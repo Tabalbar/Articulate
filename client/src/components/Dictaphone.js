@@ -97,11 +97,11 @@ const Dictaphone = ({
   
     return (
       <div>
-        <button onClick={SpeechRecognition.startListening}>Start</button>
+        {/* <button onClick={SpeechRecognition.startListening}>Start</button>
         <button onClick={() => {
           SpeechRecognition.stopListening();
           createChartWithVoice(transcript);
-        }}>Create Visualization</button>
+        }}>Create Visualization</button> */}
         <Container>
           <p>{transcript}</p>
         </Container>

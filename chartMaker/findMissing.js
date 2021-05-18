@@ -3,11 +3,10 @@ const findType = require('./findType')
 
 module.exports = {
     findMissing: function (extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence) {
-        if (command == "") {
-            return ""
-        }
-        
+ 
+        console.log('called')
         let missing = reorder(extractedHeaders, targetHeaderLength, data, sequence)
+        console.log(missing)
         if (missing.n) {
             extractedHeaders = findInferHeader(command, headerFreq, 'nominal', extractedHeaders)
             return module.exports.findMissing(extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence)

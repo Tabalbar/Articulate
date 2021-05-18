@@ -30,6 +30,14 @@ function App() {
 
   const [overHearingText, setOverHearingText] = useState("")
   const [plotlyCharts, setPlotlyCharts] = useState([])
+  const [randomChart, setRandomChart] = useState(false)
+
+  useEffect(() => {
+    if(randomChart) {
+      createCharts()
+    }
+    setRandomChart(false)
+  },[randomChart])
 
   const processData = async (data) => {
     const dataStringLines = data.split(/\r\n|\n/);
@@ -114,7 +122,7 @@ function App() {
   }
 
   const createCharts = async () => {
-
+    
     const response = await fetch('http://localhost:5000/', {
       method: 'POST',
       body: JSON.stringify(
@@ -125,7 +133,8 @@ function App() {
           prevChart: prevChart,
           overHearingData: overHearingData,
           synonymAttributes: synonymAttributes,
-          featureAttributes: featureAttributes
+          featureAttributes: featureAttributes,
+          randomChart: randomChart
         }),
       headers: {
         'Content-Type': 'application/json',
@@ -219,10 +228,15 @@ function App() {
     setPlotlyCharts([])
     setErrMsg("")
   }
+  
+  const testRandomChart = () => {
+    setRandomChart(true)
+  }
 
   return (
     <>
       <br />
+
       <div style={{ position: 'absolute' }}>
 
         <StreamGraph
@@ -239,6 +253,7 @@ function App() {
         />
       </div>
       <Grid centered={true}>
+        <Button onClick={testRandomChart}>Test Random Chart</Button>
         <Grid.Row>
         </Grid.Row>
         <Dictaphone

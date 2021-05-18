@@ -79,7 +79,7 @@ const generalizeCommand = require('../chartMaker/generalizeCommand')
 const iterateGraph = require('../chartMaker/iterateGraph')
 const countVector = require('../chartMaker/countVector')
 const ExplicitChart = require('../chartMaker/specifications/ExplicitChart')
-
+const chartOptions = require('../chartMaker/specifications/chartOptions')
 
 // const findommands = require('../chartMaker/findCommands')
 const nlp = require('compromise')
@@ -93,15 +93,18 @@ router.post('/', async (req, res, next) => {
   const prevChart = req.body.prevChart
   const synonymAttributes = req.body.synonymAttributes
   const featureAttributes = req.body.featureAttributes
+  const randomChart = req.body.randomChart
 
   let charts = []
   const command = req.body.command
   const normalizedCommand = normalizeCommand(command)
   const { generalizedCommand, synonymCommand } = generalizeCommand(normalizedCommand, attributes, data)
-  const explicitChart = ExplicitChart(normalizedCommand)
+  let explicitChart = ExplicitChart(normalizedCommand)
+
   const response = await manager.process('en', generalizedCommand)
   const headerMatrix = createVector(attributes, data)
   const { headerFreq } = countVector(transcript, featureAttributes, synonymAttributes, data)
+
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
     // add methods to run after the tagger
@@ -114,7 +117,9 @@ router.post('/', async (req, res, next) => {
       });
     })
   })
-  
+  if(randomChart) {
+    explicitChart = chartOptions[Math.floor(Math.random() * chartOptions.length)].mark
+  }
   let chartObj = []
   if (explicitChart) {
     let chart = chartMaker.chartMaker(explicitChart, synonymCommand, attributes, data, headerMatrix, command, headerFreq)

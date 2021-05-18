@@ -22,12 +22,20 @@ module.exports = (chartObj, extractedHeaders, data, headerFreq, command) => {
     if (numHeaders > 3) {
         numHeaders = 4
     }
-    console.log(extractedHeaders)
 
     switch (numHeaders) {
         case 1:
+
         extractedHeaders =  findMissing(extractedHeaders, data, 2, headerFreq, command, "QQQ")
+
         case 2:
+            for(let i = 0; i < extractedHeaders.length; i++) {
+                if(findType(extractedHeaders[i], data) == "nominal") {
+                    extractedHeaders.splice(i,1)
+                }
+                extractedHeaders = findMissing(extractedHeaders, data, 2, headerFreq, command, "QQQ")
+            }
+
             chartObj.charts.spec.encoding.x = {
                 field: extractedHeaders[0],
                 bin: true,

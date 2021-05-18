@@ -32,7 +32,6 @@ module.exports = (transcript, headerMatrix, synonymAttributes, data) => {
         const numDelete = nouns.length-20
         nouns.splice(0,numDelete)
     }
-    console.log(nouns)
     for(let i = 0; i < nouns.length; i ++) {
         for(let j = 0; j < synonymsAndFeatures.length; j++) {
             for(let n = 0; n < synonymsAndFeatures[j].length; n++) {
@@ -42,7 +41,6 @@ module.exports = (transcript, headerMatrix, synonymAttributes, data) => {
             }
         }
     }
-    console.log(transcript)
     for(let i = 0; i < wordCount.length; i++) {
         headerFreq[findType(wordCount[i].header, data)].push(wordCount[i])
     }

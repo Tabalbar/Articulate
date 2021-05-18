@@ -8,7 +8,6 @@ module.exports = (intent, command, headers, data, headerMatrix, actualCommand) =
     };
     let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers, command)
     let extractedHeaders = extractHeaders(command, headers, filteredHeaders)
-    console.log(filteredHeaders, extractedHeaders)
     return chartObj
 }
 function extractFilteredHeaders(command, headerMatrix, data, headers, command) {
