@@ -36,10 +36,6 @@ module.exports = [
         mark: "heatmap"
     },
     {
-        key: "normalized area",
-        mark: "normalizedLineArea"
-    },
-    {
         key: "area",
         mark: "lineArea"
     },

@@ -27,7 +27,7 @@ module.exports = (chartObj, extractedHeaders, data, headerFreq, command, normali
     if(intent == "stackedBar") {
         chartObj.charts.spec.mark = { type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 }
 
-    } else {
+    } else if(intent == "lineArea") {
         chartObj.charts.spec.mark = "area"
     }
 

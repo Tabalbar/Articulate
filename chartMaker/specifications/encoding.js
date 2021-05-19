@@ -9,6 +9,7 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command,
     if (numHeaders > 3) {
         numHeaders = 4
     }
+    console.log(intent)
 
     if (intent == "pie") {
         return pie(chartObj, extractedHeaders, data, headerFreq, command)
@@ -22,7 +23,7 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command,
     if(intent == "stackedBar") {
         return stackedBar(chartObj, extractedHeaders, data, headerFreq, command, normalize, intent)
     }
-    if(intent == "lineArea") {
+    if(intent == "lineArea" || intent == "normalizedLineArea") {
         return stackedBar(chartObj, extractedHeaders, data, headerFreq, command, normalize, intent)
 
     }
