@@ -1,6 +1,8 @@
 module.exports = (chartObj, intent, extractedHeaders) => {
     let layerMark = "";
-    if(extractedHeaders.length > 3) {
+    if (extractedHeaders.length > 3) {
+        console.log('jfneajknadljkfnalk')
+
         delete chartObj.charts.spec.mark
         switch (intent) {
             case "bar":
@@ -35,14 +37,18 @@ module.exports = (chartObj, intent, extractedHeaders) => {
             case "parallelCoordinates":
                 chartObj.charts.spec.mark = "line"
                 return chartObj
-    
-    
+
+
         }
     }
+
     switch (intent) {
         case "bar":
             chartObj.charts.spec.mark = "bar"
             return chartObj;
+        case "lineArea":
+            chartObj.charts.spec.mark = "area"
+            return chartObj
         case "line":
             chartObj.charts.spec.mark = "line"
             return chartObj
@@ -53,13 +59,11 @@ module.exports = (chartObj, intent, extractedHeaders) => {
             chartObj.charts.spec.mark = "arc"
             return chartObj
         case "marginalHistogram":
+
             delete chartObj.charts.spec.mark
             return chartObj
         case "heatmap":
             chartObj.charts.spec.mark = "rect"
-            return chartObj
-        case "lineArea":
-            chartObj.charts.spec.mark = "area"
             return chartObj
         case "stackedBar":
             chartObj.charts.spec.mark = { type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 }

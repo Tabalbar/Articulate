@@ -25,9 +25,7 @@ module.exports = (chartObj, extractedHeaders, data, headerFreq, command) => {
 
     switch (numHeaders) {
         case 1:
-
         extractedHeaders =  findMissing(extractedHeaders, data, 2, headerFreq, command, "QQQ")
-
         case 2:
             for(let i = 0; i < extractedHeaders.length; i++) {
                 if(findType(extractedHeaders[i], data) == "nominal") {

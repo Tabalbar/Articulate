@@ -14,9 +14,9 @@ module.exports = {
         let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers, command)
         let extractedHeaders = extractHeaders(command, headers, data)
         let hasTime = checkIfHasTime(extractedHeaders, data)
+        let normalize = checkNormalize(command)
         const headerKeys = Object.keys(headerFreq)
         for(let i = 0; i < headerKeys.length; i++) {
-            console.log(headerFreq[headerKeys[i]])
             for(let j = 0; j < headerFreq[headerKeys[i]].length; j++) {
                 if(headerFreq[headerKeys[i]][j].count >= 5){
                     extractedHeaders.push(headerFreq[headerKeys[i]][j].header)
@@ -24,9 +24,7 @@ module.exports = {
                 }
             }
         }
-        console.log(headerFreq)
 
-        console.log(extractedHeaders)
         let chartObj = {
             plotly: false,
             charts: {
@@ -57,7 +55,7 @@ module.exports = {
         chartObj = title(chartObj, actualCommand)
         chartObj = size(chartObj, sizeGraph)
         chartObj, layerMark = mark(chartObj, intent, extractedHeaders)
-        chartObj = encoding(chartObj, intent, extractedHeaders, data, headerFreq, command)
+        chartObj = encoding(chartObj, intent, extractedHeaders, data, headerFreq, command, normalize)
         chartObj = transform(data, filteredHeaders, chartObj)
         return chartObj
         switch (intent) {
@@ -552,6 +550,7 @@ module.exports = {
                                     },
                                     color: { field: extractedHeaders[0] }
                                 },
+                                
                                 data: { name: 'table' }, // note: vega-lite data attribute is a plain object instead of an array
                             }
 
@@ -711,6 +710,14 @@ module.exports = {
     }
 }
 
+function checkNormalize(command) {
+    const doc = nlp(command)
+    if(doc.has("normalized") || doc.has("normalize")) {
+        return true
+    } else {
+        return false
+    }
+}
 
 function checkIfHasTime(extractedHeaders, data) {
     for (let i = 0; i < extractedHeaders.length; i++) {

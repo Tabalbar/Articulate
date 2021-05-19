@@ -2,12 +2,14 @@ const findType = require("../findType")
 const heatmap = require("../specialGraphs/heatmap")
 const pie = require('../specialGraphs/pie')
 const marginalHistogram = require('../specialGraphs/marginalHistogram')
+const stackedBar = require('../specialGraphs/stackedBar')
 
-module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command) => {
+module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command, normalize) => {
     let numHeaders = extractedHeaders.length
     if (numHeaders > 3) {
         numHeaders = 4
     }
+
     if (intent == "pie") {
         return pie(chartObj, extractedHeaders, data, headerFreq, command)
     }
@@ -17,6 +19,14 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command)
     if(intent == "marginalHistogram") {
         return marginalHistogram(chartObj, extractedHeaders, data, headerFreq, command)
     }
+    if(intent == "stackedBar") {
+        return stackedBar(chartObj, extractedHeaders, data, headerFreq, command, normalize, intent)
+    }
+    if(intent == "lineArea") {
+        return stackedBar(chartObj, extractedHeaders, data, headerFreq, command, normalize, intent)
+
+    }
+
     switch (numHeaders) {
         case 1:
             chartObj.charts.spec.encoding.x = {
@@ -31,7 +41,7 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command)
             extractedHeaders = findQuantitative(extractedHeaders, data)
             chartObj.charts.spec.encoding.x = {
                 field: extractedHeaders[0],
-                type: findType(extractedHeaders[0], data)
+                type: findType(extractedHeaders[0], data),
             }
             chartObj.charts.spec.encoding.y = {
                 field: extractedHeaders[1],

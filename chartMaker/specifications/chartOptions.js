@@ -44,8 +44,6 @@ module.exports = [
         mark: "lineArea"
     },
 
-
-
     {
         key: "candle stick",
         mark: "candleStick"

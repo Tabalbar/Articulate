@@ -74,7 +74,6 @@ const StreamGraph = ({
                 }
             }
         }
-        console.log(streamData)
         setStreamData(tmpStreamData.flat())
     }, [overHearingData])
 

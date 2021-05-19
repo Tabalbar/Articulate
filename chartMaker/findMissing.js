@@ -5,7 +5,6 @@ module.exports = {
     findMissing: function (extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence) {
  
         let missing = reorder(extractedHeaders, targetHeaderLength, data, sequence)
-        console.log(missing)
         if (missing.n) {
             extractedHeaders = findInferHeader(command, headerFreq, 'nominal', extractedHeaders)
             return module.exports.findMissing(extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence)
@@ -60,6 +59,7 @@ function findInferHeader(command, headerFreq, type, extractedHeaders) {
             return findInferHeader(command, headerFreq, type, extractedHeaders)
         }
     }
+    console.log(extractedHeaders)
     extractedHeaders.push(headerToAdd)
 
 

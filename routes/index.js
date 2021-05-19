@@ -133,7 +133,6 @@ router.post('/', async (req, res, next) => {
       }
     }
   }
-  console.log(chartObj)
   res.send({ chartObj })
   res.status(201);
   res.json();

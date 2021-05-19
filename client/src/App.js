@@ -12,6 +12,8 @@ import { noCharts } from './assistantOptions/AssistantReplies'
 import WordCloud from './components/WordCloud'
 import Dictaphone from './components/Dictaphone'
 import DraggablePlotly from './components/DraggablePlotly'
+import DraggableLeaflet from './components/DraggableLeaflet'
+import Leaflet from './components/Leaflet';
 
 function App() {
   //data used for charts and table
@@ -171,10 +173,7 @@ function App() {
 
     UseVoice(tmpText)
   }
-  console.log(plotlyCharts)
-  console.log(charts)
-
-
+console.log(charts)
   const createChartWithVoice = async (transcript) => {
 
     const response = await fetch('http://localhost:5000/', {
@@ -273,7 +272,9 @@ function App() {
           <input type="text" onChange={(e) => setOverHearingText(e.target.value)}></input>
         </Form>
 
+
       </Grid>
+      <DraggableLeaflet/>
 
       <InputBar
         createCharts={createCharts}

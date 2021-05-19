@@ -33,3 +33,8 @@
     border-radius: 10px;
     position: absolute;
 }
+
+#mapid {
+    width: 50wh; 
+    height: 50vh;
+}
