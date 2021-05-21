@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import 'semantic-ui-css/semantic.min.css'
 import { Button, Form, Grid, Input, Header } from 'semantic-ui-react'
-import { VegaLite } from 'react-vega'
-import MaterialTable from 'material-table'
 import XLSX from 'xlsx'
 import UseVoice from './UseVoice';
 import DraggableGraph from './components/DraggableGraph';
 import InputBar from './components/InputBar';
-import StreamGraph from './components/StreamGraph'
+
 import { noCharts } from './assistantOptions/AssistantReplies'
-import WordCloud from './components/WordCloud'
 import Dictaphone from './components/Dictaphone'
 import DraggablePlotly from './components/DraggablePlotly'
 import DraggableLeaflet from './components/DraggableLeaflet'
-import Leaflet from './components/Leaflet';
 import {serverRequests} from './serverRequests'
+import AdminMenu from './components/AdminMenu'
+
 function App() {
   //data used for charts and table
   const [data, setData] = useState([])
@@ -204,34 +202,13 @@ function App() {
     <>
       <br />
 
-      <div style={{ position: 'absolute' }}>
-
-        <StreamGraph
+<AdminMenu
           overHearingData={overHearingData}
           attributes={attributes}
           synonymAttributes={synonymAttributes}
           featureAttributes={featureAttributes}
-        />
-        <WordCloud
-          overHearingData={overHearingData}
-          attributes={attributes}
-          synonymAttributes={synonymAttributes}
-          featureAttributes={featureAttributes}
-        />
-        {
-          frequencyData.length > 1 ?
-            frequencyData.map(i => {
-              return (
-                <>
-                  <p><strong>Header:</strong> {i.header}</p>
-                  <p><strong>count:</strong> {i.count}</p>
-                </>
-              )
-            })
-            :
-            null
-        }
-      </div>
+          frequencyData={frequencyData}
+/>
       <Grid centered={true}>
         <Button onClick={testRandomChart}>Test Random Chart</Button>
         <Grid.Row>
