@@ -1,7 +1,6 @@
 module.exports = (chartObj, intent, extractedHeaders) => {
     let layerMark = "";
     if (extractedHeaders.length > 3) {
-        console.log('jfneajknadljkfnalk')
 
         switch (intent) {
             case "bar":

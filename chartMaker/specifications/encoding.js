@@ -3,13 +3,13 @@ const heatmap = require("../specialGraphs/heatmap")
 const pie = require('../specialGraphs/pie')
 const marginalHistogram = require('../specialGraphs/marginalHistogram')
 const stackedBar = require('../specialGraphs/stackedBar')
+const findMissing = require("../findMissing").findMissing
 
 module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command, normalize) => {
     let numHeaders = extractedHeaders.length
     if (numHeaders > 3) {
         numHeaders = 4
     }
-    console.log(intent)
 
     if (intent == "pie") {
         return pie(chartObj, extractedHeaders, data, headerFreq, command)
@@ -39,7 +39,10 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command,
             }
             return chartObj
         case 2:
-            extractedHeaders = findQuantitative(extractedHeaders, data)
+            extractedHeaders = findQuantitative(extractedHeaders, data, headerFreq, command)
+            if(extractedHeaders.length !== 2) {
+                chartObj.errMsg("I tried to make a " + intent + ", but i coldn't find the right data")
+            }
             chartObj.charts.spec.encoding.x = {
                 field: extractedHeaders[0],
                 type: findType(extractedHeaders[0], data),
@@ -50,7 +53,12 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command,
             }
             return chartObj
         case 3:
-            extractedHeaders = findQuantitative(extractedHeaders, data)
+            extractedHeaders = findQuantitative(extractedHeaders, data, headerFreq, command)
+            console.log(extractedHeaders, )
+
+            if(extractedHeaders.length !== 3) {
+                chartObj.errMsg("I tried to make a " + intent + ", but i coldn't find the right data")
+            }
             chartObj.charts.spec.encoding.columns = {
                 field: extractedHeaders[2],
                 type: findType(extractedHeaders[2], data)
@@ -86,7 +94,8 @@ function switchHeaders(extractedHeaders, targetIndex, sourceIndex) {
     return extractedHeaders
 }
 
-function findQuantitative(extractedHeaders, data) {
+function findQuantitative(extractedHeaders, data, headerFreq, command) {
+    let quantitativeFound = false;
     for(let i = 0; i < extractedHeaders.length; i++) {
         if(findType(extractedHeaders[i], data) == "temporal") {
             extractedHeaders = switchHeaders(extractedHeaders, 0, i)
@@ -94,10 +103,16 @@ function findQuantitative(extractedHeaders, data) {
     }
     for (let i = 0; i < extractedHeaders.length; i++) {
         if (findType(extractedHeaders[i], data) == "quantitative") {
-            return switchHeaders(extractedHeaders, 1, i)
+            extractedHeaders = switchHeaders(extractedHeaders, 1, i)
+            quantitativeFound = true
         }
     }
-    return extractedHeaders
+    if(quantitativeFound) {
+        return extractedHeaders
+
+    } else {
+        return findMissing(extractedHeaders, data, 2, headerFreq, command, "NQT")
+    }
 }
 
 function createLayers(extractedHeaders, data) {

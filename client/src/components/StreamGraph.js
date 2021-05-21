@@ -11,9 +11,7 @@ const StreamGraph = ({
 
     const [streamData, setStreamData] = useState([])
     const [nounsLength, setNounsLength] = useState(0)
-
-
-
+    
     const specification = {
         width: 150,
         height: 150,

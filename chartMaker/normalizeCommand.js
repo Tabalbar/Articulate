@@ -6,12 +6,6 @@ module.exports = (command) => {
     let doc = nlp(command)
     
     let newCommand = doc.nouns().toSingular()
-    // let newCommand = doc.text()
-    // console.log(newCommand.length)
-    // newCommand.forEach(noun=>{
-    //     console.log(noun.text())
-    //     return lemmatize.noun(noun.text())
-    // })
-    // console.log(newCommand.text(), 'lololo')
+    console.log(newCommand.text())
     return doc.text()
 }

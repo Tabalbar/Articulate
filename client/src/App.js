@@ -14,7 +14,7 @@ import Dictaphone from './components/Dictaphone'
 import DraggablePlotly from './components/DraggablePlotly'
 import DraggableLeaflet from './components/DraggableLeaflet'
 import Leaflet from './components/Leaflet';
-
+import {serverRequests} from './serverRequests'
 function App() {
   //data used for charts and table
   const [data, setData] = useState([])
@@ -33,13 +33,14 @@ function App() {
   const [overHearingText, setOverHearingText] = useState("")
   const [plotlyCharts, setPlotlyCharts] = useState([])
   const [randomChart, setRandomChart] = useState(false)
+  const [currentHeaderFreq, setCurrentHeaderFreq] = useState(null)
 
   useEffect(() => {
-    if(randomChart) {
+    if (randomChart) {
       createCharts()
     }
     setRandomChart(false)
-  },[randomChart])
+  }, [randomChart])
 
   const processData = async (data) => {
     const dataStringLines = data.split(/\r\n|\n/);
@@ -124,56 +125,11 @@ function App() {
   }
 
   const createCharts = async () => {
-    
-    const response = await fetch('http://localhost:5000/', {
-      method: 'POST',
-      body: JSON.stringify(
-        {
-          command: command,
-          attributes: attributes,
-          dataHead: dataHead,
-          prevChart: prevChart,
-          overHearingData: overHearingData,
-          synonymAttributes: synonymAttributes,
-          featureAttributes: featureAttributes,
-          randomChart: randomChart
-        }),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
 
-    const body = await response.text();
-    setErrMsg("")
-    const { chartObj } = JSON.parse(body)
-    let numChartReturned = 0;
-    let tmpText = ""
-    setPrevChart(chartObj)
-
-    for (let i = 0; i < chartObj.length; i++) {
-      if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
-        setCharts(prev => [chartObj[i].charts, ...prev])
-        numChartReturned++
-      } else if (chartObj[i].plotly) {
-        setPlotlyCharts(prev => [chartObj[i], ...prev])
-        numChartReturned++
-      } else {
-        setErrMsg(prev => prev + chartObj[i].errMsg + "\n")
-        tmpText += chartObj[i].errMsg
-      }
-
-    }
-    if (chartObj.length == 0) {
-      tmpText = noCharts[Math.floor(Math.random() * 3)]
-      setErrMsg(tmpText)
-    } else {
-      setErrMsg(prev => prev + "Returned " + numChartReturned + " charts")
-      tmpText += "Returned " + numChartReturned + " chart(s)"
-    }
-
-    UseVoice(tmpText)
+   serverRequests(command, attributes, dataHead, prevChart, overHearingData,
+    synonymAttributes, featureAttributes, randomChart, setErrMsg,
+    setCurrentHeaderFreq, setPrevChart, setCharts, setPlotlyCharts, noCharts)
   }
-console.log(charts)
   const createChartWithVoice = async (transcript) => {
 
     const response = await fetch('http://localhost:5000/', {
@@ -195,7 +151,9 @@ console.log(charts)
 
     const body = await response.text();
     setErrMsg("")
-    const { chartObj } = JSON.parse(body)
+    const { chartObj, headerFreq } = JSON.parse(body)
+    setCurrentHeaderFreq(headerFreq)
+
     let numChartReturned = 0;
     let tmpText = ""
     setPrevChart(chartObj)
@@ -203,7 +161,7 @@ console.log(charts)
       if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
         setCharts(prev => [chartObj[i].charts, ...prev])
         numChartReturned++
-      } else if (chartObj[i].plotly) {
+      } else if (chartObj[i].plotly && chartObj[i].errMsg === '') {
         setPlotlyCharts(prev => [chartObj[i], ...prev])
         numChartReturned++
       } else {
@@ -227,10 +185,20 @@ console.log(charts)
     setPlotlyCharts([])
     setErrMsg("")
   }
-  
+
   const testRandomChart = () => {
     setRandomChart(true)
   }
+  let frequencyData = [];
+  if (currentHeaderFreq !== null) {
+    let keys = Object.keys(currentHeaderFreq)
+    for (let i = 0; i < keys.length; i++) {
+      for (let j = 0; j < currentHeaderFreq[keys[i]].length; j++) {
+        frequencyData.push({ header: currentHeaderFreq[keys[i]][j].header, count: currentHeaderFreq[keys[i]][j].count })
+      }
+    }
+  }
+
 
   return (
     <>
@@ -250,6 +218,19 @@ console.log(charts)
           synonymAttributes={synonymAttributes}
           featureAttributes={featureAttributes}
         />
+        {
+          frequencyData.length > 1 ?
+            frequencyData.map(i => {
+              return (
+                <>
+                  <p><strong>Header:</strong> {i.header}</p>
+                  <p><strong>count:</strong> {i.count}</p>
+                </>
+              )
+            })
+            :
+            null
+        }
       </div>
       <Grid centered={true}>
         <Button onClick={testRandomChart}>Test Random Chart</Button>
@@ -267,14 +248,16 @@ console.log(charts)
         <Grid.Row>
           <Header as="h3" color="blue">{errMsg}</Header>
         </Grid.Row>
-        {/* <Checkbox label="Iterate on Graph" checked={selected} onChange={handleSelect}/> */}
+        <p>
+          {overHearingText}
+        </p>
         <Form onSubmit={() => setOverHearingData(overHearingText)}>
           <input type="text" onChange={(e) => setOverHearingText(e.target.value)}></input>
         </Form>
 
 
       </Grid>
-      <DraggableLeaflet/>
+      {/* <DraggableLeaflet/> */}
 
       <InputBar
         createCharts={createCharts}
@@ -305,7 +288,7 @@ console.log(charts)
       <div style={{ position: "absolute" }}>
         {
           plotlyCharts.length ?
-          plotlyCharts.map((element, index) => {
+            plotlyCharts.map((element, index) => {
               return (
                 <>
                   <DraggablePlotly
@@ -319,7 +302,7 @@ console.log(charts)
             null
         }
       </div>
-      
+
     </>
   );
 }

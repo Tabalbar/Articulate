@@ -133,7 +133,7 @@ router.post('/', async (req, res, next) => {
       }
     }
   }
-  res.send({ chartObj })
+  res.send({ chartObj, headerFreq })
   res.status(201);
   res.json();
 

@@ -3,7 +3,9 @@ const findType = require('./findType')
 
 module.exports = {
     findMissing: function (extractedHeaders, data, targetHeaderLength, headerFreq, command, sequence) {
- 
+        if(extractedHeaders.length == 0) {
+            return ""
+        }
         let missing = reorder(extractedHeaders, targetHeaderLength, data, sequence)
         if (missing.n) {
             extractedHeaders = findInferHeader(command, headerFreq, 'nominal', extractedHeaders)
@@ -40,6 +42,7 @@ function switchHeaders(extractedHeaders, targetIndex, sourceIndex) {
 
 
 function findInferHeader(command, headerFreq, type, extractedHeaders) {
+
     let headerIndex = 0;
     if (headerFreq[type].length == 0) {
         return ""
@@ -52,14 +55,13 @@ function findInferHeader(command, headerFreq, type, extractedHeaders) {
             headerIndex = i
         }
     }
+
     for (let i = 0; i < extractedHeaders.length; i++) {
         if (extractedHeaders[i] == headerFreq[type][headerIndex].header) {
             headerFreq[type].splice(headerIndex, 1)
-
             return findInferHeader(command, headerFreq, type, extractedHeaders)
         }
     }
-    console.log(extractedHeaders)
     extractedHeaders.push(headerToAdd)
 
 
@@ -90,7 +92,7 @@ function reorder(extractedHeaders, targetHeaderLength, data, sequence) {
                 missing.q = false
                 if (extractedHeaders.length > 0 && findType(extractedHeaders[0], data) == 'nominal') {
                     missing.n = false
-                    return extractedHeaders
+                    break;
                 }
             }
 

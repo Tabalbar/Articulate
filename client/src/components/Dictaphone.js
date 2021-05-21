@@ -15,7 +15,7 @@ const Dictaphone = ({
         command: "computer *",
         callback: (command) => {
           console.log('listening')
-          let utterance = createChartWithVoice(command, transcript)
+          let utterance = createChartWithVoice(command)
           utterance.onend = function (event) {
             console.log('Utterance has finished being spoken after ' + event.elapsedTime + ' milliseconds.');
             setListening(true)

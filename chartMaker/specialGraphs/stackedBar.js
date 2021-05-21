@@ -3,6 +3,9 @@ const findMissing = require("../findMissing").findMissing
 
 module.exports = (chartObj, extractedHeaders, data, headerFreq, command, normalize, intent) => {
     extractedHeaders = findMissing(extractedHeaders, data, 3, headerFreq, command, "NQT")
+    if(extractedHeaders.length !== 3) {
+        chartObj.errMsg = "I tried to make a stacked bar chart but I don't have the right data for it."
+    }
     for(let i = 0; i < extractedHeaders.length; i++) {
         if(findType(extractedHeaders[i], data) == "nominal") {
             let tmpHeader = extractedHeaders[0]
