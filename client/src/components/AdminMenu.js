@@ -1,18 +1,22 @@
 import React from 'react'
 import StreamGraph from './StreamGraph'
 import WordCloud from './WordCloud'
+import { Button, Icon } from 'semantic-ui-react'
 
 function AdminMenu({
     overHearingData,
     attributes,
-    synonymAttributes, 
+    synonymAttributes,
     featureAttributes,
     frequencyData,
-
+    setShowAdminMenu
 }) {
     return (
         <>
-            <div style={{ position: 'absolute' }}>
+            {/* <Button onClick={() => setShowAdminMenu(prev => !prev)} icon color="red"><Icon name="bars" /></Button> */}
+            {/* <div style={{ position: 'absolute', background: 'white', width: 400 }}> */}
+
+            <div style={{ position: 'absolute'}}>
 
                 <StreamGraph
                     overHearingData={overHearingData}
@@ -31,8 +35,7 @@ function AdminMenu({
                         frequencyData.map(i => {
                             return (
                                 <>
-                                    <p><strong>Header:</strong> {i.header}</p>
-                                    <p><strong>count:</strong> {i.count}</p>
+                                    <p><strong>Header:</strong> {i.header} <strong>count:</strong> {i.count}</p>
                                 </>
                             )
                         })

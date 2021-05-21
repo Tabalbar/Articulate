@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import 'semantic-ui-css/semantic.min.css'
-import { Button, Form, Grid, Input, Header } from 'semantic-ui-react'
+import { Button, Form, Grid, Input, Header, Icon } from 'semantic-ui-react'
 import XLSX from 'xlsx'
 import UseVoice from './UseVoice';
 import DraggableGraph from './components/DraggableGraph';
@@ -10,7 +10,7 @@ import { noCharts } from './assistantOptions/AssistantReplies'
 import Dictaphone from './components/Dictaphone'
 import DraggablePlotly from './components/DraggablePlotly'
 import DraggableLeaflet from './components/DraggableLeaflet'
-import {serverRequests} from './serverRequests'
+import { serverRequests } from './serverRequests'
 import AdminMenu from './components/AdminMenu'
 
 function App() {
@@ -32,6 +32,8 @@ function App() {
   const [plotlyCharts, setPlotlyCharts] = useState([])
   const [randomChart, setRandomChart] = useState(false)
   const [currentHeaderFreq, setCurrentHeaderFreq] = useState(null)
+
+  const [showAdminMenu, setShowAdminMenu] = useState(false)
 
   useEffect(() => {
     if (randomChart) {
@@ -124,58 +126,15 @@ function App() {
 
   const createCharts = async () => {
 
-   serverRequests(command, attributes, dataHead, prevChart, overHearingData,
-    synonymAttributes, featureAttributes, randomChart, setErrMsg,
-    setCurrentHeaderFreq, setPrevChart, setCharts, setPlotlyCharts, noCharts)
+    serverRequests(command, attributes, dataHead, prevChart, overHearingData,
+      synonymAttributes, featureAttributes, randomChart, setErrMsg,
+      setCurrentHeaderFreq, setPrevChart, setCharts, setPlotlyCharts, noCharts)
   }
   const createChartWithVoice = async (transcript) => {
 
-    const response = await fetch('http://localhost:5000/', {
-      method: 'POST',
-      body: JSON.stringify(
-        {
-          command: transcript,
-          attributes: attributes,
-          dataHead: dataHead,
-          prevChart: prevChart,
-          overHearingData: overHearingData,
-          synonymAttributes: synonymAttributes,
-          featureAttributes: featureAttributes
-        }),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-
-    const body = await response.text();
-    setErrMsg("")
-    const { chartObj, headerFreq } = JSON.parse(body)
-    setCurrentHeaderFreq(headerFreq)
-
-    let numChartReturned = 0;
-    let tmpText = ""
-    setPrevChart(chartObj)
-    for (let i = 0; i < chartObj.length; i++) {
-      if (chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
-        setCharts(prev => [chartObj[i].charts, ...prev])
-        numChartReturned++
-      } else if (chartObj[i].plotly && chartObj[i].errMsg === '') {
-        setPlotlyCharts(prev => [chartObj[i], ...prev])
-        numChartReturned++
-      } else {
-        setErrMsg(prev => prev + chartObj[i].errMsg + "\n")
-        tmpText += chartObj[i].errMsg
-      }
-    }
-    if (chartObj.length == 0) {
-      tmpText = noCharts[Math.floor(Math.random() * 3)]
-      setErrMsg(tmpText)
-    } else {
-      setErrMsg(prev => prev + "Returned " + numChartReturned + " charts")
-      tmpText += "Returned " + numChartReturned + " chart(s)"
-    }
-    let utterance = UseVoice(tmpText)
-    return utterance
+    serverRequests(transcript, attributes, dataHead, prevChart, overHearingData,
+      synonymAttributes, featureAttributes, randomChart, setErrMsg,
+      setCurrentHeaderFreq, setPrevChart, setCharts, setPlotlyCharts, noCharts)
   }
 
   const clearGraphs = () => {
@@ -201,14 +160,17 @@ function App() {
   return (
     <>
       <br />
+        <AdminMenu
+        overHearingData={overHearingData}
+        attributes={attributes}
+        synonymAttributes={synonymAttributes}
+        featureAttributes={featureAttributes}
+        frequencyData={frequencyData}
+        setShowAdminMenu={setShowAdminMenu}
+      />
+      {/* <Button onClick="blue" icon onClick={()=>setShowAdminMenu(prev=>!prev)}><Icon name="bars" /></Button> */}
+      
 
-<AdminMenu
-          overHearingData={overHearingData}
-          attributes={attributes}
-          synonymAttributes={synonymAttributes}
-          featureAttributes={featureAttributes}
-          frequencyData={frequencyData}
-/>
       <Grid centered={true}>
         <Button onClick={testRandomChart}>Test Random Chart</Button>
         <Grid.Row>
