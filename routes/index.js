@@ -80,6 +80,7 @@ const iterateGraph = require('../chartMaker/iterateGraph')
 const countVector = require('../chartMaker/countVector')
 const ExplicitChart = require('../chartMaker/specifications/ExplicitChart')
 const chartOptions = require('../chartMaker/specifications/chartOptions')
+const testPCA = require('../chartMaker/testPCA')
 
 // const findommands = require('../chartMaker/findCommands')
 const nlp = require('compromise')
@@ -94,7 +95,7 @@ router.post('/', async (req, res, next) => {
   const synonymAttributes = req.body.synonymAttributes
   const featureAttributes = req.body.featureAttributes
   const randomChart = req.body.randomChart
-
+  const currentCharts = req.body.charts
   let charts = []
   const command = req.body.command
   const normalizedCommand = normalizeCommand(command)
@@ -104,6 +105,8 @@ router.post('/', async (req, res, next) => {
   const response = await manager.process('en', generalizedCommand)
   const headerMatrix = createVector(attributes, data)
   const { headerFreq } = countVector(transcript, featureAttributes, synonymAttributes, data)
+
+  testPCA(data)
 
   nlp.extend((Doc, world) => {
     const headers = req.body.headers

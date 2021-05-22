@@ -45,6 +45,8 @@ const StreamGraph = ({
         let doc = nlp(overHearingData)
         let nouns = doc.nouns().out('array')
         setNounsLength(nouns.length)
+        console.log(nouns)
+
         let tmpStreamData = streamData
         if (nouns.length > nounsLength) {
             let lastTerm = nouns[nouns.length - 1]
@@ -74,7 +76,6 @@ const StreamGraph = ({
         }
         setStreamData(tmpStreamData.flat())
     }, [overHearingData])
-
     return (
         <>
             <VegaLite spec={specification} data={{ table: streamData }} />

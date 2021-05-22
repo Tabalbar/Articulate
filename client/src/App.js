@@ -37,7 +37,7 @@ function App() {
 
   useEffect(() => {
     if (randomChart) {
-      createCharts()
+      createChartWithVoice("")
     }
     setRandomChart(false)
   }, [randomChart])
@@ -128,13 +128,13 @@ function App() {
 
     serverRequests(command, attributes, dataHead, prevChart, overHearingData,
       synonymAttributes, featureAttributes, randomChart, setErrMsg,
-      setCurrentHeaderFreq, setPrevChart, setCharts, setPlotlyCharts, noCharts)
+      setCurrentHeaderFreq, setPrevChart, setCharts, setPlotlyCharts, noCharts, charts)
   }
   const createChartWithVoice = async (transcript) => {
 
     serverRequests(transcript, attributes, dataHead, prevChart, overHearingData,
       synonymAttributes, featureAttributes, randomChart, setErrMsg,
-      setCurrentHeaderFreq, setPrevChart, setCharts, setPlotlyCharts, noCharts)
+      setCurrentHeaderFreq, setPrevChart, setCharts, setPlotlyCharts, noCharts, charts)
   }
 
   const clearGraphs = () => {
@@ -146,6 +146,7 @@ function App() {
   const testRandomChart = () => {
     setRandomChart(true)
   }
+
   let frequencyData = [];
   if (currentHeaderFreq !== null) {
     let keys = Object.keys(currentHeaderFreq)

@@ -2030,6 +2030,11 @@ path-to-regexp@0.1.7:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
   integrity sha1-32BBeABfUi8V60SQ5yR6G/qmf4w=
 
+pca-js@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/pca-js/-/pca-js-1.0.2.tgz#216639c897d731f4d21ff539d5afcb0cec8fc392"
+  integrity sha512-Y6a1RQ/pdNJnJq7ya9PHBW2RUXZCXDbbRpmpwclvuhOo7mttx1f80OKIQ0nPF6kCZ4a98G5TqIfRrIblk7R6Jg==
+
 picomatch@^2.0.4, picomatch@^2.2.1:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.2.2.tgz#21f333e9b6b8eaff02468f5146ea406d345f4dad"
