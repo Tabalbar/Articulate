@@ -95,7 +95,7 @@ router.post('/', async (req, res, next) => {
   const synonymAttributes = req.body.synonymAttributes
   const featureAttributes = req.body.featureAttributes
   const randomChart = req.body.randomChart
-  const currentCharts = req.body.charts
+  const currentCharts = req.body.currentCharts
   let charts = []
   const command = req.body.command
   const normalizedCommand = normalizeCommand(command)
@@ -106,7 +106,7 @@ router.post('/', async (req, res, next) => {
   const headerMatrix = createVector(attributes, data)
   const { headerFreq } = countVector(transcript, featureAttributes, synonymAttributes, data)
 
-  testPCA(data)
+  // testPCA(data)
 
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
@@ -125,7 +125,7 @@ router.post('/', async (req, res, next) => {
   }
   let chartObj = []
   if (explicitChart) {
-    let chart = chartMaker.chartMaker(explicitChart, synonymCommand, attributes, data, headerMatrix, command, headerFreq)
+    let chart = chartMaker.chartMaker(explicitChart, synonymCommand, attributes, data, headerMatrix, command, headerFreq, randomChart)
     chartObj.push(chart)
   } else {
     for (let i = 0; i < response.classifications.length; i++) {
@@ -135,6 +135,17 @@ router.post('/', async (req, res, next) => {
 
       }
     }
+  }
+  for(let i = 0; i < chartObj.length; i++) {
+    console.log(JSON.stringify(chartObj[i]))
+
+    for(let j = 0; j < currentCharts.length; j++ ) {
+      if(JSON.stringify(chartObj[i].charts.spec) === JSON.stringify(currentCharts[j].spec) && chartObj[i].errMsg == "") {
+        chartObj[i].errMsg = "Graph is already created"
+      } else {
+      }
+    }
+
   }
   res.send({ chartObj, headerFreq })
   res.status(201);

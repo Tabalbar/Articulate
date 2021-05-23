@@ -1,7 +1,7 @@
 import UseVoice from './UseVoice'
 export async function serverRequests(command, attributes, dataHead, prevChart, overHearingData,
     synonymAttributes, featureAttributes, randomChart, setErrMsg,
-    setCurrentHeaderFreq, setPrevChart, setCharts, setPlotlyCharts, noCharts) {
+    setCurrentHeaderFreq, setPrevChart, setCharts, setPlotlyCharts, noCharts, charts) {
 
 
     const response = await fetch('http://localhost:5000/', {
@@ -15,7 +15,8 @@ export async function serverRequests(command, attributes, dataHead, prevChart, o
                 overHearingData: overHearingData,
                 synonymAttributes: synonymAttributes,
                 featureAttributes: featureAttributes,
-                randomChart: randomChart
+                randomChart: randomChart,
+                currentCharts: charts
             }),
         headers: {
             'Content-Type': 'application/json',

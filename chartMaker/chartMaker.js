@@ -10,7 +10,7 @@ const transform = require('./specifications/transform')
 const plotlyPipeline = require('./plotly/plotlyPipeline')
 
 module.exports = {
-    chartMaker: function chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq) {
+    chartMaker: function chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq, randomChart) {
         let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers, command)
         let extractedHeaders = extractHeaders(command, headers, data)
         let normalize = checkNormalize(command)
@@ -27,6 +27,7 @@ module.exports = {
 
         let chartObj = {
             plotly: false,
+            randomChart: randomChart,
             charts: {
                 spec: {
                     title: "",
