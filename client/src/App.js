@@ -130,7 +130,6 @@ function App() {
       synonymAttributes, featureAttributes, randomChart, setErrMsg,
       setCurrentHeaderFreq, setPrevChart, setCharts, setPlotlyCharts, noCharts, charts)
   }
-  console.log(charts)
   const createChartWithVoice = async (transcript) => {
 
     serverRequests(transcript, attributes, dataHead, prevChart, overHearingData,

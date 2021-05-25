@@ -12,7 +12,7 @@ const Dictaphone = ({
   
     let commands = [
       {
-        command: "computer *",
+        command: "show *",
         callback: (command) => {
           console.log('listening')
           let utterance = createChartWithVoice(command)

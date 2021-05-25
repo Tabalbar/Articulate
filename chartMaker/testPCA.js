@@ -38,40 +38,41 @@ module.exports = (data) => {
     //     console.log(uniques)
     // }
 
-    // let testPCAData = []
+    let testPCAData = []
 
-    // for(let i = 0; i < data.length; i++) {
-    //     testPCAData.push([data[i]['math score'], data[i][' '], data[i]['reading score'] ])
-    // }
+    for(let i = 0; i < data.length; i++) {
+        testPCAData.push([data[i]['math score'], data[i]['writing score'], data[i]['reading score'] ])
+    }
 
     // console.log(testPCAData)
 
 
-    // let vectors = PCA.getEigenVectors(testPCAData)
-    // console.log(vectors)
-    let tmp1 = []
-    let tmp2 = []
-    for( let i = 0; i < data.length; i++) {
-        tmp1.push(data[i]['math score'])
-        tmp2.push(data[i]['writing score'])
-    }
+    let vectors = PCA.getEigenVectors(testPCAData)
+    const first = PCA.computePercentageExplained(vectors, vectors[0])
+    console.log(first)
+    // let tmp1 = []
+    // let tmp2 = []
+    // for( let i = 0; i < data.length; i++) {
+    //     tmp1.push(data[i]['math score'])
+    //     tmp2.push(data[i]['writing score'])
+    // }
+    // // console.log(covariance(tmp1, tmp2, tmp1.length))
     // console.log(covariance(tmp1, tmp2, tmp1.length))
-    console.log(covariance(tmp1, tmp2, tmp1.length))
 
 }
 
-function mean(arr, n) {
-    let sum = 0;
-    for(let i = 0; i < n; i++) {
-        sum += parseInt(arr[i])
-    }
-    return (sum / n)
-}
+// function mean(arr, n) {
+//     let sum = 0;
+//     for(let i = 0; i < n; i++) {
+//         sum += parseInt(arr[i])
+//     }
+//     return (sum / n)
+// }
 
-function covariance(arr1, arr2, n) {
-    let sum = 0;
-    for(let i = 0; i < n; i++) {
-        sum = sum + (parseInt(arr1[i]) - mean(arr1, n)) * (parseInt(arr2[i]) - mean(arr2, n));
-    }
-    return sum/(arr1.length - 1)
-}
+// function covariance(arr1, arr2, n) {
+//     let sum = 0;
+//     for(let i = 0; i < n; i++) {
+//         sum = sum + (parseInt(arr1[i]) - mean(arr1, n)) * (parseInt(arr2[i]) - mean(arr2, n));
+//     }
+//     return sum/(arr1.length - 1)
+// }

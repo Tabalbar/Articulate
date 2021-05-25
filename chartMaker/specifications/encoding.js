@@ -3,6 +3,7 @@ const heatmap = require("../specialGraphs/heatmap")
 const pie = require('../specialGraphs/pie')
 const marginalHistogram = require('../specialGraphs/marginalHistogram')
 const stackedBar = require('../specialGraphs/stackedBar')
+const parallelCoordinates = require('../specialGraphs/parallelCoordinates')
 const findMissing = require("../findMissing").findMissing
 
 module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command, normalize) => {
@@ -27,7 +28,9 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command,
         return stackedBar(chartObj, extractedHeaders, data, headerFreq, command, normalize, intent)
 
     }
-
+    if(intent == "parallelCoordinates") {
+        return parallelCoordinates(chartObj, extractedHeaders, data, headerFreq, command)
+    }
     switch (numHeaders) {
         case 1:
             chartObj.charts.spec.encoding.x = {

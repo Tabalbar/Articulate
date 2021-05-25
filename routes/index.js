@@ -71,7 +71,6 @@ manager.addAnswer('en', 'radar', 'radar');
   const response = await manager.process('en', 'I should go now');
 })();
 
-const chartMakerWithAnswer = require('../chartMaker/chartMakerWithAnswer')
 const chartMaker = require('../chartMaker/chartMaker')
 const createVector = require('../chartMaker/createVector')
 const normalizeCommand = require('../chartMaker/normalizeCommand')
@@ -106,7 +105,7 @@ router.post('/', async (req, res, next) => {
   const headerMatrix = createVector(attributes, data)
   const { headerFreq } = countVector(transcript, featureAttributes, synonymAttributes, data)
 
-  // testPCA(data)
+  testPCA(data)
 
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
