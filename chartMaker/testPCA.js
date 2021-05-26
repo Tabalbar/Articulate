@@ -1,4 +1,5 @@
-const PCA = require('pca-js')
+// const PCA = require('pca-js')
+const {PCA} = require('ml-pca')
 
 module.exports = (data) => {
     Array.prototype.contains = (v) => {
@@ -43,13 +44,13 @@ module.exports = (data) => {
     for(let i = 0; i < data.length; i++) {
         testPCAData.push([data[i]['math score'], data[i]['writing score'], data[i]['reading score'] ])
     }
-
+    const pca = new PCA(testPCAData)
     // console.log(testPCAData)
+    console.log(pca.getLoadings());
 
-
-    let vectors = PCA.getEigenVectors(testPCAData)
-    const first = PCA.computePercentageExplained(vectors, vectors[0])
-    console.log(first)
+    // let vectors = PCA.getEigenVectors(testPCAData)
+    // const first = PCA.computePercentageExplained(vectors, vectors[0])
+    // console.log(first)
     // let tmp1 = []
     // let tmp2 = []
     // for( let i = 0; i < data.length; i++) {
