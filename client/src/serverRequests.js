@@ -36,7 +36,7 @@ export async function serverRequests(command, attributes, dataHead, prevChart, o
             console.log(chartObj[i].errMsg)
             setCharts(prev => [chartObj[i].charts, ...prev])
             numChartReturned++
-        } else if (chartObj[i].plotly && chartObj[i].errMsg === '') {
+        } else if (chartObj[i].plotly && chartObj[i].errMsg === '' && chartObj[i].charts !== null) {
             setPlotlyCharts(prev => [chartObj[i], ...prev])
             numChartReturned++
         } else {

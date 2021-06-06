@@ -44,7 +44,7 @@ module.exports = (chartObj, intent, extractedHeaders, data, headerFreq, command,
         case 2:
             extractedHeaders = findQuantitative(extractedHeaders, data, headerFreq, command)
             if(extractedHeaders.length !== 2) {
-                chartObj.errMsg("I tried to make a " + intent + ", but i coldn't find the right data")
+                chartObj.errMsg = "I tried to make a " + intent + " chart, but i coldn't find the right data"
             }
             chartObj.charts.spec.encoding.x = {
                 field: extractedHeaders[0],

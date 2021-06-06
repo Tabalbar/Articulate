@@ -105,7 +105,7 @@ router.post('/', async (req, res, next) => {
   const headerMatrix = createVector(attributes, data)
   const { headerFreq } = countVector(transcript, featureAttributes, synonymAttributes, data)
 
-  testPCA(data)
+  // testPCA(data)
 
   nlp.extend((Doc, world) => {
     const headers = req.body.headers
