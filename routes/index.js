@@ -64,13 +64,15 @@ router.post('/', async (req, res, next) => {
   const headerMatrix = createVector(attributes, data)
   const { headerFreq } = countVector(transcript, featureAttributes, synonymAttributes, data)
 
-
   if(randomChart) {
     explicitChart = chartOptions[Math.floor(Math.random() * chartOptions.length)].mark
   }
   let chartObj = []
+  console.log(synonymCommand)
   if (explicitChart) {
+
     let chart = chartMaker.chartMaker(explicitChart, synonymCommand, attributes, data, headerMatrix, command, headerFreq, randomChart)
+
     chartObj.push(chart)
   } else {
     for (let i = 0; i < response.classifications.length; i++) {
@@ -111,7 +113,7 @@ router.post('/addHeaders', async (req, res, next) => {
     world.postProcess(doc => {
       nlpHeaders.forEach(header => {
         doc.match(header).tag('#Noun')
-        doc.match(noun + 's').tag('#Noun')
+        doc.match(header + 's').tag('#Noun')
 
       });
     })

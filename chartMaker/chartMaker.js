@@ -12,6 +12,7 @@ const plotlyPipeline = require('./plotly/plotlyPipeline')
 module.exports = {
     chartMaker: function chartMaker(intent, command, headers, data, headerMatrix, actualCommand, headerFreq, randomChart) {
         let filteredHeaders = extractFilteredHeaders(command, headerMatrix, data, headers, command)
+
         let extractedHeaders = extractHeaders(command, headers, data)
         let normalize = checkNormalize(command)
 
@@ -126,12 +127,12 @@ function extractHeaders(command, headers, data) {
 
     let doc = nlp(command)
     let extractedHeaders = []
-
     for (let i = 0; i < headers.length; i++) {
         if (doc.has(headers[i].toLowerCase())) {
             extractedHeaders.push(headers[i])
         }
     }
+
     let accessors = []
     // let keys = Object.keys(filteredHeaders);
     // for (let i = 0; i < keys.length; i++) {
